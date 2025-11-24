@@ -21,6 +21,8 @@ func main() {
 	repo := users.NewRepository(connect)
 	service := users.NewService(repo)
 	handler := users.NewHandler(service)
+	// llamado al handler de creacion de usuarios
 	http.HandleFunc("/users", handler.CreateUsers)
+	// Servidor escuchando en el puerto 8080
 	http.ListenAndServe(":8080", nil)
 }
