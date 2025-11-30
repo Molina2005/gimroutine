@@ -2,7 +2,7 @@ package users
 
 import (
 	"errors"
-	"time"
+	// "time"
 )
 
 // Recibe la conexion real db de Repository
@@ -16,9 +16,10 @@ func NewService(r *Repository) *Service {
 }
 
 // Creacion de usuario y requirimientos a seguir
-func (r *Service) CreatetUser(name, email string, age int, weight int16, height float64, entryDate time.Time, password string) error {
-	if name == "" || email == "" || age <= 0 || weight <= 0 || height <= 0 || entryDate.IsZero() || password == "" {
+func (r *Service) CreatetUser(name, email string, age int, weight int16, height float64, password string) error {
+
+	if name == "" || email == "" || age <= 0 || weight <= 0 || height <= 0 || password == "" {
 		return errors.New("todos los campos son obligatorios")
 	}
-	return r.repo.InsertUser(name, email, age, weight, height, entryDate, password)
+	return r.repo.InsertUser(name, email, age, weight, height, password)
 }
