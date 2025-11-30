@@ -2,7 +2,7 @@ package users
 
 import (
 	"context"
-	"time"
+	// "time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -18,11 +18,11 @@ func NewRepository(db *pgxpool.Pool) *Repository {
 }
 
 // Consulta insercion de usuarios
-func (r *Repository) InsertUser(name, email string, age int, weight int16, height float64, entryDate time.Time, password string) error {
+func (r *Repository) InsertUser(name, email string, age int, weight int16, height float64, password string) error {
 	// contexto que exije *pgxpool.Pool para consultas sql
 	ctx := context.Background()
-	query := `INSERT INTO usuarios (nombre, correo, edad, peso, altura, fecha_ingreso, contrasena) 
-				VALUES ($1, $2, $3, $4, $5, $6, $7)`
-	_, err := r.db.Exec(ctx, query, name, email, age, weight, height, entryDate, password)
+	query := `INSERT INTO usuarios (nombre, correo, edad, peso, altura, contrasena) 
+				VALUES ($1, $2, $3, $4, $5, $6 )`
+	_, err := r.db.Exec(ctx, query, name, email, age, weight, height, password)
 	return err
 }
