@@ -2,7 +2,7 @@ package users
 
 import (
 	"context"
-	// "time"
+	"errors"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -21,8 +21,22 @@ func NewRepository(db *pgxpool.Pool) *Repository {
 func (r *Repository) InsertUser(name, email string, age int, weight int16, height float64, password string) error {
 	// contexto que exije *pgxpool.Pool para consultas sql
 	ctx := context.Background()
-	query := `INSERT INTO usuarios (nombre, correo, edad, peso, altura, contrasena) 
+	// Consulta de no creacion de usuario existente
+	var existsEmail bool
+	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE correo=$1)", email).Scan(&existsEmail)
+	if err != nil {
+		return err
+	}
+	// Mensaje de usuario ya en sistema
+	if existsEmail {
+		return errors.New("usuario ya existe en el sistema")
+	}
+	// Si no existe lo crea
+	if !existsEmail {
+		query := `INSERT INTO usuarios (nombre, correo, edad, peso, altura, contrasena) 
 				VALUES ($1, $2, $3, $4, $5, $6 )`
-	_, err := r.db.Exec(ctx, query, name, email, age, weight, height, password)
-	return err
+		_, err := r.db.Exec(ctx, query, name, email, age, weight, height, password)
+		return err
+	}
+	return nil
 }
