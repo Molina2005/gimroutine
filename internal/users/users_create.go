@@ -3,7 +3,6 @@ package users
 import (
 	"encoding/json"
 	"net/http"
-	// "time"
 )
 
 // Conexion entre usuario y servidor con http por medio de POST
@@ -29,13 +28,11 @@ func (h *Handler) CreateUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "JSON invalido", 400)
 		return
 	}
-
 	// se pasa la funcion de creacion de usuario con la informacion que esta en input
 	if err := h.service.CreatetUser(input.Name, input.Email, input.Age, input.Weight, input.Height, input.Password); err != nil {
 		http.Error(w, err.Error(), 400)
 		return
 	}
-
 	// Respuesta al usuario de (usuario creado)
 	w.Write([]byte("Usuario creado"))
 }
