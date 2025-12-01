@@ -2,6 +2,8 @@ package users
 
 import (
 	"errors"
+	"fmt"
+	"modulo/internal/utils"
 	// "time"
 )
 
@@ -17,9 +19,14 @@ func NewService(r *Repository) *Service {
 
 // Creacion de usuario y requirimientos a seguir
 func (r *Service) CreatetUser(name, email string, age int, weight int16, height float64, password string) error {
-
-	if name == "" || email == "" || age <= 0 || weight <= 0 || height <= 0 || password == "" {
+	// Contraseña incriptada
+	HashPassword, err := utils.HashPassword(password)
+	if err != nil {
+		fmt.Println("error al hashear contraseña")
+	}
+	// Validaion de se pemiten campos vacios
+	if name == "" || email == "" || age <= 0 || weight <= 0 || height <= 0 || HashPassword == "" {
 		return errors.New("todos los campos son obligatorios")
 	}
-	return r.repo.InsertUser(name, email, age, weight, height, password)
+	return r.repo.InsertUser(name, email, age, weight, height, HashPassword)
 }
