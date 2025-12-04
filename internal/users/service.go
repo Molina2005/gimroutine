@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"modulo/internal/utils"
-	// "time"
 )
 
 // Recibe la conexion real db de Repository
@@ -29,4 +28,12 @@ func (r *Service) CreatetUser(name, email string, age int, weight int16, height 
 		return errors.New("todos los campos son obligatorios")
 	}
 	return r.repo.InsertUser(name, email, age, weight, height, HashPassword)
+}
+
+func (r *Service) UpdateUserInformation(id_usuarios int, name, email string, age int, weight int16, height float64, password string) error {
+	HashPassword, err := utils.HashPassword(password)
+	if err != nil {
+		fmt.Println("error al hashear contraseña")
+	}
+	return r.repo.UpdateUser(id_usuarios, name, email, age, weight, height, HashPassword)
 }
