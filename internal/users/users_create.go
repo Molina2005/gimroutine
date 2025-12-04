@@ -11,7 +11,6 @@ func (h *Handler) CreateUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Metodo no permitido", 404)
 		return
 	}
-
 	// struct para guardar los campos que vienen de peticion json
 	var input struct {
 		Name     string  `json:"name"`
@@ -21,7 +20,6 @@ func (h *Handler) CreateUsers(w http.ResponseWriter, r *http.Request) {
 		Height   float64 `json:"height"`
 		Password string  `json:"password"`
 	}
-
 	// r.Body : contiene lo que envía el usuario (JSON)
 	// Decode(&input) : toma json y convierte a struct para saber qué campos esperar y cómo guardarlos
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
