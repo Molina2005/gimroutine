@@ -9,18 +9,18 @@ import (
 )
 
 // Guarda siempre la misma conexion a db
-type Repository struct {
+type RepositoryUsers struct {
 	db *pgxpool.Pool
 }
 
 // Creacion nuevo repositroio para poder guardar la verdader conexion en la struct Repository
-func NewRepository(db *pgxpool.Pool) *Repository {
-	return &Repository{db: db}
+func NewRepository(db *pgxpool.Pool) *RepositoryUsers {
+	return &RepositoryUsers{db: db}
 }
 
 // Verificacion existencia de usuario por correo
 // Uso: solo cuando se quieren registrar y ya existe el correo en sistema
-func (r Repository) userExistsXEmail(email string) (bool, error) {
+func (r RepositoryUsers) userExistsXEmail(email string) (bool, error) {
 	// contexto que exije *pgxpool.Pool para consultas sql
 	ctx := context.Background()
 	var existsEmail bool
@@ -34,7 +34,7 @@ func (r Repository) userExistsXEmail(email string) (bool, error) {
 
 // Verificacion existencia de usuario por id
 // Uso: cuando ya estan en el sistema y se quiere validar que en realidad si esten por id
-func (r Repository) userExistsXId(id_usuarios int) (bool, error) {
+func (r RepositoryUsers) userExistsXId(id_usuarios int) (bool, error) {
 	ctx := context.Background()
 	var existsId bool
 	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1)", id_usuarios).Scan(&existsId)
@@ -45,7 +45,7 @@ func (r Repository) userExistsXId(id_usuarios int) (bool, error) {
 }
 
 // Insercion de usuarios
-func (r *Repository) InsertUser(name, email string, age int, weight int16, height float64, password string) error {
+func (r *RepositoryUsers) InsertUser(name, email string, age int, weight int16, height float64, password string) error {
 	ctx := context.Background()
 	// Funcion para verificar existencia de usuario
 	existsEmail, err := r.userExistsXEmail(email)
@@ -66,7 +66,7 @@ func (r *Repository) InsertUser(name, email string, age int, weight int16, heigh
 }
 
 // Consultar Informacion usuario
-func (r *Repository) ViewUserInfomation(id_usuarios int) (*models.User, error) {
+func (r *RepositoryUsers) ViewUserInfomation(id_usuarios int) (*models.User, error) {
 	ctx := context.Background()
 	existsEmail, err := r.userExistsXId(id_usuarios)
 	if err != nil {
@@ -99,7 +99,7 @@ func (r *Repository) ViewUserInfomation(id_usuarios int) (*models.User, error) {
 }
 
 // Actualizacion informacion usuario
-func (r Repository) UpdateUser(id_usuarios int, name, email string, age int, weight int16, height float64, password string) error {
+func (r RepositoryUsers) UpdateUser(id_usuarios int, name, email string, age int, weight int16, height float64, password string) error {
 	ctx := context.Background()
 	existsEmail, err := r.userExistsXId(id_usuarios)
 	if err != nil {
@@ -118,7 +118,7 @@ func (r Repository) UpdateUser(id_usuarios int, name, email string, age int, wei
 }
 
 // Eliminar usuario del sistema
-func (r Repository) DeleteUser(id_usuarios int) error {
+func (r RepositoryUsers) DeleteUser(id_usuarios int) error {
 	ctx := context.Background()
 	existsEmail, err := r.userExistsXId(id_usuarios)
 	if err != nil {
