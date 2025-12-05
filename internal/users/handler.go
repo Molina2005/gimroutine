@@ -1,11 +1,11 @@
 package users
 
 // Recibe el servicio con la logica interna
-type Handler struct {
-	service *Service
+type HandlerUsers struct {
+	service *ServiceUsers
 }
 
 // Creacion Handler para la conexion entre usuario y servidor
-func NewHandler(s *Service) *Handler {
-	return &Handler{service: s}
+func NewHandler(s *ServiceUsers) *HandlerUsers {
+	return &HandlerUsers{service: s}
 }
