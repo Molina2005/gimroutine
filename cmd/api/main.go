@@ -26,13 +26,12 @@ func main() {
 
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
-	// URL creacion de usuarios
-	r.Post("/users", handler.CreateUsers)
-	// URL consultar informaicion usuarios
+	// URLS respuestas http
 	// {id} : va enrutado con el id de chi.URLParam(r, "id")
+	r.Post("/users", handler.CreateUsers)
 	r.Get("/users/{id}", repo.ConsultUserInformation)
-	// URL actualizar informacion usuario
 	r.Put("/users/{id}", handler.UpdateUsersInformation)
+	r.Delete("/users/{id}", handler.DeleteUsers)
 	// Servidor escuchando en el puerto 8080
 	http.ListenAndServe(":8080", r)
 }
