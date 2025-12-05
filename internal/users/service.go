@@ -7,17 +7,17 @@ import (
 )
 
 // Recibe la conexion real db de Repository
-type Service struct {
-	repo *Repository
+type ServiceUsers struct {
+	repo *RepositoryUsers
 }
 
 // Creacion nuevo servicio el cual va a guardar toda la logica interna
-func NewService(r *Repository) *Service {
-	return &Service{repo: r}
+func NewService(r *RepositoryUsers) *ServiceUsers {
+	return &ServiceUsers{repo: r}
 }
 
 // Creacion de usuario y requirimientos a seguir
-func (r *Service) CreatetUser(name, email string, age int, weight int16, height float64, password string) error {
+func (r *ServiceUsers) CreatetUser(name, email string, age int, weight int16, height float64, password string) error {
 	// Contraseña incriptada
 	HashPassword, err := utils.HashPassword(password)
 	if err != nil {
@@ -30,10 +30,16 @@ func (r *Service) CreatetUser(name, email string, age int, weight int16, height 
 	return r.repo.InsertUser(name, email, age, weight, height, HashPassword)
 }
 
-func (r *Service) UpdateUserInformation(id_usuarios int, name, email string, age int, weight int16, height float64, password string) error {
+// Requerimientos actualizacion informacion usuario
+func (r *ServiceUsers) UpdateUserInformation(id_usuarios int, name, email string, age int, weight int16, height float64, password string) error {
 	HashPassword, err := utils.HashPassword(password)
 	if err != nil {
 		fmt.Println("error al hashear contraseña")
 	}
 	return r.repo.UpdateUser(id_usuarios, name, email, age, weight, height, HashPassword)
+}
+
+// Requerimientos eliminacion usuario
+func (r *ServiceUsers) DeleteUser(id_usuarios int) error {
+	return r.repo.DeleteUser(id_usuarios)
 }
