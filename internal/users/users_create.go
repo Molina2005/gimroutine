@@ -6,7 +6,7 @@ import (
 )
 
 // Conexion entre usuario y servidor con http por medio de POST
-func (h *Handler) CreateUsers(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerUsers) CreateUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Metodo no permitido", 404)
 		return
