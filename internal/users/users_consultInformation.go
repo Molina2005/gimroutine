@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (re *Repository) ConsultUserInformation(w http.ResponseWriter, r *http.Request) {
+func (re *RepositoryUsers) ConsultUserInformation(w http.ResponseWriter, r *http.Request) {
 	// recibe la peticion con el id a buscar y hace la conversion a int
 	IdParam := chi.URLParam(r, "id")
 	Id, err := strconv.Atoi(IdParam)
