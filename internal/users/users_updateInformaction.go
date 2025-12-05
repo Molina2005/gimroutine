@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (h *Handler) UpdateUsersInformation(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerUsers) UpdateUsersInformation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "PUT" {
 		http.Error(w, "Metodo no permitido", 404)
 		return
@@ -17,7 +17,7 @@ func (h *Handler) UpdateUsersInformation(w http.ResponseWriter, r *http.Request)
 	IdParam := chi.URLParam(r, "id")
 	IdConv, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "ID invalido", 404)
+		http.Error(w, "Id invalido", 404)
 	}
 	// struct para guardar los campos que vienen de peticion json
 	var inputUpdate struct {
