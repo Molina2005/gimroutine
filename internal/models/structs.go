@@ -2,8 +2,9 @@ package models
 
 import "time"
 
+// Struct Informacion usuarios
 type User struct {
-	Id_user   int
+	Id        int
 	Name      string
 	Email     string
 	Age       int
@@ -11,4 +12,12 @@ type User struct {
 	Height    float64
 	Password  string
 	EntryDate time.Time
+}
+
+// Struct informacion tipo de ejercicios
+type TypeOfExercises struct {
+	Id           int
+	Name         string
+	Description  string
+	CreationDate time.Time
 }
