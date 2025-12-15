@@ -34,10 +34,10 @@ func (r RepositoryUsers) userExistsXEmail(email string) (bool, error) {
 
 // Verificacion existencia de usuario por id
 // Uso: cuando ya estan en el sistema y se quiere validar que en realidad si esten por id
-func (r RepositoryUsers) userExistsXId(id_usuarios int) (bool, error) {
+func (r RepositoryUsers) userExistsXId(id_user int) (bool, error) {
 	ctx := context.Background()
 	var existsId bool
-	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1)", id_usuarios).Scan(&existsId)
+	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1)", id_user).Scan(&existsId)
 	if err != nil {
 		return false, err
 	}
@@ -66,9 +66,9 @@ func (r *RepositoryUsers) InsertUser(name, email string, age int, weight int16, 
 }
 
 // Consultar Informacion usuario
-func (r *RepositoryUsers) ViewUserInfomation(id_usuarios int) (*models.User, error) {
+func (r *RepositoryUsers) ViewUserInfomation(id_user int) (*models.User, error) {
 	ctx := context.Background()
-	existsEmail, err := r.userExistsXId(id_usuarios)
+	existsEmail, err := r.userExistsXId(id_user)
 	if err != nil {
 		return nil, err
 	}
@@ -78,12 +78,10 @@ func (r *RepositoryUsers) ViewUserInfomation(id_usuarios int) (*models.User, err
 	}
 	// Guarda la informacion que se envia con Scan
 	var DataUser models.User
-	query := `SELECT id_usuarios,nombre,correo,edad,peso,altura,contrasena,fecha_ingreso
-	FROM usuarios 
-	WHERE id_usuarios = $1`
+	query := `SELECT * FROM usuarios WHERE id_usuarios = $1`
 	// Envia informacion con scan a la variable DataUser
-	if err := r.db.QueryRow(ctx, query, id_usuarios).Scan(
-		&DataUser.Id_user,
+	if err := r.db.QueryRow(ctx, query, id_user).Scan(
+		&DataUser.Id,
 		&DataUser.Name,
 		&DataUser.Email,
 		&DataUser.Age,
@@ -99,9 +97,9 @@ func (r *RepositoryUsers) ViewUserInfomation(id_usuarios int) (*models.User, err
 }
 
 // Actualizacion informacion usuario
-func (r RepositoryUsers) UpdateUser(id_usuarios int, name, email string, age int, weight int16, height float64, password string) error {
+func (r RepositoryUsers) UpdateUser(id_user int, name, email string, age int, weight int16, height float64, password string) error {
 	ctx := context.Background()
-	existsEmail, err := r.userExistsXId(id_usuarios)
+	existsEmail, err := r.userExistsXId(id_user)
 	if err != nil {
 		return err
 	}
@@ -110,7 +108,7 @@ func (r RepositoryUsers) UpdateUser(id_usuarios int, name, email string, age int
 	}
 	query := `UPDATE usuarios SET nombre = $1, correo = $2, edad = $3, peso = $4, altura = $5, contrasena = $6
 	WHERE id_usuarios = $7`
-	_, err = r.db.Exec(ctx, query, name, email, age, weight, height, password, id_usuarios)
+	_, err = r.db.Exec(ctx, query, name, email, age, weight, height, password, id_user)
 	if err != nil {
 		return err
 	}
@@ -118,9 +116,9 @@ func (r RepositoryUsers) UpdateUser(id_usuarios int, name, email string, age int
 }
 
 // Eliminar usuario del sistema
-func (r RepositoryUsers) DeleteUser(id_usuarios int) error {
+func (r RepositoryUsers) DeleteUser(id_user int) error {
 	ctx := context.Background()
-	existsEmail, err := r.userExistsXId(id_usuarios)
+	existsEmail, err := r.userExistsXId(id_user)
 	if err != nil {
 		return err
 	}
@@ -128,7 +126,7 @@ func (r RepositoryUsers) DeleteUser(id_usuarios int) error {
 		return errors.New("usuario no existe en el sistema")
 	}
 	query := "DELETE FROM usuarios WHERE id_usuarios = $1"
-	_, err = r.db.Exec(ctx, query, id_usuarios)
+	_, err = r.db.Exec(ctx, query, id_user)
 	if err != nil {
 		return err
 	}
