@@ -20,11 +20,11 @@ func main() {
 	defer connect.Close()
 	fmt.Println("conexion exitosa a postgres")
 
-	// LLamado de las capas de users para poder crear usuarios
+	// LLamado de las capas para poder maninpular usuarios
 	repo := users.NewRepository(connect)
 	service := users.NewService(repo)
 	handler := users.NewHandler(service)
-	// LLamado de las capas de users para poder crear tipos de ejercicios
+	// LLamado de las capas para poder manipular tipos de ejercicios
 	repoTypeExercises := typeexercises.NewRepository(connect)
 	serviceTypeExercises := typeexercises.NewService(repoTypeExercises)
 	handlerTypeExercises := typeexercises.NewHandler(serviceTypeExercises)
@@ -40,6 +40,8 @@ func main() {
 	// URLS respuestas http (tipos de ejercicios)
 	r.Post("/TypeOfExercises", handlerTypeExercises.HandlerCreationTypeOfExercise)
 	r.Get("/TypeOfExercises/{id}", repoTypeExercises.HandlerConsultTypeOfExercises)
+	r.Put("/TypeOfExercises/{id}", handlerTypeExercises.HandlerUpdateInfoTypeOfExercises)
+	r.Delete("/TypeOfExercises/{id}", handlerTypeExercises.DeleteTypeOfExercises)
 	// Servidor escuchando en el puerto 8080
 	http.ListenAndServe(":8080", r)
 }
