@@ -101,3 +101,21 @@ func (r *RepositoryExercises) QueryUpdateTypeOfExercises(IdTypeOfExercise int, n
 	}
 	return nil
 }
+
+// Eliminar tipos de ejercicios
+func (r *RepositoryExercises) QueryDeleteTypeOfExercises(idTypeOfExercise int) error {
+	ctx := context.Background()
+	Exists, err := r.QueryExerciseExistsId(idTypeOfExercise)
+	if err != nil {
+		return err
+	}
+	if !Exists {
+		return errors.New("tipo de ejercicio no existe en el sistema")
+	}
+	query := `DELETE FROM tipo_ejercicios WHERE id_tipo_ejercicio = $1`
+	_, err = r.db.Exec(ctx, query, idTypeOfExercise)
+	if err != nil {
+		return err
+	}
+	return nil
+}
