@@ -21,6 +21,12 @@ func (s *ServiceExercises) ServiceCreationTypeOfExercise(nameTypeOfExercise, des
 	return s.repo.QueryCreateExerciseType(nameTypeOfExercise, description)
 }
 
+// Servicio actualizacion informacion tipos de ejercicios
 func (s *ServiceExercises) ServiceUpdateInfoTypeOfExercise(IdTypeOfExercise int, nameTypeOfExercise, description string) error {
 	return s.repo.QueryUpdateTypeOfExercises(IdTypeOfExercise, nameTypeOfExercise, description)
+}
+
+// Servicio eliminacion tipos de ejercicios
+func (s *ServiceExercises) ServiceDeleteTypeOfExercise(IdTypeOfExercise int) error {
+	return s.repo.QueryDeleteTypeOfExercises(IdTypeOfExercise)
 }
