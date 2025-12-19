@@ -15,9 +15,13 @@ func NewRepository(db *pgxpool.Pool) *RepositoryExercises {
 }
 
 // Creacion de ejercicios
-func (r *RepositoryExercises) QueryCreateExercises(IdTypeOfExercise int, nameTypeOfExercise, description, image string) {
+func (r *RepositoryExercises) QueryCreateExercises(IdTypeOfExercise int, nameTypeOfExercise, description, image string) error {
 	ctx := context.Background()
 	query := `INSERT INTO ejercicios (id_tipo_ejercicio, nombre, descripcion, imagen) 
 	VALUES ($1,$2,$3,$4)`
-	r.db.Exec(ctx, query, IdTypeOfExercise, nameTypeOfExercise, description, image)
+	_, err := r.db.Exec(ctx, query, IdTypeOfExercise, nameTypeOfExercise, description, image)
+	if err != nil {
+		return err
+	}
+	return nil
 }
