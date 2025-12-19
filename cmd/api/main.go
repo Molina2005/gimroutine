@@ -5,6 +5,7 @@ import (
 	"log"
 	typeexercises "modulo/internal/TypeExercises"
 	"modulo/internal/database"
+	"modulo/internal/exercises"
 	"modulo/internal/users"
 	"net/http"
 
@@ -28,6 +29,10 @@ func main() {
 	repoTypeExercises := typeexercises.NewRepository(connect)
 	serviceTypeExercises := typeexercises.NewService(repoTypeExercises)
 	handlerTypeExercises := typeexercises.NewHandler(serviceTypeExercises)
+	// Llamado capas para poder manipular ejercicios
+	repoExercises := exercises.NewRepository(connect)
+	serviceExercises := exercises.NewService(repoExercises)
+	handlerExercises := exercises.NewHanlder(serviceExercises)
 
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
@@ -42,6 +47,8 @@ func main() {
 	r.Get("/TypeOfExercises/{id}", repoTypeExercises.HandlerConsultTypeOfExercises)
 	r.Put("/TypeOfExercises/{id}", handlerTypeExercises.HandlerUpdateInfoTypeOfExercises)
 	r.Delete("/TypeOfExercises/{id}", handlerTypeExercises.DeleteTypeOfExercises)
+	// URLS respuestas http (ejercicios)
+	r.Post("/Exercises", handlerExercises.HandlerCreationExercises)
 	// Servidor escuchando en el puerto 8080
 	http.ListenAndServe(":8080", r)
 }
