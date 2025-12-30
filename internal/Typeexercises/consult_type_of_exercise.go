@@ -9,7 +9,7 @@ import (
 )
 
 func (re *RepositoryExercises) HandlerConsultTypeOfExercises(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != http.MethodGet {
 		http.Error(w, "Metodo no permitido", 404)
 		return
 	}
