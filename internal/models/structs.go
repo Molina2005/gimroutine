@@ -21,3 +21,13 @@ type TypeOfExercises struct {
 	Description  string
 	CreationDate time.Time
 }
+
+// Structs informacion ejercicios
+type Exercises struct {
+	Id               int
+	IdTypeOfExercise int
+	Name             string
+	Description      string
+	Img              string
+	CreationDate     time.Time
+}
