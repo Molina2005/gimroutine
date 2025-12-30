@@ -20,9 +20,9 @@ func NewRepository(db *pgxpool.Pool) *RepositoryExercises {
 func (r *RepositoryExercises) QueryExerciseExistsName(nameTypeOfExercise string) (bool, error) {
 	var ExistsTypeOfExercise bool
 	ctx := context.Background()
-	r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM tipo_ejercicios WHERE nombre = $1)", nameTypeOfExercise).Scan(&ExistsTypeOfExercise)
+	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM tipo_ejercicios WHERE nombre = $1)", nameTypeOfExercise).Scan(&ExistsTypeOfExercise)
 	// Si no existe genera el error
-	if !ExistsTypeOfExercise {
+	if err != nil {
 		return false, nil
 	}
 	// si existe retorna su existencia
@@ -33,8 +33,8 @@ func (r *RepositoryExercises) QueryExerciseExistsName(nameTypeOfExercise string)
 func (r *RepositoryExercises) QueryExerciseExistsId(IdTypeOfExercise int) (bool, error) {
 	var ExistsTypeOfExercise bool
 	ctx := context.Background()
-	r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM tipo_ejercicios WHERE id_tipo_ejercicio = $1)", IdTypeOfExercise).Scan(&ExistsTypeOfExercise)
-	if !ExistsTypeOfExercise {
+	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM tipo_ejercicios WHERE id_tipo_ejercicio = $1)", IdTypeOfExercise).Scan(&ExistsTypeOfExercise)
+	if err != nil {
 		return false, nil
 	}
 	return ExistsTypeOfExercise, nil
