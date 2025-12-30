@@ -9,7 +9,7 @@ import (
 )
 
 func (h *HandlerExercises) HandlerUpdateInfoTypeOfExercises(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "PUT" {
+	if r.Method != http.MethodPut {
 		http.Error(w, "Metodo no permitido", 404)
 		return
 	}
