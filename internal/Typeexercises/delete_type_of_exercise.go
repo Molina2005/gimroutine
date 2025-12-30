@@ -8,7 +8,7 @@ import (
 )
 
 func (h *HandlerExercises) DeleteTypeOfExercises(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "DELETE" {
+	if r.Method != http.MethodDelete {
 		http.Error(w, "Metodo no permitido", 404)
 		return
 	}
