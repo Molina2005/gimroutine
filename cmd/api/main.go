@@ -49,6 +49,7 @@ func main() {
 	r.Delete("/TypeOfExercises/{id}", handlerTypeExercises.DeleteTypeOfExercises)
 	// URLS respuestas http (ejercicios)
 	r.Post("/Exercises", handlerExercises.HandlerCreationExercises)
+	r.Get("/Exercises/{id}", repoExercises.HandlerConsultInformationExercise)
 	// Servidor escuchando en el puerto 8080
 	http.ListenAndServe(":8080", r)
 }
