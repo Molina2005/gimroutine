@@ -6,7 +6,7 @@ import (
 )
 
 func (h *HandlerExercises) HandlerCreationTypeOfExercise(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != http.MethodPost {
 		http.Error(w, "metodo no permitido", 404)
 		return
 	}
