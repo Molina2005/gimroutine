@@ -23,6 +23,6 @@ func (re *RepositoryUsers) ConsultUserInformation(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), 404)
 		return
 	}
-	// Creacion de nuevo encoder json, para poder enviar informacion exacta al usuario
+	// Creacion nuevo encoder para poder enviarle la informacion al usuario en dato json
 	json.NewEncoder(w).Encode(InfoUser)
 }
