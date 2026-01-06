@@ -24,7 +24,7 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 		return
 	}
 	// Captura la informacion que el usuario envia en el formulario
-	IdTypeOfExercise := r.FormValue("idTypeOfExercise")
+	IdTypeOfExercise := r.FormValue("IdTypeOfExercise")
 	id, err := strconv.Atoi(IdTypeOfExercise)
 	if err != nil {
 		http.Error(w, "ID invalido", 400)
@@ -44,7 +44,7 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	// Cierra la conexion cuando termina su funcion
 	defer file.Close()
 	// Creacion de carpeta automatica para guardar imagenes
-	routeFile := `c:\Users\CRISTIAN MOLINA\go\src/gimroutine/uploadsImg`
+	routeFile := `./uploadsImg`
 	if err := os.MkdirAll(routeFile, os.ModePerm); err != nil {
 		http.Error(w, "No se puede crear la carpeta", 500)
 		return
