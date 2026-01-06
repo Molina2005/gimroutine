@@ -27,6 +27,17 @@ func (r *RepositoryExercises) ExistsExercise(nameExercise string) (bool, error) 
 	return ExistsExercise, nil
 }
 
+// Verificacion existencia de ejericicio por id
+func (r *RepositoryExercises) ExistsExerciseId(IdExercise int) (bool, error) {
+	var ExistsExercise bool
+	ctx := context.Background()
+	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM ejercicios WHERE id_ejercicio = $1)", IdExercise).Scan(&ExistsExercise)
+	if err != nil {
+		return false, nil
+	}
+	return ExistsExercise, nil
+}
+
 // Creacion de ejercicios
 func (r *RepositoryExercises) QueryCreateExercises(IdTypeOfExercise int, nameExercise, description, image string) error {
 	Exists, err := r.ExistsExercise(nameExercise)
@@ -48,6 +59,13 @@ func (r *RepositoryExercises) QueryCreateExercises(IdTypeOfExercise int, nameExe
 
 // Consultar informacion ejercicios
 func (r *RepositoryExercises) QueryExercises(idExercise int) (*models.Exercises, error) {
+	Exists, err := r.ExistsExerciseId(idExercise)
+	if err != nil {
+		return nil, err
+	}
+	if !Exists {
+		return nil, errors.New("ejercicio no existe en el sistema")
+	}
 	ctx := context.Background()
 	query := `SELECT id_ejercicio, id_tipo_ejercicio, nombre, descripcion, imagen, fecha_creacion 
 	FROM ejercicios WHERE id_ejercicio = $1`
@@ -63,4 +81,22 @@ func (r *RepositoryExercises) QueryExercises(idExercise int) (*models.Exercises,
 		return nil, err
 	}
 	return &DataExercise, nil
+}
+
+// Actualizar datos de ejercicios con imagen
+func (r *RepositoryExercises) QueryUpdateExercise(IdExercise, IdTypeOfExercise int, nameExercise, description, image string) error {
+	Exists, err := r.ExistsExerciseId(IdExercise)
+	if err != nil {
+		return err
+	}
+	if !Exists {
+		return errors.New("ejercicio no existe en el sistema")
+	}
+	ctx := context.Background()
+	query := `UPDATE ejercicios SET id_tipo_ejercicio = $1, nombre = $2, descripcion = $3, imagen = $4 
+	WHERE id_ejercicio = $5`
+	if _, err := r.db.Exec(ctx, query, IdTypeOfExercise, nameExercise, description, image, IdExercise); err != nil {
+		return err
+	}
+	return nil
 }
