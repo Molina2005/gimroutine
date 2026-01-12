@@ -26,7 +26,7 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 	}
 	// Lee la informacion que envia el usuario y lo organiza para poder usarla con formvalue
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
-		http.Error(w, "error al procesar el formulario", http.StatusBadRequest)
+		http.Error(w, "error al procesar el formulario", http.StatusBadRequest) // Solicitud estado incorrecta
 		return
 	}
 	// Se captura la informacion que envio el usuario por el formulario
@@ -40,39 +40,48 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 	nameSpace := strings.TrimSpace(name)
 	nameLower := strings.ToLower(nameSpace)
 	description := r.FormValue("description")
+	// variable que guarda el nombre del archivo
+	var filename string
 	// Se obtienen los datos de la imagen
 	file, fileHeader, err := r.FormFile("images")
 	if err != nil {
-		http.Error(w, "error al obtener imagen", 400)
-		return
+		// ErrMissingFile : maneja para que imagen se pueda utilizar de manera opcional
+		// Si el error es == a que no se envio el archivo lo envia directamente a la funcion del servicio
+		// Si es != a otro error pero que no es el de que no se envio archivo, entra directmente al error real
+		if err != http.ErrMissingFile {
+			http.Error(w, "error al obtener imagen", http.StatusBadRequest)
+			return
+		}
+	} else {
+		// Se cierra el archivo cuando finaliza la ejecución del handler
+		defer file.Close()
+		// ruta de creacion de carpeta en donde se guardaran las imagenes
+		routeFile := `./uploadsImg`
+		// creacion carpeta
+		if err := os.MkdirAll(routeFile, os.ModePerm); err != nil {
+			http.Error(w, "No se puede crear la carpeta", 500)
+			return
+		}
+		// Se obtiene solo nombre de la imagen
+		filename = filepath.Base(fileHeader.Filename)
+		// une informacion de ruta de carpeta y nombre de la imagen
+		route := filepath.Join(routeFile, filename)
+		// creacion archivo en donde se guardara la data de la imagen
+		data, err := os.Create(route)
+		if err != nil {
+			http.Error(w, "no se pudo guardar la imagen", 500)
+			return
+		}
+		defer data.Close()
+		// copia archivo que el usuario envio y lo deja en el archivo que se creo en el servidor
+		// data : archivo creado en el servidor
+		// file : archivo que el usuario envio en la peticion
+		if _, err := io.Copy(data, file); err != nil {
+			http.Error(w, "error al guardar la imagen", 500)
+			return
+		}
 	}
-	// Se cierra el archivo cuando finaliza la ejecución del handler
-	defer file.Close()
-	// ruta de creacion de carpeta en donde se guardaran las imagenes
-	routeFile := `./uploadsImg`
-	// creacion carpeta
-	if err := os.MkdirAll(routeFile, os.ModePerm); err != nil {
-		http.Error(w, "No se puede crear la carpeta", 500)
-		return
-	}
-	// Se obtiene solo nombre de la imagen
-	filename := filepath.Base(fileHeader.Filename)
-	// une informacion de ruta de carpeta y nombre de la imagen
-	route := filepath.Join(routeFile, filename)
-	// creacion archivo en donde se guardara la data de la imagen
-	data, err := os.Create(route)
-	if err != nil {
-		http.Error(w, "no se pudo guardar la imagen", 500)
-		return
-	}
-	defer data.Close()
-	// copia archivo que el usuario envio y lo deja en el archivo que se creo en el servidor
-	// data : archivo creado en el servidor
-	// file : archivo que el usuario envio en la peticion
-	if _, err := io.Copy(data, file); err != nil {
-		http.Error(w, "error al guardar la imagen", 500)
-		return
-	}
+	// Funcion con logica del servicio
 	if err := h.service.ServiceUpdateExercises(IdExercise, IdTypeOfExercise, nameLower, description, filename); err != nil {
 		http.Error(w, err.Error(), 404)
 		return
