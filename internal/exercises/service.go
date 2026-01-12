@@ -31,3 +31,8 @@ func (s *ServiceExercises) ServiceUpdateExercises(IdExercise, IdTypeOfExercise i
 		description,
 		image)
 }
+
+func (s *ServiceExercises) ServiceDeleteExercises(IdExercise int) error {
+	return s.Repo.QueryDeleteExercise(
+		IdExercise)
+}
