@@ -100,3 +100,20 @@ func (r *RepositoryExercises) QueryUpdateExercise(IdExercise, IdTypeOfExercise i
 	}
 	return nil
 }
+
+// Eliminar ejercicios del sistema
+func (r *RepositoryExercises) QueryDeleteExercise(IdExercise int) error {
+	Exists, err := r.ExistsExerciseId(IdExercise)
+	if err != nil {
+		return err
+	}
+	if !Exists {
+		return errors.New("ejercicio no existe en el sistema")
+	}
+	ctx := context.Background()
+	query := `DELETE FROM ejercicios WHERE id_ejercicio = $1`
+	if _, err := r.db.Exec(ctx, query, IdExercise); err != nil {
+		return err
+	}
+	return nil
+}
