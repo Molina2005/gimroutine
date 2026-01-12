@@ -51,6 +51,7 @@ func main() {
 	r.Post("/Exercises", handlerExercises.HandlerCreationExercises)
 	r.Get("/Exercises/{id}", repoExercises.HandlerConsultInformationExercise)
 	r.Put("/Exercises/{id}", handlerExercises.HandlerUpdateInformationExercise)
+	r.Delete("/Exercises/{id}", handlerExercises.HandlerDeleteExercise)
 	// Servidor escuchando en el puerto 8080
 	http.ListenAndServe(":8080", r)
 }
