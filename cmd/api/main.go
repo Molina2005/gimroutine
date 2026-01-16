@@ -20,7 +20,6 @@ func main() {
 	}
 	defer connect.Close()
 	fmt.Println("conexion exitosa a postgres")
-
 	// LLamado de las capas para poder maninpular usuarios
 	repo := users.NewRepository(connect)
 	service := users.NewService(repo)
@@ -33,7 +32,6 @@ func main() {
 	repoExercises := exercises.NewRepository(connect)
 	serviceExercises := exercises.NewService(repoExercises)
 	handlerExercises := exercises.NewHanlder(serviceExercises)
-
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// URLS respuestas http (usuario)
@@ -52,6 +50,12 @@ func main() {
 	r.Get("/Exercises/{id}", repoExercises.HandlerConsultInformationExercise)
 	r.Put("/Exercises/{id}", handlerExercises.HandlerUpdateInformationExercise)
 	r.Delete("/Exercises/{id}", handlerExercises.HandlerDeleteExercise)
+	// Permite establecer la ruta del html
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/index.html")
+	})
+	// Ruta para poder trabajar con los archivos statics
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":2525", r)
 }
