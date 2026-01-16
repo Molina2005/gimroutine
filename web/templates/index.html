@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index principal</title>
+    <title>Crear usuario</title>
+    <link rel="stylesheet" href="../static/loginCreationUsers.css">
 </head>
 <body>
-        <form id="userForm">
-            <input type="text" name="name" id="name">
-            <input type="email" name="email" id="email">
-            <input type="number" name="age" id="age">
-            <input type="number" name="weight" id="weight">
-            <input type="number" name="height" id="height">
-            <input type="password" name="password" id="password">
-            <button type="submit">Enviar</button>
-        </form>
-        <script>
-            // buscar como funciona y usar fetch y JSON para poder conectar mi html con mi backend de creacion de usuarios
-        </script>
+    <div class="login-page">
+        <div class="login-card">
+            <h2>Crear usuario</h2>
+            <form id="userForm">
+                <input type="text" id="name" placeholder="Nombre" required>
+                <input type="email" id="email" placeholder="Correo" required>
+                <input type="number" id="age" placeholder="Edad" required>
+                <input type="number" id="weight" placeholder="Peso (kg)" required>
+                <input type="number" id="height" step="any" placeholder="Altura (cm)" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <script src="/static/connectBackend.js"></script>
 </body>
 </html>
