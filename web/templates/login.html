@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear usuario</title>
+    <link rel="stylesheet" href="../static/loginCreationUsers.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-card">
+            <h2>Crear usuario</h2>
+            <form id="userForm">
+                <input type="text" id="name" placeholder="Nombre" required>
+                <input type="email" id="email" placeholder="Correo" required>
+                <input type="number" id="age" placeholder="Edad" required>
+                <input type="number" id="weight" placeholder="Peso (kg)" required>
+                <input type="number" id="height" step="any" placeholder="Altura (cm)" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <script src="/static/connectBackend.js"></script>
+</body>
+</html>
