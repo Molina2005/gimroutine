@@ -7,11 +7,16 @@ type User struct {
 	Id        int
 	Name      string
 	Email     string
-	Age       int
-	Weight    int16
-	Height    float64
 	Password  string
 	EntryDate time.Time
+}
+
+// Login
+type Login struct {
+	Id       int
+	Name     string
+	Email    string
+	Password string
 }
 
 // Struct informacion tipo de ejercicios
