@@ -21,12 +21,9 @@ func (h *HandlerUsers) UpdateUsersInformation(w http.ResponseWriter, r *http.Req
 	}
 	// struct para guardar los campos que vienen de peticion json
 	var inputUpdate struct {
-		Name     string  `json:"name"`
-		Email    string  `json:"email"`
-		Age      int     `json:"age"`
-		Weight   int16   `json:"weight"`
-		Height   float64 `json:"height"`
-		Password string  `json:"password"`
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&inputUpdate); err != nil {
 		http.Error(w, "JSON invalido", 400)
@@ -37,9 +34,6 @@ func (h *HandlerUsers) UpdateUsersInformation(w http.ResponseWriter, r *http.Req
 		IdConv,
 		inputUpdate.Name,
 		inputUpdate.Email,
-		inputUpdate.Age,
-		inputUpdate.Weight,
-		inputUpdate.Height,
 		inputUpdate.Password,
 	); err != nil {
 		http.Error(w, err.Error(), 400)
