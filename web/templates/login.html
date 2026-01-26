@@ -3,24 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear usuario</title>
-    <link rel="stylesheet" href="../static/loginCreationUsers.css">
+    <link rel="stylesheet" href="../static/css/login.css">
+    <title>Login</title>
 </head>
-<body>
-    <div class="login-page">
-        <div class="login-card">
-            <h2>Crear usuario</h2>
-            <form id="userForm">
-                <input type="text" id="name" placeholder="Nombre" required>
-                <input type="email" id="email" placeholder="Correo" required>
-                <input type="number" id="age" placeholder="Edad" required>
-                <input type="number" id="weight" placeholder="Peso (kg)" required>
-                <input type="number" id="height" step="any" placeholder="Altura (cm)" required>
-                <input type="password" id="password" placeholder="Contraseña" required>
-                <button type="submit">Enviar</button>
-            </form>
-        </div>
+<body> 
+    <div class="login-card">
+        <h2>Iniciar Sesion</h2>
+        <form id="loginUserForm"> 
+            <input type="text" id="nameOrEmail" placeholder="Nombre de usuario o correo electronico">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button type="submit">Ingresar</button>
+        </form>
     </div>
-    <script src="/static/connectBackend.js"></script>
 </body>
 </html>
