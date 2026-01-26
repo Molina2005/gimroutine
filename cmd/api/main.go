@@ -54,12 +54,12 @@ func main() {
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
 	})
-	// Permite establecer la ruta html del login crear usuario
-	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/login.html")
+	// Permite establecer la ruta html de crear usuario
+	r.Get("/createaccount", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/create_account.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
-	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":2525", r)
+	http.ListenAndServe(":4545", r)
 }
