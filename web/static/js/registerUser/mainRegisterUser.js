@@ -1,4 +1,4 @@
-import { registerUser } from "./registerUser.js";
+import { logicRegisterUser } from "./RegisterUser.js";
 // DOM: Permite interactuar con el html, da acceso a trabajar con el formulario y botones
 document.addEventListener("DOMContentLoaded", function(){
     // Varible que obtiene informacion del formulario 
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         // Se le pasa a la función login la información del formData
         // para que ejecute la lógica de inicio de sesión (comunicación con el backend)
-        registerUser(formData)
+        logicRegisterUser(formData)
         form.reset();
     })
 })
