@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (h *HandlerUsers) UpdateUsersInformation(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Metodo no permitido", 404)
 		return
@@ -30,7 +30,7 @@ func (h *HandlerUsers) UpdateUsersInformation(w http.ResponseWriter, r *http.Req
 		return
 	}
 	// se pasa la funcion de creacion de usuario con la informacion que esta en inputUpdate
-	if err := h.service.UpdateUserInformation(
+	if err := h.service.ServiceUpdateUserInformation(
 		IdConv,
 		inputUpdate.Name,
 		inputUpdate.Email,
