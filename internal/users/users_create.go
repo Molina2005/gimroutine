@@ -6,7 +6,7 @@ import (
 )
 
 // Conexion entre usuario y servidor con http por medio de POST
-func (h *HandlerUsers) CreateUsers(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerUsers) HandlerCreateUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo no permitido", 404)
 		return
@@ -24,7 +24,7 @@ func (h *HandlerUsers) CreateUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// se pasa la funcion de creacion de usuario con la informacion que esta en input
-	if err := h.service.CreatetUser(input.Name, input.Email, input.Password); err != nil {
+	if err := h.service.ServiceCreatetUser(input.Name, input.Email, input.Password); err != nil {
 		http.Error(w, err.Error(), 400)
 		return
 	}
