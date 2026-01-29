@@ -1,6 +1,6 @@
 // Funcion para manejar la conexion con el backend por medio de fetch
 // Recibe la data
-export function createUser(data){
+export function connectionUser(data){
     // Ruta para poder comunicarse con el backend(API) de creacion de usuarios
     return fetch("/users",{
         // Metodo con el que se realizara la peticion
