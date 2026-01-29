@@ -20,7 +20,7 @@ func NewRepository(db *pgxpool.Pool) *RepositoryUsers {
 
 // Verificacion existencia de usuario por correo
 // Uso: solo cuando se quieren registrar y ya existe el correo en sistema
-func (r RepositoryUsers) userExistsXEmail(email string) (bool, error) {
+func (r RepositoryUsers) QueryuserExistsXEmail(email string) (bool, error) {
 	// contexto que exije *pgxpool.Pool para consultas sql
 	ctx := context.Background()
 	var existsEmail bool
@@ -34,7 +34,7 @@ func (r RepositoryUsers) userExistsXEmail(email string) (bool, error) {
 
 // Verificacion existencia de usuario por id
 // Uso: cuando ya estan en el sistema y se quiere validar que en realidad si esten por id
-func (r RepositoryUsers) userExistsXId(id_user int) (bool, error) {
+func (r RepositoryUsers) QueryuserExistsXId(id_user int) (bool, error) {
 	ctx := context.Background()
 	var existsId bool
 	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1)", id_user).Scan(&existsId)
@@ -45,10 +45,10 @@ func (r RepositoryUsers) userExistsXId(id_user int) (bool, error) {
 }
 
 // Insercion de usuarios
-func (r *RepositoryUsers) InsertUser(name, email string, password string) error {
+func (r *RepositoryUsers) QueryInsertUser(name, email string, password string) error {
 	ctx := context.Background()
 	// Funcion para verificar existencia de usuario
-	existsEmail, err := r.userExistsXEmail(email)
+	existsEmail, err := r.QueryuserExistsXEmail(email)
 	if err != nil {
 		return err
 	}
@@ -66,9 +66,9 @@ func (r *RepositoryUsers) InsertUser(name, email string, password string) error 
 }
 
 // Consultar Informacion usuario
-func (r *RepositoryUsers) ViewUserInfomation(id_user int) (*models.User, error) {
+func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.User, error) {
 	ctx := context.Background()
-	existsEmail, err := r.userExistsXId(id_user)
+	existsEmail, err := r.QueryuserExistsXId(id_user)
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +94,9 @@ func (r *RepositoryUsers) ViewUserInfomation(id_user int) (*models.User, error) 
 }
 
 // Actualizacion informacion usuario
-func (r *RepositoryUsers) UpdateUser(id_user int, name, email string, password string) error {
+func (r *RepositoryUsers) QueryUpdateUser(id_user int, name, email string, password string) error {
 	ctx := context.Background()
-	existsEmail, err := r.userExistsXId(id_user)
+	existsEmail, err := r.QueryuserExistsXId(id_user)
 	if err != nil {
 		return err
 	}
@@ -113,9 +113,9 @@ func (r *RepositoryUsers) UpdateUser(id_user int, name, email string, password s
 }
 
 // Eliminar usuario del sistema
-func (r *RepositoryUsers) DeleteUser(id_user int) error {
+func (r *RepositoryUsers) QueryDeleteUser(id_user int) error {
 	ctx := context.Background()
-	existsEmail, err := r.userExistsXId(id_user)
+	existsEmail, err := r.QueryuserExistsXId(id_user)
 	if err != nil {
 		return err
 	}
@@ -131,13 +131,12 @@ func (r *RepositoryUsers) DeleteUser(id_user int) error {
 }
 
 // Consulta para obtener login
-func (r *RepositoryUsers) LoginUser(id_user int, name, email, password string) (*models.Login, error) {
+func (r *RepositoryUsers) QueryLogin(email, password string) (*models.Login, error) {
 	ctx := context.Background()
 	var DataLogin models.Login
-	query := `SELECT nombre, correo, contrasena FROM usuarios WHERE id_usuarios = $1`
-	if err := r.db.QueryRow(ctx, query, name, email, password, id_user).Scan(
-		&DataLogin.Id,
-		&DataLogin.Name,
+	query := `SELECT nombre, correo, contrasena FROM usuarios
+		WHERE correo = $1 AND contrasena = $2`
+	if err := r.db.QueryRow(ctx, query, email, password).Scan(
 		&DataLogin.Email,
 		&DataLogin.Password,
 	); err != nil {
