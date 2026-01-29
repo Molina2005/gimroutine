@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (h *HandlerUsers) DeleteUsers(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerUsers) HandlerDeleteUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Metodo no permitido", 404)
 		return
@@ -18,7 +18,7 @@ func (h *HandlerUsers) DeleteUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Id invalido", 400)
 		return
 	}
-	if err := h.service.DeleteUser(id); err != nil {
+	if err := h.service.ServiceDeleteUser(id); err != nil {
 		http.Error(w, err.Error(), 400)
 		return
 	}
