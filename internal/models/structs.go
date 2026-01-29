@@ -13,8 +13,6 @@ type User struct {
 
 // Login
 type Login struct {
-	Id       int
-	Name     string
 	Email    string
 	Password string
 }
