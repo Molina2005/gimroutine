@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (re *RepositoryUsers) ConsultUserInformation(w http.ResponseWriter, r *http.Request) {
+func (re *RepositoryUsers) HandlerConsultUserInformation(w http.ResponseWriter, r *http.Request) {
 	// recibe la peticion con el id a buscar y hace la conversion a int
 	IdParam := chi.URLParam(r, "id")
 	Id, err := strconv.Atoi(IdParam)
@@ -17,7 +17,7 @@ func (re *RepositoryUsers) ConsultUserInformation(w http.ResponseWriter, r *http
 		return
 	}
 	// Llamado consulta de repository
-	InfoUser, err := re.ViewUserInfomation(Id)
+	InfoUser, err := re.QueryViewUserInfomation(Id)
 	if err != nil {
 		// cualquier error de la consulta se va a reflejar aqui con err.Error()
 		http.Error(w, err.Error(), 404)
