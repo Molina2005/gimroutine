@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (h *HandlerExercises) DeleteTypeOfExercises(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerExercises) HandlerDeleteTypeOfExercises(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Metodo no permitido", 404)
 		return
