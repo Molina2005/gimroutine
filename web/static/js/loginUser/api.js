@@ -1,5 +1,4 @@
 export function login(data){
-    console.log("entro a api")
     return fetch("/login",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
