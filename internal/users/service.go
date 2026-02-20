@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"modulo/internal/models"
 	"modulo/internal/utils"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Recibe la conexion real db de Repository
@@ -47,8 +49,19 @@ func (r *ServiceUsers) ServiceDeleteUser(id_usuarios int) error {
 
 // Requerimientos login
 func (r *ServiceUsers) ServiceLogin(email, password string) (*models.Login, error) {
+	// Requerimientos para el usuario ante los inputs
 	if email == "" || password == "" {
 		return nil, errors.New("email y contraseña son obligatorios")
 	}
-	return r.repo.QueryLogin(email, password)
+	// Datos Email, password provenientes de consulta a la base de datos
+	user, err := r.repo.QueryLogin(email)
+	if err != nil {
+		return nil, errors.New("Usuario no encontrado")
+	}
+	// Comparacion de password de base de datos con password de inputPassword
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return nil, errors.New("Credenciales invalidas")
+	}
+	return user, nil
 }
