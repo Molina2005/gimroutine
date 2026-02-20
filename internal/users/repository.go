@@ -131,12 +131,12 @@ func (r *RepositoryUsers) QueryDeleteUser(id_user int) error {
 }
 
 // Consulta para obtener login
-func (r *RepositoryUsers) QueryLogin(email, password string) (*models.Login, error) {
+func (r *RepositoryUsers) QueryLogin(email string) (*models.Login, error) {
 	ctx := context.Background()
 	var DataLogin models.Login
-	query := `SELECT nombre, correo, contrasena FROM usuarios
-		WHERE correo = $1 AND contrasena = $2`
-	if err := r.db.QueryRow(ctx, query, email, password).Scan(
+	query := `SELECT correo, contrasena FROM usuarios
+		WHERE correo = $1`
+	if err := r.db.QueryRow(ctx, query, email).Scan(
 		&DataLogin.Email,
 		&DataLogin.Password,
 	); err != nil {
