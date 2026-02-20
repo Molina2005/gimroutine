@@ -64,12 +64,11 @@ func main() {
 		http.ServeFile(w, r, "./web/templates/users/login.html")
 	})
 	// Pagina inicial al iniciar sesion
-	r.Get("/Home", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/home", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/home.html")
 	})
-
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":7070", r)
+	http.ListenAndServe(":4200", r)
 }
