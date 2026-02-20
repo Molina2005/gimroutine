@@ -4,10 +4,12 @@ export function login(data){
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(data)        
     })
-    .then(response =>{
-        if (!response.ok){
-            throw new Error("Error ingresar al sistema");
-        }
-        return response.text()
+    .then(res => res.json())   
+    .then(json =>{
+        console.log(json)
+        return json;
     })
-}
+    .catch(err =>{
+        console.log("Error en login", err)
+    });
+}  
