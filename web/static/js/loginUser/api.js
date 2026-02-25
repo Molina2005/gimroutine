@@ -1,15 +1,16 @@
-export function login(data){
-    return fetch("/login",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(data)        
-    })
-    .then(res => res.json())   
-    .then(json =>{
-        console.log(json)
+export async function login(data){
+    try {
+        const res = await fetch("/login",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data)        
+        });
+        const json = await res.json();
+        if (!res.ok){
+            return {error: true, message: json.error || "Error el login"};
+        }
         return json;
-    })
-    .catch(err =>{
-        console.log("Error en login", err)
-    });
+    } catch (err){
+        return {error: true, message: json.error || "Error inesperado en login"};
+    }
 }  
