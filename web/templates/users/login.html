@@ -1,20 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/login.css">
-    <title>Login</title>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="../../static/css/login.css">
 </head>
 <body> 
-    <div class="login-card">
-        <h2>Iniciar Sesion</h2>
-        <form id="loginUserForm"> 
-            <input type="email" id="email" placeholder="Correo electronico">
-            <input type="password" id="password" placeholder="Contraseña">
-            <button type="submit">Ingresar</button>
+    <div id="container-nav"></div>
+  <div class="background">
+    <div class="overlay">
+      <div class="form-container">
+        <img src="" alt="Logo" class="logo">
+        <h1>¡Iniciar Sesion!</h1>
+        <form id="loginUserForm">
+          <input type="email" id="email" placeholder="Correo" required>
+          <input type="password" id="password" placeholder="Contraseña" required>
+          <button type="submit" class="login-btn">Ingresar</button>
         </form>
+        <div class="register">
+          ¿No tienes cuenta aun? <a href="/createAccount">Registrate</a>
+        </div>
+      </div>
     </div>
+  </div>
     <script type="module" src="/static/js/loginUser/mainLogin.js"></script>
+    <script src="../../static/js/cammon/nav.js"></script>
+      <script> 
+            cargarMenu('./users/navGeneral.html', 'container-nav');
+      </script> 
 </body>
 </html>
