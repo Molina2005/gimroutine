@@ -1,5 +1,5 @@
 import { logicLogin } from "./Login.js";
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
     const form =  document.getElementById("loginUserForm");
     form.addEventListener("submit", async function(e){
         e.preventDefault();
@@ -10,13 +10,16 @@ document.addEventListener("DOMContentLoaded", function(){
         // Try maneja el error sin romper el programa 
         // catch cumple con enviar el error en caso de que falle
         try{
-            // Await se usa para esperar una promesa, hasta que esto se cumpla pasa a lo siguiente
-            await logicLogin(formData);
-            form.reset();
-            // url para que redirija a la pagina de Home
-            window.location.replace("/home");
+            const result = await logicLogin(formData);
+            if (result.error){
+                alert(result.message);
+            }else{
+                form.reset();
+                window.location.replace("home")
+            }
+
         }catch (err){
-            alert("Credenciales incorrectas intente de nuevo")
+            alert( err.message || "Credenciales incorrectas intente de nuevo")
         } 
     })
 })
