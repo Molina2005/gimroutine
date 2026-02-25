@@ -18,7 +18,7 @@ header {
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    border-bottom: 1px solid #ff0000;
+    border-bottom: 1px solid rgb(92, 8, 188);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -49,12 +49,12 @@ header button {
 }
 
 header button:hover {
-    background: rgba(255, 0, 0, 0.1);
-    color: #ff0000;
+    background: rgb(92, 8, 188);
+    color: #e0e0e0;
 }
 
 header button:active {
-    background: rgba(255, 0, 0, 0.2);
+    background: rgb(92, 8, 188);
 }
 
 .auth-buttons {
@@ -64,7 +64,7 @@ header button:active {
 
 .auth-buttons button {
     background: transparent;
-    color: #ff0000;
+    color: rgb(92, 8, 188);
     border: none;
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
@@ -72,16 +72,16 @@ header button:active {
 }
 
 .auth-buttons button:first-child {
-    border: 1px solid #ff0000;
+    border: 1px solid rgb(92, 8, 188);;
 }
 
 .auth-buttons button:last-child {
-    background: #ff0000;
+    background: rgb(92, 8, 188);
     color: #ffffff;
 }
 
 .auth-buttons button:last-child:hover {
-    background: #cc0000;
+    background: rgb(92, 8, 188);
     color: #ffffff;
 }
 
@@ -98,7 +98,7 @@ header input[type="text"] {
 
 header input[type="text"]:focus {
     outline: none;
-    border-color: #ff0000;
+    border-color: rgb(92, 8, 188);
     background: #222222;
 }
 
@@ -131,7 +131,7 @@ header input[type="text"]::placeholder {
 }
 
 .hero-content h1 span {
-    color: #ff0000;
+    color: rgb(92, 8, 188);
 }
 
 .hero-content p {
@@ -147,7 +147,7 @@ header input[type="text"]::placeholder {
 }
 
 .btn-primary {
-    background: #ff0000;
+    background: rgb(92, 8, 188);
     color: #ffffff;
     border: none;
     padding: 1rem 2.5rem;
@@ -159,9 +159,9 @@ header input[type="text"]::placeholder {
 }
 
 .btn-primary:hover {
-    background: #cc0000;
+    background: rgb(92, 8, 188);
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.3);
+    box-shadow: 0 10px 25px rgb(92, 8, 188);
 }
 
 .btn-secondary {
@@ -177,8 +177,8 @@ header input[type="text"]::placeholder {
 }
 
 .btn-secondary:hover {
-    border-color: #ff0000;
-    color: #ff0000;
+    border-color: rgb(92, 8, 188);
+    color: #ff00 rgb(92, 8, 188);
 }
 
 .hero-image {
@@ -208,7 +208,7 @@ header input[type="text"]::placeholder {
 }
 
 .feature-card:hover {
-    border-color: #ff0000;
+    border-color: rgb(92, 8, 188);
     transform: translateY(-5px);
 }
 
@@ -264,12 +264,12 @@ header input[type="text"]::placeholder {
 }
 
 .plan-card:hover {
-    border-color: #ff0000;
+    border-color: rgb(92, 8, 188);
     transform: translateY(-5px);
 }
 
 .plan-card.featured {
-    border-color: #ff0000;
+    border-color: rgb(92, 8, 188);
     position: relative;
 }
 
@@ -279,7 +279,7 @@ header input[type="text"]::placeholder {
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #ff0000;
+    background: rgb(92, 8, 188);
     color: #ffffff;
     padding: 0.3rem 1rem;
     border-radius: 20px;
@@ -313,7 +313,7 @@ header input[type="text"]::placeholder {
 
 .plan-card li:before {
     content: "✓";
-    color: #ff0000;
+    color: rgb(92, 8, 188);
     font-weight: bold;
     margin-right: 0.8rem;
 }
@@ -334,7 +334,7 @@ header input[type="text"]::placeholder {
 }
 
 .news-card:hover {
-    border-color: #ff0000;
+    border-color: rgb(92, 8, 188);
     transform: translateY(-5px);
 }
 
@@ -352,7 +352,7 @@ header input[type="text"]::placeholder {
 }
 
 .news-date {
-    color: #ff0000;
+    color: rgb(92, 8, 188);
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -385,7 +385,7 @@ header input[type="text"]::placeholder {
 
 .benefit-icon {
     background: #121212;
-    border: 1px solid #ff0000;
+    border: 1px solid rgb(92, 8, 188);
     border-radius: 8px;
     width: 60px;
     height: 60px;
@@ -410,7 +410,7 @@ header input[type="text"]::placeholder {
 
 footer {
     background: #0a0a0a;
-    border-top: 1px solid #ff0000;
+    border-top: 1px solid rgb(92, 8, 188);
     padding: 4rem 3rem 2rem;
     margin-top: 5rem;
 }
@@ -451,7 +451,7 @@ footer {
 }
 
 .footer-section ul li a:hover {
-    color: #ff0000;
+    color: rgb(92, 8, 188);
 }
 
 .social-links {
@@ -475,8 +475,8 @@ footer {
 }
 
 .social-links a:hover {
-    background: #ff0000;
-    border-color: #ff0000;
+    background: rgb(92, 8, 188);
+    border-color: rgb(92, 8, 188);
     transform: translateY(-3px);
 }
 
@@ -504,7 +504,7 @@ footer {
 }
 
 .footer-links a:hover {
-    color: #ff0000;
+    color: rgb(92, 8, 188);
 }
 
 ::-webkit-scrollbar {
@@ -521,7 +521,7 @@ footer {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #ff0000;
+    background: rgb(92, 8, 188);
 }
 
 @media (max-width: 1024px) {
