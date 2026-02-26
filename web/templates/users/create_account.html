@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Crear Cuenta</title>
-  <link rel="stylesheet" href="../../static/css/creationUsers.css">
+  <link rel="stylesheet" href="/static/css/creationUsers.css">
 </head>
 <body>
+  <div id="container-nav"></div>
   <div class="background">
     <div class="overlay">
       <div class="form-container">
@@ -23,6 +24,11 @@
       </div>
     </div>
   </div>
-      <script type="module" src="../../static/js/registerUser/mainRegisterUser.js"></script>
+    <script type="module" src="/static/js/registerUser/mainRegisterUser.js"></script>
+        <script src="/static/js/cammon/nav.js"></script>
+    <script> 
+      cargarMenu('/nav', 'container-nav');
+    </script> 
+
 </body>
 </html>
