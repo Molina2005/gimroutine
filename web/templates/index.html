@@ -3,26 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="/static/css/index.css">
     <title>App Index</title>
 </head>
 <body>
-    <header>
-        <div class="nav-links">
-            <a href=""><button>Inicio</button></a>
-            <a href=""><button>Servicios</button></a>
-            <a href=""><button>Planes</button></a>
-            <a href=""><button>Novedades</button></a>
-            <a href=""><button>Beneficios</button></a>
-            <a href=""><button>Nosotros</button></a>
-        </div>
-        <div class="auth-buttons">
-            <a href="/loginUsers"><button>Iniciar Sesión</button></a>
-            <a href="/createAccount"><button>Crear Cuenta</button></a>
-        </div>
-        <input type="text" placeholder="Búsqueda rápida...">
-    </header>
-
+    <div id="container-nav"></div>
     <div class="content">
         <section class="hero-section">
             <div class="hero-content">
@@ -249,5 +234,9 @@
         </div>
     </footer>
 
+    <script src="/static/js/cammon/nav.js"></script>
+    <script> 
+      cargarMenu('/nav', 'container-nav');
+    </script> 
 </body>
 </html>
