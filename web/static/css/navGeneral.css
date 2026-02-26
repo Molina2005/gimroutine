@@ -1,0 +1,94 @@
+header {
+    background: #121212;
+    padding: 1.2rem 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    border-bottom: 1px solid rgb(92, 8, 188);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header button {
+    background: transparent;
+    color: #e0e0e0;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+}
+
+header button:hover {
+    background: rgb(92, 8, 188);
+    color: #e0e0e0;
+}
+
+header button:active {
+    background: rgb(92, 8, 188);
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.auth-buttons button {
+    background: transparent;
+    color: rgb(92, 8, 188);
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.auth-buttons button:first-child {
+    border: 1px solid rgb(92, 8, 188);;
+}
+
+.auth-buttons button:last-child {
+    background: rgb(92, 8, 188);
+    color: #ffffff;
+}
+
+.auth-buttons button:last-child:hover {
+    background: rgb(92, 8, 188);
+    color: #ffffff;
+}
+
+header input[type="text"] {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    color: #e0e0e0;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+header input[type="text"]:focus {
+    outline: none;
+    border-color: rgb(92, 8, 188);
+    background: #222222;
+}
+
+header input[type="text"]::placeholder {
+    color: #666666;
+}
