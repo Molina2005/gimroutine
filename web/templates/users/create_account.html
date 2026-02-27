@@ -13,12 +13,18 @@
         <img src="" alt="Logo" class="logo">
         <h1>¡Crea tu cuenta!</h1>
         <form id="userForm">
-          <input type="text" id="name" placeholder="Nombre" required>
-          <input type="email" id="email" placeholder="Correo" required>
-          <input type="password" id="password" placeholder="Contraseña" required>
-          <button type="submit" class="login-btn">Enviar</button>
+          <!--Patter: validacion para usuario mas seguro-->
+          <input title="3–15 caracteres, solo letras, números, '_' o '.'" type="text" id="name" pattern="[a-zA-Z0-9._]{3,15}" placeholder="Nombre" required>
+          <input title="Correo" type="email" id="email" placeholder="Correo" required>
+          <!-- Patter: Validacion par contrasera mas segura  -->
+          <input title="8+ caracteres, con mayúscula, minúscula, número y símbolo" type="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}" placeholder="Contraseña" required>
+          <label class="terminos" for="">
+            <input type="checkbox" required>
+              Al enviar, acepta <a href="">Autorizacion de datos personales</a> 
+          </label>
+          <button title="Envio informacion" type="submit" class="login-btn">Enviar</button>
         </form>
-        <div class="register">
+        <div title="Inicia sesion con tu cuenta" class="register">
           ¿Ya tienes una cuenta? <a href="/loginUsers">Inicia sesión</a>
         </div>
       </div>
@@ -29,6 +35,5 @@
     <script> 
       cargarMenu('/nav', 'container-nav');
     </script> 
-
 </body>
 </html>
