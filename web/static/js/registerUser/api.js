@@ -24,8 +24,3 @@ export function connectionUser(data){
         return response.text();
     })
 }
-
-// Login inicio de sesion
-export function loginUser(data){
-
-}
