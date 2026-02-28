@@ -7,8 +7,13 @@ import (
 
 // Conexion entre usuario y servidor con http por medio de POST
 func (h *HandlerUsers) HandlerCreateUsers(w http.ResponseWriter, r *http.Request) {
+	// Header que hace que siempre la respuesta a enviar sea de tipo json
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
-		http.Error(w, "Metodo no permitido", 404)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	// struct para guardar los campos que vienen de peticion json
@@ -20,14 +25,22 @@ func (h *HandlerUsers) HandlerCreateUsers(w http.ResponseWriter, r *http.Request
 	// r.Body : contiene lo que envía el usuario (JSON)
 	// Decode(&input) : toma json y convierte a struct para saber qué campos esperar y cómo guardarlos
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "JSON invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "json_invalido",
+		})
 		return
 	}
 	// se pasa la funcion de creacion de usuario con la informacion que esta en input
 	if err := h.service.ServiceCreatetUser(input.Name, input.Email, input.Password); err != nil {
-		http.Error(w, err.Error(), 400)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	// Respuesta al usuario de (usuario creado)
-	w.Write([]byte("Usuario creado"))
+	// Respuesta al usuario de (usuario creado) en tipo json
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "usuario_creado_correctamente",
+	})
 }
