@@ -1,26 +1,38 @@
 package typeexercises
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
 
-func (h *HandlerExercises) HandlerDeleteTypeOfExercises(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerTypeOfExercises) HandlerDeleteTypeOfExercises(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
-		http.Error(w, "Metodo no permitido", 404)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	IdParam := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "Id invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
 	if err := h.service.ServiceDeleteTypeOfExercise(id); err != nil {
-		http.Error(w, err.Error(), 400)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	w.Write([]byte("tipo ejercicio eliminado con exito"))
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "tipo_ejercicio_eliminado_con_exito",
+	})
 }
