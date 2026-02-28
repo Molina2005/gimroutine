@@ -1,6 +1,9 @@
 package exercises
 
-import "errors"
+import (
+	"errors"
+	"modulo/internal/models"
+)
 
 type ServiceExercises struct {
 	Repo *RepositoryExercises
@@ -20,6 +23,11 @@ func (s *ServiceExercises) ServiceCreationExercises(IdTypeOfExercise int, nameTy
 		nameTypeOfExercise,
 		description,
 		image)
+}
+
+// Servicio consulta de ejercicios
+func (s *ServiceExercises) ServiceQueryExercises(idExercise int) (*models.Exercises, error) {
+	return s.Repo.QueryExercises(idExercise)
 }
 
 // Servicio actualizacion de ejercicios
