@@ -8,22 +8,34 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (re *RepositoryExercises) HandlerConsultInformationExercise(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerExercises) HandlerConsultInformationExercise(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {
-		http.Error(w, "Metodo no permitido", 404)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	Idparam := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(Idparam)
 	if err != nil {
-		http.Error(w, "ID invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
-	InfoExercise, err := re.QueryExercises(id)
+	InfoExercise, err := h.service.ServiceQueryExercises(id)
 	if err != nil {
-		http.Error(w, err.Error(), 404)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
 	// Creacion nuevo encoder para poder enviarle la informacion al usuario en dato json
-	json.NewEncoder(w).Encode(InfoExercise)
+	json.NewEncoder(w).Encode(map[string]any{
+		"exercise": InfoExercise,
+	})
 }
