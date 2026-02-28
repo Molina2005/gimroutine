@@ -1,6 +1,7 @@
 package exercises
 
 import (
+	"encoding/json"
 	"io"
 	"net/http"
 	"os"
@@ -12,28 +13,41 @@ import (
 )
 
 func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	// Verificacion de metodo
 	if r.Method != http.MethodPut {
-		http.Error(w, "Metodo no permitido", http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	// Probar si es mejor con busqueda por id o solo consultar y despues actualizar
 	IdParam := chi.URLParam(r, "id")
 	IdExercise, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "ID invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
 	// Lee la informacion que envia el usuario y lo organiza para poder usarla con formvalue
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
-		http.Error(w, "error al procesar el formulario", http.StatusBadRequest) // Solicitud estado incorrecta
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "error_al_procesar_formulario",
+		})
 		return
 	}
 	// Se captura la informacion que envio el usuario por el formulario
 	Id := r.FormValue("IdTypeOfExercise")
 	IdTypeOfExercise, err := strconv.Atoi(Id)
 	if err != nil {
-		http.Error(w, "ID invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
 	name := r.FormValue("name")
@@ -49,7 +63,10 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 		// Si el error es == a que no se envio el archivo lo envia directamente a la funcion del servicio
 		// Si es != a otro error pero que no es el de que no se envio archivo, entra directmente al error real
 		if err != http.ErrMissingFile {
-			http.Error(w, "error al obtener imagen", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "error_obtener_imagen",
+			})
 			return
 		}
 	} else {
@@ -59,7 +76,10 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 		routeFile := `./uploadsImg`
 		// creacion carpeta
 		if err := os.MkdirAll(routeFile, os.ModePerm); err != nil {
-			http.Error(w, "No se puede crear la carpeta", 500)
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "No_se_puede_crear_la_carpeta",
+			})
 			return
 		}
 		// Se obtiene solo nombre de la imagen
@@ -69,7 +89,10 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 		// creacion archivo en donde se guardara la data de la imagen
 		data, err := os.Create(route)
 		if err != nil {
-			http.Error(w, "no se pudo guardar la imagen", 500)
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "no_se_pudo_guardar_la_imagen",
+			})
 			return
 		}
 		defer data.Close()
@@ -77,14 +100,22 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 		// data : archivo creado en el servidor
 		// file : archivo que el usuario envio en la peticion
 		if _, err := io.Copy(data, file); err != nil {
-			http.Error(w, "error al guardar la imagen", 500)
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "error_al_guardar_imagen",
+			})
 			return
 		}
 	}
 	// Funcion con logica del servicio
 	if err := h.service.ServiceUpdateExercises(IdExercise, IdTypeOfExercise, nameLower, description, filename); err != nil {
-		http.Error(w, err.Error(), 404)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	w.Write([]byte("ejercicio actualizado correctamente"))
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "ejercicio_actualizado_correctamente",
+	})
 }
