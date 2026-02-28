@@ -8,21 +8,37 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (re *RepositoryUsers) HandlerConsultUserInformation(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerUsers) HandlerConsultUserInformation(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
+		return
+	}
 	// recibe la peticion con el id a buscar y hace la conversion a int
 	IdParam := chi.URLParam(r, "id")
 	Id, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "Id invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
-	// Llamado consulta de repository
-	InfoUser, err := re.QueryViewUserInfomation(Id)
+	// Llamado de funcion al servicio
+	InfoUser, err := h.service.ServiceQueryUser(Id)
 	if err != nil {
 		// cualquier error de la consulta se va a reflejar aqui con err.Error()
-		http.Error(w, err.Error(), 404)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
 	// Creacion nuevo encoder para poder enviarle la informacion al usuario en dato json
-	json.NewEncoder(w).Encode(InfoUser)
+	json.NewEncoder(w).Encode(map[string]any{
+		"user": InfoUser,
+	})
 }
