@@ -25,9 +25,9 @@ func main() {
 	service := users.NewService(repo)
 	handler := users.NewHandler(service)
 	// LLamado de las capas para poder manipular tipos de ejercicios
-	repoTypeExercises := typeexercises.NewRepository(connect)
-	serviceTypeExercises := typeexercises.NewService(repoTypeExercises)
-	handlerTypeExercises := typeexercises.NewHandler(serviceTypeExercises)
+	repoTypeOfExercises := typeexercises.NewRepository(connect)
+	serviceTypeOfExercises := typeexercises.NewService(repoTypeOfExercises)
+	handlerTypeOfExercises := typeexercises.NewHandler(serviceTypeOfExercises)
 	// Llamado capas para poder manipular ejercicios
 	repoExercises := exercises.NewRepository(connect)
 	serviceExercises := exercises.NewService(repoExercises)
@@ -38,17 +38,17 @@ func main() {
 	// {id} : va enrutado con el id de chi.URLParam(r, "id")
 	r.Post("/users", handler.HandlerCreateUsers)
 	r.Post("/login", handler.HandlerLogin)
-	r.Get("/users/{id}", repo.HandlerConsultUserInformation)
+	r.Get("/users/{id}", handler.HandlerConsultUserInformation)
 	r.Put("/users/{id}", handler.HandlerUpdateUsersInformation)
 	r.Delete("/users/{id}", handler.HandlerDeleteUsers)
 	// URLS respuestas http (tipos de ejercicios)
-	r.Post("/TypeOfExercises", handlerTypeExercises.HandlerCreationTypeOfExercise)
-	r.Get("/TypeOfExercises/{id}", repoTypeExercises.HandlerConsultTypeOfExercises)
-	r.Put("/TypeOfExercises/{id}", handlerTypeExercises.HandlerUpdateInfoTypeOfExercises)
-	r.Delete("/TypeOfExercises/{id}", handlerTypeExercises.HandlerDeleteTypeOfExercises)
+	r.Post("/TypeOfExercises", handlerTypeOfExercises.HandlerCreationTypeOfExercise)
+	r.Get("/TypeOfExercises/{id}", handlerTypeOfExercises.HandlerConsultTypeOfExercises)
+	r.Put("/TypeOfExercises/{id}", handlerTypeOfExercises.HandlerUpdateInfoTypeOfExercises)
+	r.Delete("/TypeOfExercises/{id}", handlerTypeOfExercises.HandlerDeleteTypeOfExercises)
 	// URLS respuestas http (ejercicios)
 	r.Post("/Exercises", handlerExercises.HandlerCreationExercises)
-	r.Get("/Exercises/{id}", repoExercises.HandlerConsultInformationExercise)
+	r.Get("/Exercises/{id}", handlerExercises.HandlerConsultInformationExercise)
 	r.Put("/Exercises/{id}", handlerExercises.HandlerUpdateInformationExercise)
 	r.Delete("/Exercises/{id}", handlerExercises.HandlerDeleteExercise)
 	// Permite establecer la ruta html del index
@@ -73,5 +73,5 @@ func main() {
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":3800", r)
+	http.ListenAndServe(":2020", r)
 }
