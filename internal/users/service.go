@@ -33,6 +33,10 @@ func (r *ServiceUsers) ServiceCreatetUser(name, email string, password string) e
 	return r.repo.QueryInsertUser(name, email, HashPassword)
 }
 
+func (r *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
+	return r.repo.QueryViewUserInfomation(id_user)
+}
+
 // Requerimientos actualizacion informacion usuario
 func (r *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email string, password string) error {
 	HashPassword, err := utils.HashPassword(password)
