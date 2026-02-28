@@ -8,21 +8,34 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (re *RepositoryExercises) HandlerConsultTypeOfExercises(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerTypeOfExercises) HandlerConsultTypeOfExercises(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {
-		http.Error(w, "Metodo no permitido", 404)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	IdParam := chi.URLParam(r, "id")
 	Id, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "ID invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
-	InfoTypeOfExercise, err := re.QueryTypeOfExercises(Id)
+
+	InfoTypeOfExercise, err := h.service.ServiceQueryTypeOfExercise(Id)
 	if err != nil {
-		http.Error(w, err.Error(), 404)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	json.NewEncoder(w).Encode(InfoTypeOfExercise)
+	json.NewEncoder(w).Encode(map[string]any{
+		"type_exercise": InfoTypeOfExercise,
+	})
 }
