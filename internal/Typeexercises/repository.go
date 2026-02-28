@@ -8,16 +8,16 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type RepositoryExercises struct {
+type RepositoryTypeOfExercises struct {
 	db *pgxpool.Pool
 }
 
-func NewRepository(db *pgxpool.Pool) *RepositoryExercises {
-	return &RepositoryExercises{db: db}
+func NewRepository(db *pgxpool.Pool) *RepositoryTypeOfExercises {
+	return &RepositoryTypeOfExercises{db: db}
 }
 
 // Verificacion existencia de ejercicios por nombre
-func (r *RepositoryExercises) QueryExerciseExistsName(nameTypeOfExercise string) (bool, error) {
+func (r *RepositoryTypeOfExercises) QueryExerciseExistsName(nameTypeOfExercise string) (bool, error) {
 	var ExistsTypeOfExercise bool
 	ctx := context.Background()
 	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM tipo_ejercicios WHERE nombre = $1)", nameTypeOfExercise).Scan(&ExistsTypeOfExercise)
@@ -30,7 +30,7 @@ func (r *RepositoryExercises) QueryExerciseExistsName(nameTypeOfExercise string)
 }
 
 // Verificacion existencia de ejercicios por id
-func (r *RepositoryExercises) QueryExerciseExistsId(IdTypeOfExercise int) (bool, error) {
+func (r *RepositoryTypeOfExercises) QueryExerciseExistsId(IdTypeOfExercise int) (bool, error) {
 	var ExistsTypeOfExercise bool
 	ctx := context.Background()
 	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM tipo_ejercicios WHERE id_tipo_ejercicio = $1)", IdTypeOfExercise).Scan(&ExistsTypeOfExercise)
@@ -41,7 +41,7 @@ func (r *RepositoryExercises) QueryExerciseExistsId(IdTypeOfExercise int) (bool,
 }
 
 // Creacion de tipos de ejercicios
-func (r *RepositoryExercises) QueryCreateExerciseType(nameTypeOfExercise, description string) error {
+func (r *RepositoryTypeOfExercises) QueryCreateExerciseType(nameTypeOfExercise, description string) error {
 	Exists, err := r.QueryExerciseExistsName(nameTypeOfExercise)
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func (r *RepositoryExercises) QueryCreateExerciseType(nameTypeOfExercise, descri
 }
 
 // Consulta de tipos de ejercicios
-func (r *RepositoryExercises) QueryTypeOfExercises(IdTypeOfExercise int) (*models.TypeOfExercises, error) {
+func (r *RepositoryTypeOfExercises) QueryTypeOfExercises(IdTypeOfExercise int) (*models.TypeOfExercises, error) {
 	Exists, err := r.QueryExerciseExistsId(IdTypeOfExercise)
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (r *RepositoryExercises) QueryTypeOfExercises(IdTypeOfExercise int) (*model
 }
 
 // Actualizar informacion de tipos de ejercicios
-func (r *RepositoryExercises) QueryUpdateTypeOfExercises(IdTypeOfExercise int, nameTypeOfExercise, description string) error {
+func (r *RepositoryTypeOfExercises) QueryUpdateTypeOfExercises(IdTypeOfExercise int, nameTypeOfExercise, description string) error {
 	ctx := context.Background()
 	Exists, err := r.QueryExerciseExistsId(IdTypeOfExercise)
 	if err != nil {
@@ -103,7 +103,7 @@ func (r *RepositoryExercises) QueryUpdateTypeOfExercises(IdTypeOfExercise int, n
 }
 
 // Eliminar tipos de ejercicios
-func (r *RepositoryExercises) QueryDeleteTypeOfExercises(idTypeOfExercise int) error {
+func (r *RepositoryTypeOfExercises) QueryDeleteTypeOfExercises(idTypeOfExercise int) error {
 	ctx := context.Background()
 	Exists, err := r.QueryExerciseExistsId(idTypeOfExercise)
 	if err != nil {
