@@ -1,6 +1,7 @@
 package exercises
 
 import (
+	"encoding/json"
 	"io"
 	"net/http"
 	"os"
@@ -10,8 +11,12 @@ import (
 )
 
 func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
-		http.Error(w, "Metodo no permitido", http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	// Lee el contenido que el usuario envio (parsea peticion usuario)
@@ -20,14 +25,20 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	// Si esta entre los 10MB se mantiene en memoria temporalmente
 	// Si los archivos superan ese tamaño, se guardan en archivos temporales en disco
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
-		http.Error(w, "error al procesar el formulario", http.StatusBadRequest) // Solicitud estado incorrecta
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "error_al_procesar_formulario",
+		})
 		return
 	}
 	// Captura la informacion que el usuario envia en el formulario
 	IdTypeOfExercise := r.FormValue("IdTypeOfExercise")
 	id, err := strconv.Atoi(IdTypeOfExercise)
 	if err != nil {
-		http.Error(w, "ID invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
 	name := r.FormValue("name")
@@ -38,7 +49,10 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	// devuelve: archivo en stream para leerlo pedazo a pedazo, datos del archivo(nombre, tamaño, etc), error
 	file, fileHeader, err := r.FormFile("images")
 	if err != nil {
-		http.Error(w, "error al obtener imagen", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "error_obtener_imagen",
+		})
 		return
 	}
 	// Cierra la conexion cuando termina su funcion
@@ -46,7 +60,10 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	// Creacion de carpeta automatica para guardar imagenes
 	routeFile := `./uploadsImg`
 	if err := os.MkdirAll(routeFile, os.ModePerm); err != nil {
-		http.Error(w, "No se puede crear la carpeta", 500)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "No_se_puede_crear_la_carpeta",
+		})
 		return
 	}
 	// Solo toma solo el nombre de la imagen sin importar sus direcciones
@@ -57,7 +74,10 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	// Crea el archivo físico dentro de la carpeta uploadsImg usando la ruta definida
 	data, err := os.Create(route)
 	if err != nil {
-		http.Error(w, "no se pudo guardar la imagen", 500)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "no_se_pudo_guardar_la_imagen",
+		})
 		return
 	}
 	defer data.Close()
@@ -65,12 +85,21 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	// data : archivo creado en el servidor
 	// file : archivo que el usuario envio en la peticion
 	if _, err := io.Copy(data, file); err != nil {
-		http.Error(w, "Error al guardar la imagen", 500)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "error_al_guardar_imagen",
+		})
+		return
 	}
 	// pase de servicio con toda la informacion
 	if err := h.service.ServiceCreationExercises(id, nameLower, description, filename); err != nil {
-		http.Error(w, err.Error(), 400)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	w.Write([]byte("ejercicio creado correctamente"))
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "ejercicio_creado_correctamente",
+	})
 }
