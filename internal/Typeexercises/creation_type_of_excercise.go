@@ -5,9 +5,13 @@ import (
 	"net/http"
 )
 
-func (h *HandlerExercises) HandlerCreationTypeOfExercise(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerTypeOfExercises) HandlerCreationTypeOfExercise(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
-		http.Error(w, "metodo no permitido", 404)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	var inputTypeOfExercise struct {
@@ -15,12 +19,20 @@ func (h *HandlerExercises) HandlerCreationTypeOfExercise(w http.ResponseWriter, 
 		Description string `json:"description"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&inputTypeOfExercise); err != nil {
-		http.Error(w, "JSON invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "json_invalido",
+		})
 		return
 	}
 	if err := h.service.ServiceCreationTypeOfExercise(inputTypeOfExercise.Name, inputTypeOfExercise.Description); err != nil {
-		http.Error(w, err.Error(), 400)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	w.Write([]byte("Tipo de ejercicio creado correctamente"))
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "tipo_ejercicio_creado_correctamente",
+	})
 }
