@@ -1,6 +1,7 @@
 package users
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -8,19 +9,31 @@ import (
 )
 
 func (h *HandlerUsers) HandlerDeleteUsers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodDelete {
-		http.Error(w, "Metodo no permitido", 404)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	IdParam := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "Id invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
 		return
 	}
 	if err := h.service.ServiceDeleteUser(id); err != nil {
-		http.Error(w, err.Error(), 400)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	w.Write([]byte("usuario eliminado con exito"))
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "usuario_eliminado_correctamente",
+	})
 }
