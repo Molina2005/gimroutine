@@ -1,9 +1,9 @@
 package typeexercises
 
-type HandlerExercises struct {
-	service *ServiceExercises
+type HandlerTypeOfExercises struct {
+	service *ServiceTypeOfExercises
 }
 
-func NewHandler(s *ServiceExercises) *HandlerExercises {
-	return &HandlerExercises{service: s}
+func NewHandler(s *ServiceTypeOfExercises) *HandlerTypeOfExercises {
+	return &HandlerTypeOfExercises{service: s}
 }
