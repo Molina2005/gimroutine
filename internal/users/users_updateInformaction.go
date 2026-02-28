@@ -9,15 +9,23 @@ import (
 )
 
 func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPut {
-		http.Error(w, "Metodo no permitido", 404)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "metodo_no_permitido",
+		})
 		return
 	}
 	// Recibe la peticion con el id a buscar y hace la conversion a int
 	IdParam := chi.URLParam(r, "id")
 	IdConv, err := strconv.Atoi(IdParam)
 	if err != nil {
-		http.Error(w, "Id invalido", 404)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "id_invalido",
+		})
+		return
 	}
 	// struct para guardar los campos que vienen de peticion json
 	var inputUpdate struct {
@@ -26,7 +34,10 @@ func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *h
 		Password string `json:"password"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&inputUpdate); err != nil {
-		http.Error(w, "JSON invalido", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "json_invalido",
+		})
 		return
 	}
 	// se pasa la funcion de creacion de usuario con la informacion que esta en inputUpdate
@@ -36,9 +47,13 @@ func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *h
 		inputUpdate.Email,
 		inputUpdate.Password,
 	); err != nil {
-		http.Error(w, err.Error(), 400)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
-	// Respuesta al usuario
-	w.Write([]byte("informacion actualizada"))
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "informacion_actualizada_correctamente",
+	})
 }
