@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"modulo/internal/models"
 	"modulo/internal/utils"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -19,46 +20,81 @@ func NewService(r *RepositoryUsers) *ServiceUsers {
 	return &ServiceUsers{repo: r}
 }
 
+// Variables que guarda el error de existencia de usuario
+var ErrUserAlreadyExists = errors.New("usuario ya existe en el sistema")
+var ErrUserDoesNotExists = errors.New("usuario no existe en el sistema")
+
 // Creacion de usuario y requirimientos a seguir
-func (r *ServiceUsers) ServiceCreatetUser(name, email string, password string) error {
+func (s *ServiceUsers) ServiceCreatetUser(name, email, password string) error {
+	// Verificacion de existencia de usuario por email
+	Exist, err := s.repo.QueryuserExistsXEmail(email)
+	if err != nil {
+		return err
+	}
+	if Exist {
+		// Error global de existencia de usuario
+		return ErrUserAlreadyExists
+	}
 	// Contraseña incriptada
 	HashPassword, err := utils.HashPassword(password)
 	if err != nil {
-		fmt.Println("error al hashear contraseña")
+		return errors.New("error al hashear contraseña")
 	}
+	// Nombre y email del usuario en minuscula para evitar usuarios duplicados en la creacion
+	LowerName := strings.ToLower(name)
+	LowerEmail := strings.ToLower(email)
+
 	// Validaion de se pemiten campos vacios
 	if name == "" || email == "" || HashPassword == "" {
 		return errors.New("todos los campos son obligatorios")
 	}
-	return r.repo.QueryInsertUser(name, email, HashPassword)
+	return s.repo.QueryInsertUser(LowerName, LowerEmail, HashPassword)
 }
 
-func (r *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
-	return r.repo.QueryViewUserInfomation(id_user)
+// Servicio consultar usuarios
+func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
+	Exist, err := s.repo.QueryuserExistsXId(id_user)
+	if err != nil {
+		return nil, err
+	}
+	if !Exist {
+		return nil, ErrUserDoesNotExists
+	}
+	return s.repo.QueryViewUserInfomation(id_user)
 }
 
 // Requerimientos actualizacion informacion usuario
-func (r *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email string, password string) error {
+func (s *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email string, password string) error {
+	Exist, err := s.repo.QueryuserExistsXId(id_usuarios)
+	if err != nil {
+		return err
+	}
+	if !Exist {
+		return ErrUserDoesNotExists
+	}
 	HashPassword, err := utils.HashPassword(password)
 	if err != nil {
 		fmt.Println("error al hashear contraseña")
 	}
-	return r.repo.QueryUpdateUser(id_usuarios, name, email, HashPassword)
+	return s.repo.QueryUpdateUser(id_usuarios, name, email, HashPassword)
 }
 
 // Requerimientos eliminacion usuario
-func (r *ServiceUsers) ServiceDeleteUser(id_usuarios int) error {
-	return r.repo.QueryDeleteUser(id_usuarios)
+func (s *ServiceUsers) ServiceDeleteUser(id_usuarios int) error {
+	Exist, err := s.repo.QueryuserExistsXId(id_usuarios)
+	if err != nil {
+		return err
+	}
+	if !Exist {
+		return ErrUserDoesNotExists
+	}
+	return s.repo.QueryDeleteUser(id_usuarios)
 }
 
 // Requerimientos login
-func (r *ServiceUsers) ServiceLogin(email, password string) (*models.Login, error) {
-	// Requerimientos para el usuario ante los inputs
-	if email == "" || password == "" {
-		return nil, errors.New("email y contraseña son obligatorios")
-	}
+func (s *ServiceUsers) ServiceLogin(email, password string) (*models.Login, error) {
 	// Datos Email, password provenientes de consulta a la base de datos
-	user, err := r.repo.QueryLogin(email)
+	user, err := s.repo.QueryLogin(email)
 	if err != nil {
 		return nil, errors.New("Usuario no encontrado")
 	}
