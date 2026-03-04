@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -27,7 +28,11 @@ func (h *HandlerUsers) HandlerDeleteUsers(w http.ResponseWriter, r *http.Request
 		return
 	}
 	if err := h.service.ServiceDeleteUser(id); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrUserDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
