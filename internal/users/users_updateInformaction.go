@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -47,7 +48,11 @@ func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *h
 		inputUpdate.Email,
 		inputUpdate.Password,
 	); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrUserDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
