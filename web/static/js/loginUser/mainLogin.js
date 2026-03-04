@@ -11,15 +11,16 @@ document.addEventListener("DOMContentLoaded", async function(){
         // catch cumple con enviar el error en caso de que falle
         try{
             const result = await logicLogin(formData);
-            if (result.error){
-                alert(result.message);
-            }else{
-                form.reset();
-                window.location.replace("home")
-            }
-
+            alert("Bienvenido a App", result)
+            form.reset();
+            window.location.replace("/home")
         }catch (err){
-            alert( err.message || "Credenciales incorrectas intente de nuevo")
+            // Si error es Estado no autorizado(401) entra a alert si no es un error del servidor
+            if (err.status == "401") {
+                alert("Credenciales incorrectas intente de nuevo")
+            }else{
+                alert("Error en el servidor")
+            }
         } 
     })
 })
