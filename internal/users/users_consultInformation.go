@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -30,8 +31,14 @@ func (h *HandlerUsers) HandlerConsultUserInformation(w http.ResponseWriter, r *h
 	// Llamado de funcion al servicio
 	InfoUser, err := h.service.ServiceQueryUser(Id)
 	if err != nil {
-		// cualquier error de la consulta se va a reflejar aqui con err.Error()
-		w.WriteHeader(http.StatusNotFound)
+		// Se comparan el err con el error ErrUserDoesNotExists el cual es una variable global que esta en el service
+		// Si el error es ErrUserDoesNotExists entra a StatusNotFound, si no se sabe que es un error interno del servidor
+		if errors.Is(err, ErrUserDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		// Cualquier otro error que en envie el service
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
