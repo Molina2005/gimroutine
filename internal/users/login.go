@@ -6,6 +6,7 @@ import (
 )
 
 func (h *HandlerUsers) HandlerLogin(w http.ResponseWriter, r *http.Request) {
+	// Header que hace que siempre la respuesta a enviar sea de tipo json
 	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
