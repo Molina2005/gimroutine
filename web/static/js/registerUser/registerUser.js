@@ -3,10 +3,8 @@
 import { connectionUser } from "./api.js";
 // Función que maneja la lógica de registro de usuarios.
 // Recibe los datos del formulario y delega la creación al backend.
-export function logicRegisterUser(formData){
-    return connectionUser(formData)
-    .then(data =>{
-        console.log("usuario creado")
-        return data
-    });
+export async function logicRegisterUser(formData){
+    // Recibe la informacion que envia ConnectionUser si es correcta
+    const data = await connectionUser(formData);
+    return data;
 } 
