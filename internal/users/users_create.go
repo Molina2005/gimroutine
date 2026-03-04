@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -33,8 +34,13 @@ func (h *HandlerUsers) HandlerCreateUsers(w http.ResponseWriter, r *http.Request
 	}
 	// se pasa la funcion de creacion de usuario con la informacion que esta en input
 	if err := h.service.ServiceCreatetUser(input.Name, input.Email, input.Password); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrUserAlreadyExists) {
+			w.WriteHeader(http.StatusConflict)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
+			// Culaquier otro error que venga del service
 			"error": err.Error(),
 		})
 		return
