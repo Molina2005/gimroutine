@@ -2,6 +2,7 @@ package typeexercises
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -26,7 +27,13 @@ func (h *HandlerTypeOfExercises) HandlerCreationTypeOfExercise(w http.ResponseWr
 		return
 	}
 	if err := h.service.ServiceCreationTypeOfExercise(inputTypeOfExercise.Name, inputTypeOfExercise.Description); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		// Comparacion de errores, si el error es que el tipo ejercicio ya existe entra a http.StatusConflict, si no es error interno http.StatusInternalServerError
+		if errors.Is(err, ErrTypeOfExerciseAlreadyExists) {
+			w.WriteHeader(http.StatusConflict)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		// Otros errores que pueden venir
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
