@@ -2,6 +2,7 @@ package exercises
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"os"
@@ -109,7 +110,13 @@ func (h *HandlerExercises) HandlerUpdateInformationExercise(w http.ResponseWrite
 	}
 	// Funcion con logica del servicio
 	if err := h.service.ServiceUpdateExercises(IdExercise, IdTypeOfExercise, nameLower, description, filename); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		// Comparacion de errores, si el erro es que el usuario no existe, entra a statusNotFound
+		// Si no entra a http.StatusInternalServerError
+		if errors.Is(err, ErrExerciseDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
