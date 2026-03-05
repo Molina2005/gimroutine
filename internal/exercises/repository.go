@@ -2,7 +2,6 @@ package exercises
 
 import (
 	"context"
-	"errors"
 	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -40,17 +39,10 @@ func (r *RepositoryExercises) ExistsExerciseId(IdExercise int) (bool, error) {
 
 // Creacion de ejercicios
 func (r *RepositoryExercises) QueryCreateExercises(IdTypeOfExercise int, nameExercise, description, image string) error {
-	Exists, err := r.ExistsExercise(nameExercise)
-	if err != nil {
-		return err
-	}
-	if Exists {
-		return errors.New("ejercicio ya existe en el sistema")
-	}
 	ctx := context.Background()
 	query := `INSERT INTO ejercicios (id_tipo_ejercicio, nombre, descripcion, imagen) 
 	VALUES ($1,$2,$3,$4)`
-	_, err = r.db.Exec(ctx, query, IdTypeOfExercise, nameExercise, description, image)
+	_, err := r.db.Exec(ctx, query, IdTypeOfExercise, nameExercise, description, image)
 	if err != nil {
 		return err
 	}
@@ -59,13 +51,6 @@ func (r *RepositoryExercises) QueryCreateExercises(IdTypeOfExercise int, nameExe
 
 // Consultar informacion ejercicios
 func (r *RepositoryExercises) QueryExercises(idExercise int) (*models.Exercises, error) {
-	Exists, err := r.ExistsExerciseId(idExercise)
-	if err != nil {
-		return nil, err
-	}
-	if !Exists {
-		return nil, errors.New("ejercicio no existe en el sistema")
-	}
 	ctx := context.Background()
 	query := `SELECT id_ejercicio, id_tipo_ejercicio, nombre, descripcion, imagen, fecha_creacion 
 	FROM ejercicios WHERE id_ejercicio = $1`
@@ -85,13 +70,6 @@ func (r *RepositoryExercises) QueryExercises(idExercise int) (*models.Exercises,
 
 // Actualizar datos de ejercicios con imagen
 func (r *RepositoryExercises) QueryUpdateExercise(IdExercise, IdTypeOfExercise int, nameExercise, description, image string) error {
-	Exists, err := r.ExistsExerciseId(IdExercise)
-	if err != nil {
-		return err
-	}
-	if !Exists {
-		return errors.New("ejercicio no existe en el sistema")
-	}
 	ctx := context.Background()
 	query := `UPDATE ejercicios SET id_tipo_ejercicio = $1, nombre = $2, descripcion = $3, imagen = $4 
 	WHERE id_ejercicio = $5`
@@ -103,13 +81,6 @@ func (r *RepositoryExercises) QueryUpdateExercise(IdExercise, IdTypeOfExercise i
 
 // Eliminar ejercicios del sistema
 func (r *RepositoryExercises) QueryDeleteExercise(IdExercise int) error {
-	Exists, err := r.ExistsExerciseId(IdExercise)
-	if err != nil {
-		return err
-	}
-	if !Exists {
-		return errors.New("ejercicio no existe en el sistema")
-	}
 	ctx := context.Background()
 	query := `DELETE FROM ejercicios WHERE id_ejercicio = $1`
 	if _, err := r.db.Exec(ctx, query, IdExercise); err != nil {
