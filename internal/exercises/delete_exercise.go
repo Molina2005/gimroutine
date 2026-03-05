@@ -2,6 +2,7 @@ package exercises
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -27,7 +28,11 @@ func (h *HandlerExercises) HandlerDeleteExercise(w http.ResponseWriter, r *http.
 		return
 	}
 	if err := h.service.ServiceDeleteExercises(Id); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrExerciseDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
