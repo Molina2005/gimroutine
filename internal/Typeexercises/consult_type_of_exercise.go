@@ -2,6 +2,7 @@ package typeexercises
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -29,7 +30,11 @@ func (h *HandlerTypeOfExercises) HandlerConsultTypeOfExercises(w http.ResponseWr
 
 	InfoTypeOfExercise, err := h.service.ServiceQueryTypeOfExercise(Id)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrTypeOfExerciseNotDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
