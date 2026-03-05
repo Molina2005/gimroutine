@@ -2,6 +2,7 @@ package typeexercises
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -41,7 +42,11 @@ func (h *HandlerTypeOfExercises) HandlerUpdateInfoTypeOfExercises(w http.Respons
 		inputUpdate.NameTypeOfExercise,
 		inputUpdate.Description,
 	); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrTypeOfExerciseNotDoesNotExists) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
