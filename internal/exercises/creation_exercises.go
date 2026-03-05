@@ -2,6 +2,7 @@ package exercises
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"os"
@@ -93,7 +94,11 @@ func (h *HandlerExercises) HandlerCreationExercises(w http.ResponseWriter, r *ht
 	}
 	// pase de servicio con toda la informacion
 	if err := h.service.ServiceCreationExercises(id, nameLower, description, filename); err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		if errors.Is(err, ErrExerciseAlreadyExists) {
+			w.WriteHeader(http.StatusConflict)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
 		})
