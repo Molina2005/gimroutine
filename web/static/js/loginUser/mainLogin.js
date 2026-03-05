@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function(){
         // catch cumple con enviar el error en caso de que falle
         try{
             const result = await logicLogin(formData);
-            alert("Bienvenido a App", result)
+            alert("Bienvenido a MasterGPro", result)
             form.reset();
             window.location.replace("/home")
         }catch (err){
