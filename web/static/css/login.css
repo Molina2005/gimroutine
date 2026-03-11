@@ -30,9 +30,9 @@ body, html {
   max-width: 400px;
 }
 
-.logo {
-  width: 90px;
-  margin-bottom: 20px;
+.logoEmpresa{
+  width: 150px;
+  height: 40px;
 }
 
 h1 {
