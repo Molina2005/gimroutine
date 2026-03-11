@@ -232,9 +232,6 @@ body {
     margin-right: 0.8rem;
 }
   
-
-
-
 .news-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
