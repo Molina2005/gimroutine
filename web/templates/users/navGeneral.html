@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/navGeneral.css">
-    <title>Menu</title>
+    <title>Menú</title>
 </head>
 <body>
-    <header>
-        <div class="nav-links">
-            <a title="Ir a pagina principal" href="/index"><button>Inicio</button></a>
-            <a title="Ver servicios" href=""><button>Servicios</button></a>
-            <a title="Ver planes" href=""><button>Planes</button></a>
-            <a title="Ver Novedades" href=""><button>Novedades</button></a>
-            <a title="Ver beneficios" href=""><button>Beneficios</button></a>
-            <a title="Informacion empresa" href=""><button>Nosotros</button></a>
-        </div>
-        <div class="auth-buttons">
-            <a title="Inicia sesion con tu cuenta" href="/loginUsers"><button>Iniciar Sesión</button></a>
-            <a title="Crea rapidamente tu cuenta" href="/createAccount"><button>Crear Cuenta</button></a>
-        </div>
-        <input title="Busqueda rapida" type="text" placeholder="Búsqueda rápida...">
-    </header>
+    <section>
+        <header>
+            <nav class="navbar">
+                <div class="navbar__logo">
+                    <a href="/index"><img src="/static/images/LogoMasterGPro.png" alt="Logo" class="logo">
+                    </a>
+                </div>
+                <ul class="navbar__links">
+                    <li><a href="/index#inicio" title="Ir a página principal">Inicio</a></li>
+                    <li><a href="/index#servicios" title="Ver servicios">Servicios</a></li>
+                    <li><a href="/index#planes" title="Ver planes">Planes</a></li>
+                    <li><a href="/index#novedades" title="Ver novedades">Novedades</a></li>
+                    <li><a href="/index#beneficios" title="Ver beneficios">Beneficios</a></li>
+                    <li><a href="/index#footer" title="Información empresa">Nosotros</a></li>
+                </ul>
+                <div class="navbar__auth">
+                    <a href="/loginUsers" title="Inicia sesión con tu cuenta" class="btn btn--outline">Iniciar Sesión</a>
+                    <a href="/createAccount" title="Crea rápidamente tu cuenta" class="btn btn--primary">Crear Cuenta</a>
+                </div>
+            </nav>
+        </header>
+    </section>
 </body>
 </html>
