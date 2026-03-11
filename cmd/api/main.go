@@ -67,11 +67,16 @@ func main() {
 	r.Get("/home", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/home.html")
 	})
+	// pagina navegador general
 	r.Get("/nav", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/users/navGeneral.html")
+	})
+	// pagina formulario politica y privacidad
+	r.Get("/politicaPrivacidad", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/politica_privacidad.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":4100", r)
+	http.ListenAndServe(":1011", r)
 }
