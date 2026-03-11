@@ -28,11 +28,12 @@ body, html {
   text-align: center;
   min-width: 350px;
   max-width: 400px;
+  margin-top: 80px;
 }
 
-.logo {
-  width: 90px;
-  margin-bottom: 20px;
+.logoEmpresa{
+  width: 150px;
+  height: 40px;
 }
 
 h1 {
