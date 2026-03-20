@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
             alert("Usuario creado correctamente",data);
             form.reset();
             // Envio al login en el momento en que se cree el usuario
-            window.location.href = "/loginUsers"
+            window.location.href = "/home"
         }catch (err){
             if (err.status == "409"){
                 alert("Usuario ya existe en el sistema")
