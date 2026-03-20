@@ -1,6 +1,5 @@
 // funcion para cargar menus reutilizables en otro archivo html
 function cargarMenu(nombreArchivo, idContenedor = 'container-nav'){
-    console.log("JS CARGADO")
     // archivo el cual contiene la data  
     fetch(nombreArchivo) 
     // Promesa que convierte data que llega en texto para poder utilizarlo
