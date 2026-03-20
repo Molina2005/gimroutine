@@ -78,5 +78,5 @@ func main() {
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":2700", r)
+	http.ListenAndServe(":5800", r)
 }
