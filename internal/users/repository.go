@@ -49,7 +49,10 @@ func (r *RepositoryUsers) QueryInsertUser(name, email string, password string) e
 	query := `INSERT INTO usuarios (nombre, correo, contrasena) 
 				VALUES ($1, $2, $3)`
 	_, err := r.db.Exec(ctx, query, name, email, password)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Consultar Informacion usuario
