@@ -23,7 +23,8 @@ func (r RepositoryUsers) QueryuserExistsXEmail(email string) (bool, error) {
 	// contexto que exije *pgxpool.Pool para consultas sql
 	ctx := context.Background()
 	var existsEmail bool
-	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE correo=$1)", email).Scan(&existsEmail)
+	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE correo=$1`
+	err := r.db.QueryRow(ctx, query, email).Scan(&existsEmail)
 	// Mensaje de usuario ya en sistema
 	if err != nil {
 		return false, err
@@ -36,7 +37,8 @@ func (r RepositoryUsers) QueryuserExistsXEmail(email string) (bool, error) {
 func (r RepositoryUsers) QueryuserExistsXId(id_user int) (bool, error) {
 	ctx := context.Background()
 	var existsId bool
-	err := r.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1)", id_user).Scan(&existsId)
+	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1`
+	err := r.db.QueryRow(ctx, query, id_user).Scan(&existsId)
 	if err != nil {
 		return false, err
 	}
