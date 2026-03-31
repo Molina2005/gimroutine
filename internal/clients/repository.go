@@ -2,6 +2,7 @@ package clients
 
 import (
 	"context"
+	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -18,7 +19,7 @@ func NewRepository(db *pgxpool.Pool) *RepositoryClients {
 func (r *RepositoryClients) QueryClientExistsById(IdClient int) (bool, error) {
 	ctx := context.Background()
 	var ExistsId bool
-	query := `SELECT * FROM clientes WHERE EXISTS(SELECT 1 FROM clientes WHERE id_cliente = $1)`
+	query := `SELECT EXISTS(SELECT 1 FROM clientes WHERE id_cliente = $1)`
 	err := r.db.QueryRow(ctx, query, IdClient).Scan(&ExistsId)
 	if err != nil {
 		return false, err
@@ -30,7 +31,7 @@ func (r *RepositoryClients) QueryClientExistsById(IdClient int) (bool, error) {
 func (r *RepositoryClients) QueryClientExistsByGmail(Gmail string) (bool, error) {
 	ctx := context.Background()
 	var ExistsGmail bool
-	query := `SELECT * FROM clientes WHERE EXISTS(SELECT 1 FROM clientes WHERE correo = $1)`
+	query := `SELECT EXISTS(SELECT 1 FROM clientes WHERE correo = $1)`
 	err := r.db.QueryRow(ctx, query, Gmail).Scan(&ExistsGmail)
 	if err != nil {
 		return false, err
@@ -42,7 +43,7 @@ func (r *RepositoryClients) QueryClientExistsByGmail(Gmail string) (bool, error)
 func (r *RepositoryClients) QueryClientExistsByDocument(Document string) (bool, error) {
 	ctx := context.Background()
 	var ExistsDocument bool
-	query := `SELECT * FROM clientes WHERE EXISTS(SELECT 1 FROM clientes WHERE documento = $1)`
+	query := `SELECT EXISTS(SELECT 1 FROM clientes WHERE documento = $1)`
 	err := r.db.QueryRow(ctx, query, Document).Scan(&ExistsDocument)
 	if err != nil {
 		return false, err
@@ -60,4 +61,24 @@ func (r *RepositoryClients) QueryCreateClient(name, document, gmail, phone, pass
 		return err
 	}
 	return nil
+}
+
+// Consultar informacion de clientes
+func (r *RepositoryClients) QueryClientInformation(idClient int) ([]models.Client, error) {
+	ctx := context.Background()
+	query := `SELECT * FROM clientes`
+	data, err := r.db.Query(ctx, query, idClient)
+	if err != nil {
+		return nil, err
+	}
+	data.Close()
+	var dataClients []models.Client
+	for data.Next() {
+		var x models.Client
+		if err := data.Scan(x.Id, x.Name, x.Document, x.Gmail, x.Phone, x.EnterDate, x.Password, x.State); err != nil {
+			return nil, err
+		}
+		dataClients = append(dataClients, x)
+	}
+	return dataClients, nil
 }
