@@ -34,3 +34,15 @@ type Exercises struct {
 	Img              string
 	CreationDate     time.Time
 }
+
+// Struct informacion clientes
+type Client struct {
+	Id        int
+	Name      string
+	Document  string
+	Gmail     string
+	Phone     string
+	EnterDate time.Time
+	Password  string
+	State     string
+}
