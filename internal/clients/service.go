@@ -1,6 +1,9 @@
 package clients
 
-import "errors"
+import (
+	"errors"
+	"modulo/internal/utils"
+)
 
 type ServiceClients struct {
 	Repo *RepositoryClients
@@ -31,8 +34,9 @@ func (s *ServiceClients) ServiceCreateClient(nameClient, document, gmail, phone,
 	if ExistsGmail {
 		return ErrClientAlreadyExists
 	}
-	if nameClient == "" || document == "" || gmail == "" || phone == "" || password == "" || state == "" {
-		return errors.New("todos los campos son obligatorios")
+	x, err := utils.HashPassword(password)
+	if err != nil {
+		return err
 	}
-	return s.Repo.QueryCreateClient(nameClient, document, gmail, phone, password, state)
+	return s.Repo.QueryCreateClient(nameClient, document, gmail, phone, x, state)
 }
