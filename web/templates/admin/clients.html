@@ -8,6 +8,7 @@
 <body>
     <a href="/addClient" title="" class="btn btn--outline">Agregar</a>
     <a href="/" title="" class="btn btn--outline">Filtros</a>
+    <input type="text" id="searchInput" placeholder="Buscar cliente...">
     <h2>Gestionar clientes</h2>
     <!-- Tabla de informacion de usuarios -->
     <table>
@@ -19,6 +20,9 @@
             <th>Fecha ingreso</th>
             <th>Estado</th>
         </tr>
+        <tbody id="clients-table"></tbody>
     </table>
+    <script type="module" src="/static/js/clients/allClients/mainAllClient.js"></script>
+    <script type="module" src="/static/js/ui/ui.js"></script>
 </body>
 </html>
