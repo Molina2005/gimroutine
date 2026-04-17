@@ -57,7 +57,8 @@ func main() {
 	r.Put("/Exercises/{id}", handlerExercises.HandlerUpdateInformationExercise)
 	r.Delete("/Exercises/{id}", handlerExercises.HandlerDeleteExercise)
 	// URSL respuestas htpp (clientes)
-	r.Post("/Clients", handlerClients.HandlerCreationClients)
+	r.Post("/AddClients", handlerClients.HandlerCreationClients)
+	r.Get("/AllClients", handlerClients.HandlerConsultAllClients)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
@@ -93,5 +94,5 @@ func main() {
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":2500", r)
+	http.ListenAndServe(":8965", r)
 }
