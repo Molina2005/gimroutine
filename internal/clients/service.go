@@ -2,6 +2,7 @@ package clients
 
 import (
 	"errors"
+	"modulo/internal/models"
 	"modulo/internal/utils"
 )
 
@@ -15,6 +16,7 @@ func NewService(r *RepositoryClients) *ServiceClients {
 
 // Error de existencia del cliente
 var ErrClientAlreadyExists = errors.New("Cliente ya existe en el sistema")
+var ErrClientDoesNotExists = errors.New("Cliente no existe en el sistema")
 
 func (s *ServiceClients) ServiceCreateClient(nameClient, document, gmail, phone, password, state string) error {
 	// Validacion de existencia de cliente por correo
@@ -34,9 +36,14 @@ func (s *ServiceClients) ServiceCreateClient(nameClient, document, gmail, phone,
 	if ExistsGmail {
 		return ErrClientAlreadyExists
 	}
-	x, err := utils.HashPassword(password)
+	// Hasheo de contraseña
+	hash, err := utils.HashPassword(password)
 	if err != nil {
 		return err
 	}
-	return s.Repo.QueryCreateClient(nameClient, document, gmail, phone, x, state)
+	return s.Repo.QueryCreateClient(nameClient, document, gmail, phone, hash, state)
+}
+
+func (s *ServiceClients) ServiceConsultAllClient() ([]models.Client, error) {
+	return s.Repo.QueryClientInformation()
 }
