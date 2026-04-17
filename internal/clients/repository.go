@@ -64,21 +64,27 @@ func (r *RepositoryClients) QueryCreateClient(name, document, gmail, phone, pass
 }
 
 // Consultar informacion de clientes
-func (r *RepositoryClients) QueryClientInformation(idClient int) ([]models.Client, error) {
+func (r *RepositoryClients) QueryClientInformation() ([]models.Client, error) {
 	ctx := context.Background()
-	query := `SELECT * FROM clientes`
-	data, err := r.db.Query(ctx, query, idClient)
+	query := `SELECT id_cliente, nombre, documento, correo, telefono, fecha_ingreso, 
+		contrasena, estado FROM clientes`
+	// Trae todos los registros
+	data, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	data.Close()
+	defer data.Close()
 	var dataClients []models.Client
+	// Recorre cada registro uno por uno
 	for data.Next() {
-		var x models.Client
-		if err := data.Scan(x.Id, x.Name, x.Document, x.Gmail, x.Phone, x.EnterDate, x.Password, x.State); err != nil {
+		var client models.Client
+		// Se agregan a memoria a client para luego pasarlo a dataclient
+		if err := data.Scan(&client.Id, &client.Name, &client.Document,
+			&client.Gmail, &client.Phone, &client.EnterDate,
+			&client.Password, &client.State); err != nil {
 			return nil, err
 		}
-		dataClients = append(dataClients, x)
+		dataClients = append(dataClients, client)
 	}
 	return dataClients, nil
 }
