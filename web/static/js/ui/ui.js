@@ -1,5 +1,7 @@
 // Importacion de funcion que trae recorre a los clientes
+import { LocationButtons } from "../cammon/locationButtons.js";
 import { LogicAllClient } from "../clients/allClients/logicAllClient.js";
+
 
 document.addEventListener("DOMContentLoaded", async function(){
     const clients = await LogicAllClient();
@@ -21,11 +23,16 @@ document.addEventListener("DOMContentLoaded", async function(){
         // Creacion de celda la cual guarda los botones con sus acciones 
         const actions = document.createElement("td")
         actions.innerHTML = `
-            <button>Consultar</button>
-            <button>Actualizar</button>
-            <button>Eliminar</button>`
+            <button class="ConsultButton" data-id="${client.Document}">Consultar</button>
+            <button class="UpdateButton" data-id="${client.Document}">Actualizar</button>
+            <button class="DeleteButton" data-id="${client.Document}">Eliminar</button>`
+        // Direccionamientos botones acciones
+        LocationButtons(ConsultButton, "/addClient");
+        LocationButtons(UpdateButton, "/addClient");
+        LocationButtons(DeleteButton, "/addClient");
+        
         // Se agregan a su respectivo campo
         row.appendChild(actions);
-        TableBody.appendChild(row);
+        TableBody.appendChild(row);        
     });
 });
