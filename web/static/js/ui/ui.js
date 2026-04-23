@@ -2,7 +2,6 @@
 import { LocationButtons } from "../cammon/locationButtons.js";
 import { LogicAllClient } from "../clients/allClients/logicAllClient.js";
 
-
 document.addEventListener("DOMContentLoaded", async function(){
     const clients = await LogicAllClient();
     // Se obtiene tabla que es en donde se va a guardar la informacion
@@ -26,13 +25,19 @@ document.addEventListener("DOMContentLoaded", async function(){
             <button class="ConsultButton" data-id="${client.Document}">Consultar</button>
             <button class="UpdateButton" data-id="${client.Document}">Actualizar</button>
             <button class="DeleteButton" data-id="${client.Document}">Eliminar</button>`
-        // Direccionamientos botones acciones
-        LocationButtons(ConsultButton, "/addClient");
-        LocationButtons(UpdateButton, "/addClient");
-        LocationButtons(DeleteButton, "/addClient");
-        
         // Se agregan a su respectivo campo
         row.appendChild(actions);
-        TableBody.appendChild(row);        
+        TableBody.appendChild(row);     
+        // Direccionamientos botones acciones
+        // Se pasa la clase del boton y el document que es el identificador de cada cliente
+        LocationButtons("ConsultButton", (document) =>{
+            window.location.href = ""
+        });
+        LocationButtons("UpdateButton", (document) =>{
+            window.location.href = ""
+        });
+        LocationButtons("DeleteButton", (document) =>{
+            window.location.href = ""
+        });
     });
 });
