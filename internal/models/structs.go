@@ -17,8 +17,8 @@ type Login struct {
 	Password string
 }
 
-// Struct informacion tipo de ejercicios
-type TypeOfExercises struct {
+// Struct informacion tipo de mantenimiento
+type TeamOfMaintenance struct {
 	Id           int
 	Name         string
 	Description  string
@@ -26,13 +26,13 @@ type TypeOfExercises struct {
 }
 
 // Structs informacion ejercicios
-type Exercises struct {
-	Id               int
-	IdTypeOfExercise int
-	Name             string
-	Description      string
-	Img              string
-	CreationDate     time.Time
+type Maintenance struct {
+	Id                  int
+	IdTeamOfMaintenance int
+	Name                string
+	Description         string
+	Img                 string
+	CreationDate        time.Time
 }
 
 // Struct informacion clientes
