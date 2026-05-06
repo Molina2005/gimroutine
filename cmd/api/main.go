@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	typeexercises "modulo/internal/TypeExercises"
+	teammaintenance "modulo/internal/TeamMaintenance"
 	"modulo/internal/clients"
 	"modulo/internal/database"
-	"modulo/internal/exercises"
+	maintenances "modulo/internal/maintenance"
 	"modulo/internal/users"
 	"net/http"
 
@@ -25,14 +25,14 @@ func main() {
 	repo := users.NewRepository(connect)
 	service := users.NewService(repo)
 	handler := users.NewHandler(service)
-	// LLamado de las capas para poder manipular tipos de ejercicios
-	repoTypeOfExercises := typeexercises.NewRepository(connect)
-	serviceTypeOfExercises := typeexercises.NewService(repoTypeOfExercises)
-	handlerTypeOfExercises := typeexercises.NewHandler(serviceTypeOfExercises)
-	// Llamado capas para poder manipular ejercicios
-	repoExercises := exercises.NewRepository(connect)
-	serviceExercises := exercises.NewService(repoExercises)
-	handlerExercises := exercises.NewHanlder(serviceExercises)
+	// LLamado de las capas para poder manipular equipos de mantenimiento
+	repoTeamOfMaintenance := teammaintenance.NewRepository(connect)
+	serviceTeamOfMaintenance := teammaintenance.NewService(repoTeamOfMaintenance)
+	handlerTeamOfMaintenance := teammaintenance.NewHandler(serviceTeamOfMaintenance)
+	// Llamado capas para poder manipular mantenimientos
+	repoMaintenance := maintenances.NewRepository(connect)
+	serviceMaintenance := maintenances.NewService(repoMaintenance)
+	handlerMaintenance := maintenances.NewHanlder(serviceMaintenance)
 	// Llamado capas para poder manipular clientes
 	repoClients := clients.NewRepository(connect)
 	serviceClients := clients.NewService(repoClients)
@@ -46,16 +46,16 @@ func main() {
 	r.Get("/users/{id}", handler.HandlerConsultUserInformation)
 	r.Put("/users/{id}", handler.HandlerUpdateUsersInformation)
 	r.Delete("/users/{id}", handler.HandlerDeleteUsers)
-	// URLS respuestas http (tipos de ejercicios)
-	r.Post("/TypeOfExercises", handlerTypeOfExercises.HandlerCreationTypeOfExercise)
-	r.Get("/TypeOfExercises/{id}", handlerTypeOfExercises.HandlerConsultTypeOfExercises)
-	r.Put("/TypeOfExercises/{id}", handlerTypeOfExercises.HandlerUpdateInfoTypeOfExercises)
-	r.Delete("/TypeOfExercises/{id}", handlerTypeOfExercises.HandlerDeleteTypeOfExercises)
-	// URLS respuestas http (ejercicios)
-	r.Post("/Exercises", handlerExercises.HandlerCreationExercises)
-	r.Get("/Exercises/{id}", handlerExercises.HandlerConsultInformationExercise)
-	r.Put("/Exercises/{id}", handlerExercises.HandlerUpdateInformationExercise)
-	r.Delete("/Exercises/{id}", handlerExercises.HandlerDeleteExercise)
+	// URLS respuestas http (equipos de mantenimientos)
+	r.Post("/TeamOfMaintenance", handlerTeamOfMaintenance.HandlerCreationTeamOfMaintenance)
+	r.Get("/TeamOfMaintenance/{id}", handlerTeamOfMaintenance.HandlerConsultTeamOfMaintenance)
+	r.Put("/TeamOfMaintenance/{id}", handlerTeamOfMaintenance.HandlerUpdateInfoTeamOfMaintenance)
+	r.Delete("/TeaemOfMaintenance/{id}", handlerTeamOfMaintenance.HandlerDeleteTeamOfMaintenance)
+	// URLS respuestas http (mantenimientos)
+	r.Post("/Maintenance", handlerMaintenance.HandlerCreationMaintenance)
+	r.Get("/Maintenance/{id}", handlerMaintenance.HandlerConsultInformationMaintenance)
+	r.Put("/Maintenance/{id}", handlerMaintenance.HandlerUpdateInformationMaintenance)
+	r.Delete("/Maintenance/{id}", handlerMaintenance.HandlerDeleteMaintenance)
 	// URSL respuestas htpp (clientes)
 	r.Post("/AddClients", handlerClients.HandlerCreationClients)
 	r.Get("/AllClients", handlerClients.HandlerConsultAllClients)
@@ -64,8 +64,8 @@ func main() {
 		http.ServeFile(w, r, "./web/templates/index.html")
 	})
 	// Permite establecer la ruta html de crear usuario
-	r.Get("/createAccount", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/users/create_account.html")
+	r.Get("/createUsers", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/admin/forms/add_users.html")
 	})
 	// Permite establecer la ruta html del login
 	r.Get("/loginUsers", func(w http.ResponseWriter, r *http.Request) {
@@ -94,5 +94,5 @@ func main() {
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":2000", r)
 }
