@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	httpmiddlewares "modulo/internal/http_middlewares"
 	"net/http"
 )
 
@@ -31,7 +32,8 @@ func (h *HandlerUsers) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	// Se llama al servicio para validar las credenciales.
 	// Si ocurre un error, se responde con estado 401 y un mensaje en formato JSON.
-	if _, err := h.service.ServiceLogin(input.Email, input.Password); err != nil {
+	user, err := h.service.ServiceLogin(input.Email, input.Password)
+	if err != nil {
 		// WriteHeader: Guarda el codigo de estado de la respuesta
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(map[string]string{
@@ -39,8 +41,15 @@ func (h *HandlerUsers) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	// Envio a frontend login exitoso
+	// Se llama funcion para poder obtener el token JWT de cada usuario al ingresar
+	token, err := httpmiddlewares.GenerateJWT(user.Id, user.Role)
+	if err != nil {
+		http.Error(w, "error al generar token", http.StatusUnauthorized)
+	}
+	// Envio de informacion al frontend
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Login exitoso",
+		"token":   token,
+		"role":    user.Role,
 	})
 }
