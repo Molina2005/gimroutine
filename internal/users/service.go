@@ -25,7 +25,7 @@ var ErrUserAlreadyExists = errors.New("usuario ya existe en el sistema")
 var ErrUserDoesNotExists = errors.New("usuario no existe en el sistema")
 
 // Creacion de usuario y requirimientos a seguir
-func (s *ServiceUsers) ServiceCreatetUser(name, email, password string) error {
+func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) error {
 	// Verificacion de existencia de usuario por email
 	Exist, err := s.repo.QueryuserExistsXEmail(email)
 	if err != nil {
@@ -48,11 +48,12 @@ func (s *ServiceUsers) ServiceCreatetUser(name, email, password string) error {
 	if name == "" || email == "" || HashPassword == "" {
 		return errors.New("todos los campos son obligatorios")
 	}
-	return s.repo.QueryInsertUser(LowerName, LowerEmail, HashPassword)
+	return s.repo.QueryInsertUser(LowerName, LowerEmail, HashPassword, role)
 }
 
 // Servicio consultar usuarios
 func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
+	fmt.Println("err")
 	Exist, err := s.repo.QueryuserExistsXId(id_user)
 	if err != nil {
 		return nil, err
@@ -64,19 +65,24 @@ func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
 }
 
 // Requerimientos actualizacion informacion usuario
-func (s *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email string, password string) error {
+func (s *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email, password, role string) error {
 	Exist, err := s.repo.QueryuserExistsXId(id_usuarios)
 	if err != nil {
+		fmt.Print("err en query service ")
 		return err
 	}
 	if !Exist {
 		return ErrUserDoesNotExists
 	}
+	// Si no se actializa contraseña solo actualiza los demas datos
+	if password == "" {
+		return s.repo.QueryUpdateUserNoPassword(id_usuarios, name, email, role)
+	}
 	HashPassword, err := utils.HashPassword(password)
 	if err != nil {
 		fmt.Println("error al hashear contraseña")
 	}
-	return s.repo.QueryUpdateUser(id_usuarios, name, email, HashPassword)
+	return s.repo.QueryUpdateUser(id_usuarios, name, email, HashPassword, role)
 }
 
 // Requerimientos eliminacion usuario
@@ -98,10 +104,15 @@ func (s *ServiceUsers) ServiceLogin(email, password string) (*models.Login, erro
 	if err != nil {
 		return nil, errors.New("Usuario no encontrado")
 	}
+
 	// Comparacion de password de base de datos con password de inputPassword
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return nil, errors.New("Credenciales invalidas")
 	}
 	return user, nil
+}
+
+func (s *ServiceUsers) ServiceConsultAllUsers() ([]models.Users, error) {
+	return s.repo.QueryUsersInformation()
 }
