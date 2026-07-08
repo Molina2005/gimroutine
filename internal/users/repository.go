@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"fmt"
 	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -23,7 +24,7 @@ func (r RepositoryUsers) QueryuserExistsXEmail(email string) (bool, error) {
 	// contexto que exije *pgxpool.Pool para consultas sql
 	ctx := context.Background()
 	var existsEmail bool
-	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE correo=$1`
+	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE correo=$1)`
 	err := r.db.QueryRow(ctx, query, email).Scan(&existsEmail)
 	// Mensaje de usuario ya en sistema
 	if err != nil {
@@ -37,7 +38,7 @@ func (r RepositoryUsers) QueryuserExistsXEmail(email string) (bool, error) {
 func (r RepositoryUsers) QueryuserExistsXId(id_user int) (bool, error) {
 	ctx := context.Background()
 	var existsId bool
-	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1`
+	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_usuarios=$1)`
 	err := r.db.QueryRow(ctx, query, id_user).Scan(&existsId)
 	if err != nil {
 		return false, err
@@ -46,11 +47,11 @@ func (r RepositoryUsers) QueryuserExistsXId(id_user int) (bool, error) {
 }
 
 // Insercion de usuarios
-func (r *RepositoryUsers) QueryInsertUser(name, email string, password string) error {
+func (r *RepositoryUsers) QueryInsertUser(name, email, password, role string) error {
 	ctx := context.Background()
-	query := `INSERT INTO usuarios (nombre, correo, contrasena) 
-				VALUES ($1, $2, $3)`
-	_, err := r.db.Exec(ctx, query, name, email, password)
+	query := `INSERT INTO usuarios (nombre, correo, contrasena, rol) 
+				VALUES ($1, $2, $3, $4)`
+	_, err := r.db.Exec(ctx, query, name, email, password, role)
 	if err != nil {
 		return err
 	}
@@ -62,14 +63,13 @@ func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.User, er
 	ctx := context.Background()
 	// Guarda la informacion que se envia con Scan
 	var DataUser models.User
-	query := `SELECT * FROM usuarios WHERE id_usuarios = $1`
+	query := "SELECT nombre, correo, contrasena, rol FROM usuarios WHERE id_usuarios=$1"
 	// Envia informacion con scan a la variable DataUser
 	if err := r.db.QueryRow(ctx, query, id_user).Scan(
-		&DataUser.Id,
 		&DataUser.Name,
 		&DataUser.Email,
 		&DataUser.Password,
-		&DataUser.EntryDate,
+		&DataUser.Role,
 	); err != nil {
 		return nil, err
 	}
@@ -77,12 +77,24 @@ func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.User, er
 	return &DataUser, nil
 }
 
-// Actualizacion informacion usuario
-func (r *RepositoryUsers) QueryUpdateUser(id_user int, name, email string, password string) error {
+// Actualizacion informacion usuario con contraseña incluida
+func (r *RepositoryUsers) QueryUpdateUser(id_user int, name, email, password, role string) error {
 	ctx := context.Background()
-	query := `UPDATE usuarios SET nombre = $1, correo = $2, contrasena = $3
+	query := `UPDATE usuarios SET nombre = $1, correo = $2, contrasena = $3, rol = $4
+	WHERE id_usuarios = $5`
+	_, err := r.db.Exec(ctx, query, name, email, password, role, id_user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Actualizacion informacion usuario sin contraseña
+func (r *RepositoryUsers) QueryUpdateUserNoPassword(id_user int, name, email, role string) error {
+	ctx := context.Background()
+	query := `UPDATE usuarios SET nombre = $1, correo = $2, rol = $3
 	WHERE id_usuarios = $4`
-	_, err := r.db.Exec(ctx, query, name, email, password, id_user)
+	_, err := r.db.Exec(ctx, query, name, email, role, id_user)
 	if err != nil {
 		return err
 	}
@@ -104,13 +116,46 @@ func (r *RepositoryUsers) QueryDeleteUser(id_user int) error {
 func (r *RepositoryUsers) QueryLogin(email string) (*models.Login, error) {
 	ctx := context.Background()
 	var DataLogin models.Login
-	query := `SELECT correo, contrasena FROM usuarios
+	query := `SELECT id_usuarios, correo, contrasena, rol FROM usuarios
 		WHERE correo = $1`
 	if err := r.db.QueryRow(ctx, query, email).Scan(
+		&DataLogin.Id,
 		&DataLogin.Email,
 		&DataLogin.Password,
+		&DataLogin.Role,
 	); err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	return &DataLogin, nil
+}
+
+// Consulta informacion de todos los usuarios
+func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
+	ctx := context.Background()
+	query := `SELECT id_usuarios, nombre, correo, contrasena, fecha_ingreso, rol FROM usuarios`
+	data, err := r.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer data.Close()
+	var DataUsers []models.Users
+	for data.Next() {
+		var users models.Users
+		if err := data.Scan(&users.Id, &users.Name, &users.Gmail, &users.Password, &users.EntryDate, &users.Role); err != nil {
+			return nil, err
+		}
+		DataUsers = append(DataUsers, users)
+	}
+	return DataUsers, nil
+}
+
+// Buscar informacion usuario
+func (r *RepositoryUsers) SearchUsers(search string) ([]models.SearchUsers, error) {
+	query := `SELECT nombre, correo, contrasena, fecha_ingreso, rol 
+	FROM usuarios 
+	WHERE nombre ILIKE '%' || $1 || '%' 
+	OR correo LIKE '%' || $2 || '%'`
+	fmt.Print(query)
+	return nil, nil
 }
