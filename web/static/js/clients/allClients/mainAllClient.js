@@ -11,11 +11,11 @@
             res.forEach(client =>{
                 // ================== Nombre ==================
                 // Creacion contenedor para guardar la informacion que esta dentro, contiene las celdas
-                const row=document.createElement("tr");
+                const row = document.createElement("tr");
                 // Elemento que crea una celda la cual guarda el nombre del cliente
-                const clientName=document.createElement("td");
+                const clientName = document.createElement("td");
                 // Agrega el nombre a la celda ClientName
-                clientName.textContent=client.Name;
+                clientName.textContent = client.Name;
                 // Agrega a row lo que se tiene en clientName
                 row.appendChild(clientName);
                 // ================== Documento ==================
