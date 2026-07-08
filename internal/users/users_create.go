@@ -22,6 +22,7 @@ func (h *HandlerUsers) HandlerCreateUsers(w http.ResponseWriter, r *http.Request
 		Name     string `json:"name"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
+		Role     string `json:"role"`
 	}
 	// r.Body : contiene lo que envía el usuario (JSON)
 	// Decode(&input) : toma json y convierte a struct para saber qué campos esperar y cómo guardarlos
@@ -33,7 +34,7 @@ func (h *HandlerUsers) HandlerCreateUsers(w http.ResponseWriter, r *http.Request
 		return
 	}
 	// se pasa la funcion de creacion de usuario con la informacion que esta en input
-	if err := h.service.ServiceCreatetUser(input.Name, input.Email, input.Password); err != nil {
+	if err := h.service.ServiceCreatetUser(input.Name, input.Email, input.Password, input.Role); err != nil {
 		if errors.Is(err, ErrUserAlreadyExists) {
 			w.WriteHeader(http.StatusConflict)
 		} else {
