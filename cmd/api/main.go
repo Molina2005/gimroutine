@@ -9,6 +9,7 @@ import (
 	maintenances "modulo/internal/maintenance"
 	"modulo/internal/users"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -46,6 +47,7 @@ func main() {
 	r.Get("/users/{id}", handler.HandlerConsultUserInformation)
 	r.Put("/users/{id}", handler.HandlerUpdateUsersInformation)
 	r.Delete("/users/{id}", handler.HandlerDeleteUsers)
+	r.Get("/allUsers", handler.HandlerConsultAllUsers)
 	// URLS respuestas http (equipos de mantenimientos)
 	r.Post("/TeamOfMaintenance", handlerTeamOfMaintenance.HandlerCreationTeamOfMaintenance)
 	r.Get("/TeamOfMaintenance/{id}", handlerTeamOfMaintenance.HandlerConsultTeamOfMaintenance)
@@ -65,15 +67,30 @@ func main() {
 	})
 	// Permite establecer la ruta html de crear usuario
 	r.Get("/createUsers", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/admin/forms/add_users.html")
+		http.ServeFile(w, r, "./web/templates/admin/forms/users/add_users.html")
 	})
 	// Permite establecer la ruta html del login
 	r.Get("/loginUsers", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/users/login.html")
 	})
-	// Pagina inicial al iniciar sesion
-	r.Get("/home", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/home.html")
+	// Permite establecer la ruta html de pagina de informacion de usuarios
+	r.Get("/usersInfo", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/users/users.html")
+	})
+	r.Get("/FormUpdateUsers", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/admin/forms/users/updateUsers.html")
+	})
+	// Pagina inicial para el admin
+	r.Get("/adminHome", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/adminHome.html")
+	})
+	// Pagina inicial para el supervisor
+	r.Get("/supervisorHome", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/supervisorHome.html")
+	})
+	// Pagina inicial para el tecnico
+	r.Get("/TechnicalHome", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/technicalHome.html")
 	})
 	// pagina navegador general
 	r.Get("/nav", func(w http.ResponseWriter, r *http.Request) {
@@ -89,10 +106,14 @@ func main() {
 	})
 	// Pagina agregar cliente
 	r.Get("/addClient", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/admin/forms/add_client.html")
+		http.ServeFile(w, r, "./web/templates/admin/forms/clients/add_client.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
-	// Servidor escuchando en el puerto 8080
-	http.ListenAndServe(":2000", r)
+	// Servidor escuchando en el puerto XXXX
+	port := os.Getenv("BACKEND_PORT")
+	if port == "" {
+		port = "8080"
+	}
+	http.ListenAndServe(":"+port, r)
 }
