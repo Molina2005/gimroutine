@@ -53,7 +53,6 @@ func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) er
 
 // Servicio consultar usuarios
 func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
-	fmt.Println("err")
 	Exist, err := s.repo.QueryuserExistsXId(id_user)
 	if err != nil {
 		return nil, err
@@ -113,6 +112,12 @@ func (s *ServiceUsers) ServiceLogin(email, password string) (*models.Login, erro
 	return user, nil
 }
 
+// Servicio para consultar todos los usuarios
 func (s *ServiceUsers) ServiceConsultAllUsers() ([]models.Users, error) {
 	return s.repo.QueryUsersInformation()
+}
+
+// Servicio para buscar usuario por nombre o correo
+func (s *ServiceUsers) ServiceUserSearch(dataUsersSearch string) ([]models.SearchUsers, error) {
+	return s.repo.QuerySearchUsers(dataUsersSearch)
 }
