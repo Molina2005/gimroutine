@@ -150,12 +150,26 @@ func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 	return DataUsers, nil
 }
 
-// Buscar informacion usuario
-func (r *RepositoryUsers) SearchUsers(search string) ([]models.SearchUsers, error) {
+// Buscar usuario en buscador
+func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers, error) {
+	ctx := context.Background()
 	query := `SELECT nombre, correo, contrasena, fecha_ingreso, rol 
 	FROM usuarios 
 	WHERE nombre ILIKE '%' || $1 || '%' 
-	OR correo LIKE '%' || $2 || '%'`
-	fmt.Print(query)
-	return nil, nil
+	OR correo ILIKE '%' || $1 || '%'`
+	data, err := r.db.Query(ctx, query, search)
+	if err != nil {
+		return nil, err
+	}
+	var DataUsers []models.SearchUsers
+	defer data.Close()
+	for data.Next() {
+		var User models.SearchUsers
+		err := data.Scan(&User.Name, &User.Email, &User.EntryDate, &User.Password, &User.Password)
+		if err != nil {
+			return nil, err
+		}
+		DataUsers = append(DataUsers, User)
+	}
+	return DataUsers, nil
 }
