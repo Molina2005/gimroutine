@@ -48,6 +48,7 @@ func main() {
 	r.Put("/users/{id}", handler.HandlerUpdateUsersInformation)
 	r.Delete("/users/{id}", handler.HandlerDeleteUsers)
 	r.Get("/allUsers", handler.HandlerConsultAllUsers)
+	r.Get("/UsersSearch", handler.HandlerUsersSearch)
 	// URLS respuestas http (equipos de mantenimientos)
 	r.Post("/TeamOfMaintenance", handlerTeamOfMaintenance.HandlerCreationTeamOfMaintenance)
 	r.Get("/TeamOfMaintenance/{id}", handlerTeamOfMaintenance.HandlerConsultTeamOfMaintenance)
