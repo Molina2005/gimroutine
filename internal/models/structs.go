@@ -35,8 +35,11 @@ type Users struct {
 }
 
 type SearchUsers struct {
-	Name  string
-	Email string
+	Name      string
+	Email     string
+	Password  string
+	EntryDate string
+	Role      string
 }
 
 // CLIENTES
