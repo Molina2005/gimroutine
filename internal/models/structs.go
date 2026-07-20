@@ -36,7 +36,7 @@ type Users struct {
 
 type SearchUsers struct {
 	Name      string
-	Email     string
+	Gmail     string
 	Password  string
 	EntryDate string
 	Role      string
@@ -51,7 +51,7 @@ type Client struct {
 	Document  string
 	Gmail     string
 	Phone     string
-	EnterDate time.Time
+	EntryDate time.Time
 	Password  string
 	State     string
 }
