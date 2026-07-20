@@ -47,3 +47,21 @@ func (s *ServiceClients) ServiceCreateClient(nameClient, document, gmail, phone,
 func (s *ServiceClients) ServiceConsultAllClient() ([]models.Client, error) {
 	return s.Repo.QueryClientInformation()
 }
+
+func (s *ServiceClients) ServiceUpdateClient(id_client int, name, document, gmail, phone, password, state string) error {
+	Exist, err := s.Repo.QueryClientExistsById(id_client)
+	if err != nil {
+		return err
+	}
+	if !Exist {
+		return ErrClientDoesNotExists
+	}
+	if password == "" {
+		return s.Repo.QueryUpdateClientNoPassword(id_client, name, document, gmail, phone, state)
+	}
+	HashPassword, err := utils.HashPassword(password)
+	if err != nil {
+		return err
+	}
+	return s.Repo.QueryUpdateClient(id_client, name, document, gmail, phone, HashPassword, state)
+}
