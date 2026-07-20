@@ -3,7 +3,6 @@ package users
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -54,7 +53,6 @@ func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *h
 		if errors.Is(err, ErrUserDoesNotExists) {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
-			fmt.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 		json.NewEncoder(w).Encode(map[string]string{
