@@ -165,7 +165,7 @@ func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers,
 	defer data.Close()
 	for data.Next() {
 		var User models.SearchUsers
-		err := data.Scan(&User.Name, &User.Email, &User.EntryDate, &User.Password, &User.Password)
+		err := data.Scan(&User.Name, &User.Gmail, &User.Password, &User.EntryDate, &User.Role)
 		if err != nil {
 			return nil, err
 		}
