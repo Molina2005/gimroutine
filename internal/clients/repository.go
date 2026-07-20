@@ -80,11 +80,33 @@ func (r *RepositoryClients) QueryClientInformation() ([]models.Client, error) {
 		var client models.Client
 		// Se agregan a memoria a client para luego pasarlo a dataclient
 		if err := data.Scan(&client.Id, &client.Name, &client.Document,
-			&client.Gmail, &client.Phone, &client.EnterDate,
+			&client.Gmail, &client.Phone, &client.EntryDate,
 			&client.Password, &client.State); err != nil {
 			return nil, err
 		}
 		dataClients = append(dataClients, client)
 	}
 	return dataClients, nil
+}
+
+// Actualizacion informacion cliente con contraseña incluida
+func (r *RepositoryClients) QueryUpdateClient(id_client int, name, document, gmail, phone, password, state string) error {
+	ctx := context.Background()
+	query := `UPDATE clientes SET nombre = $1 documento = $2 correo = $3, telefono = $4, contrasena = $5, estado = $6 
+	WHERE id_cliente = $7`
+	if _, err := r.db.Exec(ctx, query, name, document, gmail, phone, password, state, id_client); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Actualizacion informacion cliente sin contraseña incluida
+func (r *RepositoryClients) QueryUpdateClientNoPassword(id_client int, name, document, gmail, phone, state string) error {
+	ctx := context.Background()
+	query := `UPDATE clientes SET nombre = $1 documento = $2 correo = $3, telefono = $4, esatdo = $5
+	WHERE id_cliente = $6`
+	if _, err := r.db.Exec(ctx, query, name, document, gmail, phone, state, id_client); err != nil {
+		return err
+	}
+	return nil
 }
