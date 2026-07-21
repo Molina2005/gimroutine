@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>addUsers</title>
+</head>
+<body>
+    <form id="userForm">
+        <input title="3-15 caracteres, solo letras, numeros,'_','.'" pattern="[a-zA-Z0-9._]{3,15}" type="text" id="name" placeholder="Nombre" required>
+        <input title="Correo" type="email" id="email" placeholder="Correo" required>
+        <input title="8+ caracteres, con mayúscula, minúscula, número y símbolo" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}" type="password" id="password" placeholder="Contraseña" required>
+        <label>Rol</label>
+        <select id="role">
+            <option value="administrator">Administrador</option>
+            <option value="supervisor">Supervisor</option>
+            <option value="technical">Tecnico</option>
+        </select>
+        <button title="Envio informacion" type="submit" class="login-btn">Enviar</button>
+    </form>
+    <script type="module" src="/static/js/users/registerUser/mainRegisterUser.js"></script>
+</body>
+</html>
