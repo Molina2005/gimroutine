@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <h2>Gestion de usuarios</h2>
+    <a href="/createUsers" class="btn btn--outline">Agregar</a>
+    <input type="text" id="searchInputUser" placeholder="Buscar usuario...">
+    <table id="table-user-info">
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Contraseña</th>
+            <th>fecha ingreso</th>
+            <th>rol</th>
+        </tr>
+        <tbody id="users-table"></tbody>
+    </table>
+    <!-- Script sweetAlert2 para que pueda funcionar -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/static/js/ui/users/ui.js"></script>
+    <script type="module" src="/static/js/ui/users/search.js"></script>
+</body>
+</html>
