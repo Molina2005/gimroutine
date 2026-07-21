@@ -9,10 +9,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// Middleware que valida que el usuario envíe un token JWT válido
+// antes de permitir el acceso a la ruta protegida.
 func MiddlewareAccessUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorization := r.Header.Get("Authorization")
-		if authorization == " " {
+		if authorization == "" {
 			http.Error(w, "token requerido", http.StatusUnauthorized)
 			return
 		}
