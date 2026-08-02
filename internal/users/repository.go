@@ -2,7 +2,6 @@ package users
 
 import (
 	"context"
-	"fmt"
 	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -16,21 +15,6 @@ type RepositoryUsers struct {
 // Creacion nuevo repositroio para poder guardar la verdader conexion en la struct Repository
 func NewRepository(db *pgxpool.Pool) *RepositoryUsers {
 	return &RepositoryUsers{db: db}
-}
-
-// Verificacion existencia de usuario por correo
-// Uso: solo cuando se quieren registrar y ya existe el correo en sistema
-func (r RepositoryUsers) QueryuserExistsXEmail(email string) (bool, error) {
-	// contexto que exije *pgxpool.Pool para consultas sql
-	ctx := context.Background()
-	var existsEmail bool
-	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE correo=$1)`
-	err := r.db.QueryRow(ctx, query, email).Scan(&existsEmail)
-	// Mensaje de usuario ya en sistema
-	if err != nil {
-		return false, err
-	}
-	return existsEmail, nil
 }
 
 // Verificacion existencia de usuario por id
@@ -112,28 +96,10 @@ func (r *RepositoryUsers) QueryDeleteUser(id_user int) error {
 	return nil
 }
 
-// Consulta para obtener login
-func (r *RepositoryUsers) QueryLogin(email string) (*models.Login, error) {
-	ctx := context.Background()
-	var DataLogin models.Login
-	query := `SELECT id_usuarios, correo, contrasena, rol FROM usuarios
-		WHERE correo = $1`
-	if err := r.db.QueryRow(ctx, query, email).Scan(
-		&DataLogin.Id,
-		&DataLogin.Email,
-		&DataLogin.Password,
-		&DataLogin.Role,
-	); err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-	return &DataLogin, nil
-}
-
 // Consulta informacion de todos los usuarios
 func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 	ctx := context.Background()
-	query := `SELECT id_usuarios, nombre, correo, contrasena, fecha_ingreso, rol FROM usuarios`
+	query := `SELECT id_usuarios, nombre, correo, contrasena, fecha_ingreso, rol FROM usuarios ORDER BY id_usuarios ASC`
 	data, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
