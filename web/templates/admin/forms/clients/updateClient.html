@@ -2,17 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1, initial-scale=1.0">
     <title>UPDATE CLIENT</title>
 </head>
 <body>
-    <form id="form-update">
-        <input type="text" id="name" >
+    <form id="form-update-clients">
+        <input type="text" id="name">
         <input type="text" id="document">
         <input type="text" id="gmail">
         <input type="text" id="phone">
-        <input type="text" id="entrydate">
-        <input type="text" id="password">
+        <input title="********" type="password" id="password">
+        <select id="state" required>
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+        </select>
+        <button type="submit">Actualizar</button>
     </form>
 </body>
+<script type="module" src="/static/js/clients/updateClients/mainUpdateClients.js"></script>
 </html>
