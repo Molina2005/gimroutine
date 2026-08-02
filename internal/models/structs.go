@@ -16,14 +16,6 @@ type User struct {
 	Role     string
 }
 
-// Login
-type Login struct {
-	Id       int
-	Email    string
-	Password string
-	Role     string
-}
-
 // Struct informacion usuarios
 type Users struct {
 	Id        int
@@ -34,6 +26,7 @@ type Users struct {
 	Role      string
 }
 
+// Struct search
 type SearchUsers struct {
 	Name      string
 	Gmail     string
@@ -44,8 +37,17 @@ type SearchUsers struct {
 
 // CLIENTES
 
-// Struct informacion clientes
 type Client struct {
+	Name     string
+	Document string
+	Gmail    string
+	Phone    string
+	Password string
+	State    string
+}
+
+// Struct informacion clientes
+type Clients struct {
 	Id        int
 	Name      string
 	Document  string
@@ -56,32 +58,33 @@ type Client struct {
 	State     string
 }
 
+// Struct search
+type SearchClients struct {
+	Name      string
+	Document  string
+	Gmail     string
+	Phone     string
+	Password  string
+	EntryDate time.Time
+	State     string
+}
+
+// LOGIN
+
+// Login
+type Login struct {
+	Id       int
+	Email    string
+	Password string
+	// Eleccion si es tipo [usuario] o [cliente]
+	Type string
+	Role string
+}
+
 // Struct manejo token JWT
 type DataToken struct {
 	Id   int    `json:"id"`
 	Role string `json:"role"`
 	// campo para poder usar funciones de JWT
 	jwt.RegisteredClaims
-}
-
-// TIPOS MANTENIMIENTOS
-
-// Struct informacion tipo de mantenimiento
-type TeamOfMaintenance struct {
-	Id           int
-	Name         string
-	Description  string
-	CreationDate time.Time
-}
-
-// EJERCICIOS
-
-// Structs informacion ejercicios
-type Maintenance struct {
-	Id                  int
-	IdTeamOfMaintenance int
-	Name                string
-	Description         string
-	Img                 string
-	CreationDate        time.Time
 }
