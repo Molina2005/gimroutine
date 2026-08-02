@@ -1,3 +1,4 @@
+import { ConsultButtonClients, DeleteButtonClients, UpdateButtonClients } from "./crud/clientsCrud.js";
 import { RenderCrudButton } from "./locationButtons.js";
 export function RenderClientsRow(client){
     const row = document.createElement("tr");
@@ -19,6 +20,6 @@ export function RenderClientsRow(client){
     const cellState = document.createElement("td");
     cellState.textContent = client.State;
     row.appendChild(cellState);
-    row.appendChild(RenderCrudButton(client.Id))
+    row.appendChild(RenderCrudButton(client.Id, ConsultButtonClients, UpdateButtonClients, DeleteButtonClients))
     return row
 }
