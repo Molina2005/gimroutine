@@ -1,5 +1,6 @@
 import { ConsultButtonClients, DeleteButtonClients, UpdateButtonClients } from "./crud/clientsCrud.js";
 import { RenderCrudButton } from "./locationButtons.js";
+// Funcion para creacion de filas - columnas, botones crud 
 export function RenderClientsRow(client){
     const row = document.createElement("tr");
     const cellName = document.createElement("td");
