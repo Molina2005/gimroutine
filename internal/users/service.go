@@ -3,21 +3,21 @@ package users
 import (
 	"errors"
 	"fmt"
+	"modulo/internal/login"
 	"modulo/internal/models"
 	"modulo/internal/utils"
 	"strings"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Recibe la conexion real db de Repository
 type ServiceUsers struct {
-	repo *RepositoryUsers
+	repo      *RepositoryUsers
+	RepoLogin *login.RepoLogin
 }
 
 // Creacion nuevo servicio el cual va a guardar toda la logica interna
-func NewService(r *RepositoryUsers) *ServiceUsers {
-	return &ServiceUsers{repo: r}
+func NewService(r *RepositoryUsers, rl *login.RepoLogin) *ServiceUsers {
+	return &ServiceUsers{repo: r, RepoLogin: rl}
 }
 
 // Variables que guarda el error de existencia de usuario
@@ -26,13 +26,15 @@ var ErrUserDoesNotExists = errors.New("usuario no existe en el sistema")
 
 // Creacion de usuario y requirimientos a seguir
 func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) error {
-	// Verificacion de existencia de usuario por email
-	Exist, err := s.repo.QueryuserExistsXEmail(email)
+	existGmailClient, err := s.RepoLogin.QueryClientExistsByGmail(email)
 	if err != nil {
 		return err
 	}
-	if Exist {
-		// Error global de existencia de usuario
+	existGmailUser, err := s.RepoLogin.QueryuserExistsXEmail(email)
+	if err != nil {
+		return err
+	}
+	if existGmailClient || existGmailUser {
 		return ErrUserAlreadyExists
 	}
 	// Contraseña incriptada
@@ -51,7 +53,7 @@ func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) er
 	return s.repo.QueryInsertUser(LowerName, LowerEmail, HashPassword, role)
 }
 
-// Servicio consultar usuarios
+// Servicio consultar usuario
 func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
 	Exist, err := s.repo.QueryuserExistsXId(id_user)
 	if err != nil {
@@ -94,22 +96,6 @@ func (s *ServiceUsers) ServiceDeleteUser(id_usuarios int) error {
 		return ErrUserDoesNotExists
 	}
 	return s.repo.QueryDeleteUser(id_usuarios)
-}
-
-// Requerimientos login
-func (s *ServiceUsers) ServiceLogin(email, password string) (*models.Login, error) {
-	// Datos Email, password provenientes de consulta a la base de datos
-	user, err := s.repo.QueryLogin(email)
-	if err != nil {
-		return nil, errors.New("Usuario no encontrado")
-	}
-
-	// Comparacion de password de base de datos con password de inputPassword
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	if err != nil {
-		return nil, errors.New("Credenciales invalidas")
-	}
-	return user, nil
 }
 
 // Servicio para consultar todos los usuarios
