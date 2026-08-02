@@ -6,5 +6,6 @@ import { connectionUser } from "./api.js";
 export async function logicRegisterUser(formData){
     // Recibe la informacion que envia ConnectionUser si es correcta
     const data = await connectionUser(formData);
+    console.log(data)
     return data;
 } 
