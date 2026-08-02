@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function(){
             password: document.getElementById("password").value,
             role: document.getElementById("role").value,
         }
+        console.log(formData)
+        
         try{
             // Se le pasa a la función login la información del formData
             // para que ejecute la lógica de inicio de sesión (comunicación con el backend)
