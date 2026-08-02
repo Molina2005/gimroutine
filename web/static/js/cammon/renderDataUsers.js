@@ -1,3 +1,4 @@
+import { ConsultButtonUsers, DeleteButtonUsers, UpdateButtonUsers } from "./crud/usersCrud.js";
 import { RenderCrudButton } from "./locationButtons.js";
 // Funcion para poder renderizar y crear informacion de los usuarios y mostrarlas en pantalla, ademas de los botones de cruds
 export function RenderUsersRow(user){
@@ -17,6 +18,6 @@ export function RenderUsersRow(user){
     const cellRole = document.createElement("td");
     cellRole.textContent = user.Role;
     row.appendChild(cellRole);
-    row.appendChild(RenderCrudButton(user.Id))
+    row.appendChild(RenderCrudButton(user.Id, ConsultButtonUsers, UpdateButtonUsers, DeleteButtonUsers))
     return row
 }
