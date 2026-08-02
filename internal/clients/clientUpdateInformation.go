@@ -17,7 +17,6 @@ func (h *HandlerClients) HandlerUpdateClients(w http.ResponseWriter, r *http.Req
 		})
 		return
 	}
-
 	IdParam := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(IdParam)
 	if err != nil {
@@ -27,7 +26,6 @@ func (h *HandlerClients) HandlerUpdateClients(w http.ResponseWriter, r *http.Req
 		})
 		return
 	}
-
 	var input struct {
 		Name     string `json:"name"`
 		Document string `json:"document"`
@@ -42,7 +40,6 @@ func (h *HandlerClients) HandlerUpdateClients(w http.ResponseWriter, r *http.Req
 		})
 		return
 	}
-
 	if err := h.service.ServiceUpdateClient(
 		id,
 		input.Name,
