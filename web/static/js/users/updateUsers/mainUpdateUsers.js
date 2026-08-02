@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", async function(){
     // Se para el id a la funcion de logic, de igual manera aqui recibe la informacion cuando llega de logic
     const data = await logicInfoUser(id);
     const formUpdate = document.getElementById("form-update-users")
-    const Infoname = document.getElementById("name").value = data.user.Name
-    const Infogmail = document.getElementById("email").value = data.user.Email
-    const Infotrole = document.getElementById("role").value = data.user.Role      
+    document.getElementById("name").value = data.user.Name
+    document.getElementById("email").value = data.user.Email
+    document.getElementById("role").value = data.user.Role      
     // Evento para cuando el usuario de click a boton actualizar se actualizen los datos con lo que ingreso en los inputs 
     formUpdate.addEventListener("submit", async function(e){
         e.preventDefault();
@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", async function(){
         };
         // Retorna la informacion a la siguiente funcion para que cumnpla su proceso
         const dataUpdate = await logicUpdateUser(id,dataUser);
+        alert("usuario actualizado correctamente");
+        window.location.replace("/usersInfo");
         return dataUpdate
     })
 })
