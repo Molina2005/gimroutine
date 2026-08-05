@@ -6,6 +6,7 @@ import (
 	"modulo/internal/clients"
 	"modulo/internal/database"
 	"modulo/internal/login"
+	"modulo/internal/plans"
 	"modulo/internal/users"
 	"net/http"
 	"os"
@@ -33,7 +34,10 @@ func main() {
 	repoClients := clients.NewRepository(connect)
 	serviceClients := clients.NewService(repoClients, repoLogin)
 	handlerClients := clients.NewHandler(serviceClients)
-
+	// Llamado capas para poder manipular planes
+	repoPlans := plans.NewRepository(connect)
+	servicePlans := plans.NewService(repoPlans)
+	handlerPlans := plans.NewHandler(servicePlans)
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// URLS respuestas http (usuario)
@@ -51,6 +55,8 @@ func main() {
 	r.Put("/client/{id}", handlerClients.HandlerUpdateClients)
 	r.Delete("/client/{id}", handlerClients.HandlerDeleteClient)
 	r.Get("/ClientSearch/{search}", handlerClients.HandlerClientsSearch)
+	// URLS respuestas http (planes)
+	r.Post("/addPlans", handlerPlans.HandlerCreatePlans)
 	// URLS respuestas http (Login)
 	r.Post("/login", handlerlogin.HandlerLogin)
 	// Permite establecer la ruta html del index
@@ -76,6 +82,10 @@ func main() {
 	// Permite ingresar al formulario de actualizacion de datos usuario
 	r.Get("/FormUpdateUsers", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/users/updateUsers.html")
+	})
+	// Pagina inicial para el super admin
+	r.Get("/superAdminHome", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/superAdmin.html")
 	})
 	// Pagina inicial para el admin
 	r.Get("/adminHome", func(w http.ResponseWriter, r *http.Request) {
@@ -105,10 +115,26 @@ func main() {
 	r.Get("/addClient", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/clients/add_client.html")
 	})
-
+	// Pagina para actualizar informacion cliente
 	r.Get("/FormUpdateClients", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/clients/updateClient.html")
 	})
+
+	// PENDIENTE INFORMACION QUE SE ESTABA REALIZANDO SOBRE LSO PLANES
+
+	// pagina con lista de planes creados
+	r.Get("/planList", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/plans/planList.html")
+	})
+	// pagina para crear planes
+	r.Get("/planCreate", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/plans/forms/creationPlans.html")
+	})
+	// pagina actualizar informacion de planes
+	r.Get("/planUpdate", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/plans/forms/updatePlans.html")
+	})
+
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto XXXX
