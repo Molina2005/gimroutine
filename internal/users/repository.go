@@ -30,6 +30,17 @@ func (r RepositoryUsers) QueryuserExistsXId(id_user int) (bool, error) {
 	return existsId, nil
 }
 
+// Validacion de existencia de superAdmin
+func (r *RepositoryUsers) QueryExistsSuperAdmin() (bool, error) {
+	ctx := context.Background()
+	var ExistRole bool
+	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE rol = 'superAdmin')`
+	if err := r.db.QueryRow(ctx, query).Scan(&ExistRole); err != nil {
+		return false, err
+	}
+	return ExistRole, nil
+}
+
 // Insercion de usuarios
 func (r *RepositoryUsers) QueryInsertUser(name, email, password, role string) error {
 	ctx := context.Background()
@@ -138,4 +149,16 @@ func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers,
 		DataUsers = append(DataUsers, User)
 	}
 	return DataUsers, nil
+}
+
+// Creacion super admin
+func (r *RepositoryUsers) QueryCreateSuperAdmin(name, email, password, role string) error {
+	ctx := context.Background()
+	query := `INSERT INTO usuarios (nombre, correo, contrasena, rol) 
+				VALUES ($1, $2, $3, $4)`
+	_, err := r.db.Exec(ctx, query, name, email, password, role)
+	if err != nil {
+		return err
+	}
+	return nil
 }
