@@ -19,6 +19,9 @@ document.addEventListener("DOMContentLoaded", async function(){
                     administrator : "/adminHome",
                     userInter : "/userHome",
                 }
+                if (result.role == "superAdmin"){
+                    window.location.replace("/")
+                }
                 // Redireccion a cada pagina de inicio segun el rol
                 window.location.replace(routes[result.role])
             }else{
