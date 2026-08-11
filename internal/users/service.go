@@ -6,6 +6,7 @@ import (
 	"modulo/internal/login"
 	"modulo/internal/models"
 	"modulo/internal/utils"
+	"os"
 	"strings"
 )
 
@@ -23,6 +24,7 @@ func NewService(r *RepositoryUsers, rl *login.RepoLogin) *ServiceUsers {
 // Variables que guarda el error de existencia de usuario
 var ErrUserAlreadyExists = errors.New("usuario ya existe en el sistema")
 var ErrUserDoesNotExists = errors.New("usuario no existe en el sistema")
+var ErrSuperAdminAlreadyExists = errors.New("superAdmin ya existe en el sistema")
 
 // Creacion de usuario y requirimientos a seguir
 func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) error {
@@ -106,4 +108,32 @@ func (s *ServiceUsers) ServiceConsultAllUsers() ([]models.Users, error) {
 // Servicio para buscar usuario por nombre o correo
 func (s *ServiceUsers) ServiceUserSearch(dataUsersSearch string) ([]models.SearchUsers, error) {
 	return s.repo.QuerySearchUsers(dataUsersSearch)
+}
+
+// Creacion de superAdmin y requirimientos a seguir
+func (s *ServiceUsers) ServiceCreateSuperAdmin() error {
+	Exists, err := s.repo.QueryExistsSuperAdmin()
+	if err != nil {
+		return err
+	}
+	if Exists {
+		return ErrSuperAdminAlreadyExists
+	}
+	// Modelos para poder guardar informacion de variables de entorno y dejar rol fijo
+	SuperAdmin := models.User{
+		Name:     os.Getenv("NAME_SUPER"),
+		Email:    os.Getenv("EMAIL_SUPER"),
+		Password: os.Getenv("PASSWORD_SUPER"),
+		Role:     "superAdmin",
+	}
+
+	// Contraseña incriptada
+	HashPassword, err := utils.HashPassword(SuperAdmin.Password)
+	if err != nil {
+		return errors.New("error al hashear contraseña")
+	}
+	// Nombre y email del usuario en minuscula para evitar usuarios duplicados en la creacion
+	LowerName := strings.ToLower(SuperAdmin.Name)
+	LowerEmail := strings.ToLower(SuperAdmin.Email)
+	return s.repo.QueryCreateSuperAdmin(LowerName, LowerEmail, HashPassword, SuperAdmin.Role)
 }
