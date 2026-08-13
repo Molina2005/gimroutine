@@ -41,10 +41,8 @@ func main() {
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// Creacion de superAdmin
-	errSA := service.ServiceCreateSuperAdmin()
-	if errSA != nil {
-		log.Fatal(errSA)
-	}
+	service.ServiceCreateSuperAdmin()
+
 	// URLS respuestas http (usuario)
 	// {id} : va enrutado con el id de chi.URLParam(r, "id")
 	r.Post("/users", handler.HandlerCreateUsers)
