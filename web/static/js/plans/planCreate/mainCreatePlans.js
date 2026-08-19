@@ -1,22 +1,23 @@
+import { LogicPlans } from "./logicPlans.js";
 document.addEventListener("DOMContentLoaded", async function(){
-    const form = document.getElementById("addClientForm")
+    const form = document.getElementById("addPlansForm")
     form.addEventListener("submit", async function(e){
         e.preventDefault();
         const formData = {
             name: document.getElementById("name").value,
-            document: document.getElementById("document").value,
-            gmail:document.getElementById("gmail").value,
-            phone: document.getElementById("phone").value,
-            password: document.getElementById("password").value,
-            state: document.getElementById("state").value
+            document: document.getElementById("description").value,
+            gmail:document.getElementById("price").value,
+            phone: document.getElementById("monthsduration").value,
+            password: document.getElementById("usermax").value,
         }
+        console.log(formData)
         try{
-            const res = await LogicClient(formData);
-            alert("Cliente creado correctamente", res)
+            const res = await LogicPlans(formData);
+            alert("Plan creado correctamente", res)
             form.reset();
         }catch (err){
             if (err.status == "409"){
-                alert("Cliente ya existe en el sistema")
+                alert("Plan ya existe en el sistema")
             }else{
                 alert("Error en el servidor")   
             }
