@@ -9,6 +9,5 @@ export async function ConnectionPlans(data){
         throw {status:res.status}
     }
     const x = await res.json();
-    console.log(x)
     return x
 }
