@@ -122,9 +122,6 @@ func main() {
 	r.Get("/FormUpdateClients", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/clients/updateClient.html")
 	})
-
-	// PENDIENTE INFORMACION QUE SE ESTABA REALIZANDO SOBRE LSO PLANES
-
 	// pagina con lista de planes creados
 	r.Get("/planList", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/plans/planList.html")
