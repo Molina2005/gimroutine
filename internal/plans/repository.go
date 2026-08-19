@@ -30,11 +30,11 @@ func (r *RepositoryPlans) QueryPlanExistOfName(name string) (bool, error) {
 }
 
 // Insercion de planes
-func (r *RepositoryPlans) QueryInsertPlans(name, description, state string, price, durationMonths, maxUser int, expirationDate time.Time) error {
+func (r *RepositoryPlans) QueryInsertPlans(name, description string, price, durationMonths, maxUser int, expirationDate time.Time) error {
 	ctx := context.Background()
-	query := `INSERT INTO planes (nombre, descripcion, precio, duracion_meses, max_usuarios, estado, fecha_vencimiento) 
-				VALUES ($1, $2, $3, $4, $5, $6, $7)`
-	_, err := r.db.Exec(ctx, query, name, description, state, price, durationMonths, maxUser, expirationDate)
+	query := `INSERT INTO planes (nombre, descripcion, precio, duracion_meses, max_usuarios, fecha_vencimiento) 
+				VALUES ($1, $2, $3, $4, $5, $6)`
+	_, err := r.db.Exec(ctx, query, name, description, price, durationMonths, maxUser, expirationDate)
 	if err != nil {
 		return err
 	}
