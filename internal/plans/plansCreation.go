@@ -22,7 +22,6 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 	var input struct {
 		Name           string    `json:"name"`
 		Description    string    `json:"description"`
-		State          string    `json:"state"`
 		Price          int       `json:"price"`
 		DurationMonths int       `json:"Durationmonths"`
 		MaxUser        int       `json:"maxuser"`
@@ -38,7 +37,7 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 		return
 	}
 	// se pasa la funcion de creacion de plan con la informacion que esta en input
-	if err := h.S.repo.QueryInsertPlans(input.Name, input.Description, input.State, input.Price, input.DurationMonths, input.MaxUser, input.ExpirationDate); err != nil {
+	if err := h.S.repo.QueryInsertPlans(input.Name, input.Description, input.Price, input.DurationMonths, input.MaxUser, input.ExpirationDate); err != nil {
 		if errors.Is(err, ErrUserAlreadyaPlans) {
 			w.WriteHeader(http.StatusConflict)
 		} else {
