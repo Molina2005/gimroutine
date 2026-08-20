@@ -134,7 +134,6 @@ func main() {
 	r.Get("/planUpdate", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/plans/forms/updatePlans.html")
 	})
-
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
 	// Servidor escuchando en el puerto XXXX
