@@ -5,12 +5,11 @@ document.addEventListener("DOMContentLoaded", async function(){
         e.preventDefault();
         const formData = {
             name: document.getElementById("name").value,
-            document: document.getElementById("description").value,
-            gmail:document.getElementById("price").value,
-            phone: document.getElementById("monthsduration").value,
-            password: document.getElementById("usermax").value,
+            description: document.getElementById("description").value,
+            price:Number(document.getElementById("price").value),
+            monthsduration: Number(document.getElementById("monthsduration").value),
+            usermax: Number(document.getElementById("usermax").value),
         }
-        console.log(formData)
         try{
             const res = await LogicPlans(formData);
             alert("Plan creado correctamente", res)
