@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"time"
 )
 
 // Conexion entre usuario y servidor con http por medio de POST
@@ -20,12 +19,11 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 	}
 	// struct para guardar los campos que vienen de peticion json
 	var input struct {
-		Name           string    `json:"name"`
-		Description    string    `json:"description"`
-		Price          int       `json:"price"`
-		DurationMonths int       `json:"Durationmonths"`
-		MaxUser        int       `json:"maxuser"`
-		ExpirationDate time.Time `json:"expirationdate"`
+		Name           string `json:"name"`
+		Description    string `json:"description"`
+		Price          int    `json:"price"`
+		MonthsDuration int    `json:"monthsduration"`
+		UserMax        int    `json:"usermax"`
 	}
 	// r.Body : contiene lo que envía el usuario (JSON)
 	// Decode(&input) : toma json y convierte a struct para saber qué campos esperar y cómo guardarlos
@@ -37,7 +35,7 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 		return
 	}
 	// se pasa la funcion de creacion de plan con la informacion que esta en input
-	if err := h.S.repo.QueryInsertPlans(input.Name, input.Description, input.Price, input.DurationMonths, input.MaxUser, input.ExpirationDate); err != nil {
+	if err := h.S.ServiceCreatetPlans(input.Name, input.Description, input.Price, input.MonthsDuration, input.UserMax); err != nil {
 		if errors.Is(err, ErrUserAlreadyaPlans) {
 			w.WriteHeader(http.StatusConflict)
 		} else {
