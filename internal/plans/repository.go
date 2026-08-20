@@ -2,7 +2,6 @@ package plans
 
 import (
 	"context"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -21,20 +20,20 @@ func NewRepository(db *pgxpool.Pool) *RepositoryPlans {
 func (r *RepositoryPlans) QueryPlanExistOfName(name string) (bool, error) {
 	ctx := context.Background()
 	var existPlan bool
-	query := `SELECT EXISTS(SELECT 1 FROM planes WHERE name = $1) `
+	query := `SELECT EXISTS(SELECT 1 FROM planes WHERE nombre = $1) `
 
 	if err := r.db.QueryRow(ctx, query, name).Scan(&existPlan); err != nil {
-		return false, nil
+		return false, err
 	}
 	return existPlan, nil
 }
 
 // Insercion de planes
-func (r *RepositoryPlans) QueryInsertPlans(name, description string, price, durationMonths, maxUser int, expirationDate time.Time) error {
+func (r *RepositoryPlans) QueryInsertPlans(name, description string, price, monthsduration, userMax int) error {
 	ctx := context.Background()
-	query := `INSERT INTO planes (nombre, descripcion, precio, duracion_meses, max_usuarios, fecha_vencimiento) 
-				VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err := r.db.Exec(ctx, query, name, description, price, durationMonths, maxUser, expirationDate)
+	query := `INSERT INTO planes (nombre, descripcion, precio, duracion_meses, max_usuarios) 
+				VALUES ($1, $2, $3, $4, $5)`
+	_, err := r.db.Exec(ctx, query, name, description, price, monthsduration, userMax)
 	if err != nil {
 		return err
 	}
