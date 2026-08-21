@@ -2,6 +2,7 @@ package plans
 
 import (
 	"context"
+	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -29,13 +30,34 @@ func (r *RepositoryPlans) QueryPlanExistOfName(name string) (bool, error) {
 }
 
 // Insercion de planes
-func (r *RepositoryPlans) QueryInsertPlans(name, description string, price, monthsduration, userMax int) error {
+func (r *RepositoryPlans) QueryInsertPlans(name, description string, userMax int) error {
 	ctx := context.Background()
-	query := `INSERT INTO planes (nombre, descripcion, precio, duracion_meses, max_usuarios) 
-				VALUES ($1, $2, $3, $4, $5)`
-	_, err := r.db.Exec(ctx, query, name, description, price, monthsduration, userMax)
+	query := `INSERT INTO planes (nombre, descripcion, max_usuarios) 
+				VALUES ($1, $2, $3)`
+	_, err := r.db.Exec(ctx, query, name, description, userMax)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// Consultar para llamar todos los planes creados
+func (r *RepositoryPlans) QueryAllPlans() ([]models.PlansAll, error) {
+	ctx := context.Background()
+	query := `SELECT id_plan, nombre, descripcion, max_usuarios, fecha_creacion
+	FROM planes ORDER BY id_plan ASC`
+	data, err := r.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer data.Close()
+	var DataPlans []models.PlansAll
+	for data.Next() {
+		var plans models.PlansAll
+		if err := data.Scan(&plans.Id, &plans.Name, &plans.Description, &plans.UserMax, &plans.CretionDate); err != nil {
+			return nil, err
+		}
+		DataPlans = append(DataPlans, plans)
+	}
+	return DataPlans, nil
 }
