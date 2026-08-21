@@ -88,3 +88,14 @@ type DataToken struct {
 	// campo para poder usar funciones de JWT
 	jwt.RegisteredClaims
 }
+
+// PLANES
+
+// maanejo de datos para llamar todos los campos de un plan
+type PlansAll struct {
+	Id          int
+	Name        string
+	Description string
+	UserMax     int
+	CretionDate time.Time
+}
