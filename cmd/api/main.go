@@ -60,6 +60,7 @@ func main() {
 	r.Get("/ClientSearch/{search}", handlerClients.HandlerClientsSearch)
 	// URLS respuestas http (planes)
 	r.Post("/addPlans", handlerPlans.HandlerCreatePlans)
+	r.Get("/AllPlans", handlerPlans.HandlerConsultAllPlans)
 	// URLS respuestas http (Login)
 	r.Post("/login", handlerlogin.HandlerLogin)
 	// Permite establecer la ruta html del index
