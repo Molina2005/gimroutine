@@ -1,5 +1,5 @@
 export async function ConnectionAllUsers(){
-    const res = await fetch("allUsers",{
+    const res = await fetch("/allUsers",{
         method: "GET",
         headers:{"Content-Type":"application/json"},
     })
