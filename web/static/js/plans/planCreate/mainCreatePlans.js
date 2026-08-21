@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", async function(){
         const formData = {
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
-            price:Number(document.getElementById("price").value),
-            monthsduration: Number(document.getElementById("monthsduration").value),
             usermax: Number(document.getElementById("usermax").value),
         }
         try{
