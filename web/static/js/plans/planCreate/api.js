@@ -8,6 +8,6 @@ export async function ConnectionPlans(data){
     if (!res.ok){
         throw {status:res.status}
     }
-    const x = await res.json();
-    return x
+    const dataPlans = await res.json();
+    return dataPlans
 }
