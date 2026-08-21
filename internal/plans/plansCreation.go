@@ -19,11 +19,9 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 	}
 	// struct para guardar los campos que vienen de peticion json
 	var input struct {
-		Name           string `json:"name"`
-		Description    string `json:"description"`
-		Price          int    `json:"price"`
-		MonthsDuration int    `json:"monthsduration"`
-		UserMax        int    `json:"usermax"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		UserMax     int    `json:"usermax"`
 	}
 	// r.Body : contiene lo que envía el usuario (JSON)
 	// Decode(&input) : toma json y convierte a struct para saber qué campos esperar y cómo guardarlos
@@ -35,7 +33,7 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 		return
 	}
 	// se pasa la funcion de creacion de plan con la informacion que esta en input
-	if err := h.S.ServiceCreatetPlans(input.Name, input.Description, input.Price, input.MonthsDuration, input.UserMax); err != nil {
+	if err := h.S.ServiceCreatetPlans(input.Name, input.Description, input.UserMax); err != nil {
 		if errors.Is(err, ErrUserAlreadyaPlans) {
 			w.WriteHeader(http.StatusConflict)
 		} else {
