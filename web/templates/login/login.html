@@ -2,33 +2,110 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
-  <link rel="stylesheet" href="/static/css/login.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión | MasterGPro</title>
+  <link rel="stylesheet" href="/static/css/output.css">
 </head>
-<body> 
-  <section>
+
+<body class="min-h-screen bg-[#07122A] flex flex-col">
+
+  Menú fijo arriba
+  <section class="absolute top-0 left-0 w-full">
     <div id="container-nav"></div>
   </section>
-  <div class="background">
-    <div class="overlay">
-      <div class="form-container">
-        <img src="/static/images/marcoindex.jpg" alt="Logo" class="logoEmpresa">
-        <h1>¡Iniciar Sesion!</h1>
-        <form id="loginUserForm">
-          <input title="Correo" type="email" id="email" placeholder="Correo" required>
-          <input title="Contraseña" type="password" id="password" placeholder="Contraseña" required>
-          <button title="Ingresa a tu cuenta" type="submit" class="login-btn">Ingresar</button>
-        </form>
-        <div title="Crea rapidamente tu cuenta" class="register">
-          ¿No tienes cuenta aun? <a href="/index#planes">Registrate</a>
-        </div>
+
+  <!-- Contenido centrado -->
+  <main class="flex flex-1 items-center justify-center px-6">
+
+    <div class="w-full max-w-md">
+
+      <!-- Logo y título -->
+      <div class="text-center mb-10">
+        <img src="/static/images/LogoMasterGPro.png"
+             class="h-16 mx-auto mb-6"
+             alt="Logo">
       </div>
+
+      <!-- Formulario -->
+      <form id="loginUserForm" class="space-y-6">
+
+        <!-- Correo -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-300">
+            Correo electrónico
+          </label>
+          <div class="flex items-center rounded-xl border border-slate-700 bg-[#0B1736] px-4">
+            <icon name=mail color=secondary />
+            <input
+              id="email"
+              type="email"
+              placeholder="correo@empresa.com"
+              required
+              class="w-full bg-transparent px-3 py-4 text-white outline-none placeholder:text-gray-500"
+            >
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-300">
+            Contraseña
+          </label>
+          <div class="flex items-center rounded-xl border border-slate-700 bg-[#0B1736] px-4">
+            <!-- Icono candado -->
+            <icon name=lock color=secondary />
+
+            <!-- Input -->
+            <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              required
+              class="w-full bg-transparent px-3 py-4 text-white outline-none placeholder:text-gray-500"
+            >
+
+            <!-- Botón mostrar/ocultar -->
+            <button type="button" 
+                    class="ml-auto flex items-center justify-center text-gray-400 hover:text-white">
+              <icon name=eye-off color=secondary />
+            </button>
+          </div>
+        </div>
+
+        
+        <!-- Recordarme + link -->
+        <div class="flex items-center justify-between">
+          <a href="#" class="text-sm text-blue-400 hover:text-blue-300">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <!-- Botón -->
+        <button
+          type="submit"
+          class="w-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 py-4 font-semibold text-white transition hover:scale-[1.02]"
+        >
+          Ingresar
+        </button>
+      </form>
+
+      <!-- Registro -->
+      <p class="mt-8 text-center text-gray-400">
+        ¿No tienes cuenta?
+        <a href="/index#planes" class="font-semibold text-blue-400 hover:text-blue-300">
+          Regístrate
+        </a>
+      </p>
+
     </div>
-  </div>
-    <script type="module" src="/static/js/login/mainLogin.js"></script>
-    <script src="/static/js/cammon/nav.js"></script>
-    <script> 
-      cargarMenu('/nav', 'container-nav');
-    </script> 
+
+  </main>
+
+  <script type="module" src="/static/js/login/mainLogin.js"></script>
+  <script src="/static/js/cammon/nav.js"></script>
+  <script>
+    cargarMenu('/nav', 'container-nav');
+  </script>
+
 </body>
 </html>
