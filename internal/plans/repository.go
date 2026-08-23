@@ -29,12 +29,27 @@ func (r *RepositoryPlans) QueryPlanExistOfName(name string) (bool, error) {
 	return existPlan, nil
 }
 
-// Insercion de planes
-func (r *RepositoryPlans) QueryInsertPlans(name, description string, userMax int) error {
+// Insercion de planes datos basicos del plan
+func (r *RepositoryPlans) QueryInsertPlans(name, description string, userMax int) (int, error) {
 	ctx := context.Background()
 	query := `INSERT INTO planes (nombre, descripcion, max_usuarios) 
+				VALUES ($1, $2, $3)
+				RETURNING id_plan`
+	var IdPlan int
+	err := r.db.QueryRow(ctx, query, name, description, userMax).Scan(&IdPlan)
+	if err != nil {
+		return 0, err
+	}
+	return IdPlan, nil
+}
+
+// Funcion creacion de plan, datos basicos de los precios para manejar [mensual, anual, etc]
+// Insercion de planes datos basicos del plan
+func (r *RepositoryPlans) QueryInsertPrecio(id_plan, Months, Price int) error {
+	ctx := context.Background()
+	query := `INSERT INTO precios (id_plan, meses, precio)
 				VALUES ($1, $2, $3)`
-	_, err := r.db.Exec(ctx, query, name, description, userMax)
+	_, err := r.db.Exec(ctx, query, id_plan, Months, Price)
 	if err != nil {
 		return err
 	}
