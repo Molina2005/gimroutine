@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", async function(){
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
             usermax: Number(document.getElementById("usermax").value),
+            months: Number(document.getElementById("months").value),
+            price: Number(document.getElementById("price").value)
         }
         try{
             const res = await LogicPlans(formData);
