@@ -8,9 +8,14 @@
 <body>
     <h2>Agregar plan</h2>
     <form id="addPlansForm">
+        <label for="">Planes</label>
         <input title="nombre" type="text" placeholder="Nombre" id="name" required>
-        <input title="descripcion" type="text" placeholder="Descripcion" id="description">
-        <input title="maximo usuarios" type="number" placeholder="Maximo usuarios" id="usermax">
+        <input title="descripcion" type="text" placeholder="Descripcion" id="description" required>
+        <input title="maximo usuarios" type="number" placeholder="Maximo usuarios" id="usermax" required>
+        <label for="">Precios</label>
+        <input title="meses de duracion plan" type="number" placeholder="meses" id="months" required>
+        <input title="precio segun meses" type="number" placeholder="precio" id="price">
+        <button title="Crear nuevo precio" type="submit" id="new-price">Nuevo precio</button>
         <button title="Guardar nuevo plan" type="submit">Guardar</button>
     </form>
     <script type="module" src="/static/js/plans/planCreate/mainCreatePlans.js"></script>
