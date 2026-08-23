@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", async function(){
             months: Number(document.getElementById("months").value),
             price: Number(document.getElementById("price").value)
         }
+        buttonNewPrice = document.getElementById("new-price")
+        buttonNewPrice.addEventListener("click", function(){
+            // Estrucutta para poder imgresar nuevo precio
+            // y que pueda ingesar esos datos y procesarlos como un nuevo precio
+        })
         try{
             const res = await LogicPlans(formData);
             alert("Plan creado correctamente", res)
