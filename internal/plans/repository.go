@@ -76,3 +76,7 @@ func (r *RepositoryPlans) QueryAllPlans() ([]models.PlansAll, error) {
 	}
 	return DataPlans, nil
 }
+
+func (r *RepositoryPlans) QueryJoinInformationPlans() ([]models.PlansAll, error) {
+
+}
