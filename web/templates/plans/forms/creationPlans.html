@@ -13,9 +13,14 @@
         <input title="descripcion" type="text" placeholder="Descripcion" id="description" required>
         <input title="maximo usuarios" type="number" placeholder="Maximo usuarios" id="usermax" required>
         <label for="">Precios</label>
-        <input title="meses de duracion plan" type="number" placeholder="meses" id="months" required>
-        <input title="precio segun meses" type="number" placeholder="precio" id="price">
-        <button title="Crear nuevo precio" type="submit" id="new-price">Nuevo precio</button>
+        <div id="content-new-price">
+            <div class="price-item"> 
+                <input title="meses de duracion plan" type="number" placeholder="Meses" class="months" required>
+                <input title="precio segun meses" type="number" placeholder="Precio" class="price" required>
+            </div>
+
+            <button title="Crear nuevo precio" type="button" id="new-price-button">Nuevo precio</button>
+        </div>
         <button title="Guardar nuevo plan" type="submit">Guardar</button>
     </form>
     <script type="module" src="/static/js/plans/planCreate/mainCreatePlans.js"></script>
