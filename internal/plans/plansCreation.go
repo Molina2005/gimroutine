@@ -3,6 +3,7 @@ package plans
 import (
 	"encoding/json"
 	"errors"
+	"modulo/internal/models"
 	"net/http"
 )
 
@@ -22,8 +23,8 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 		Name        string `json:"name"`
 		Description string `json:"description"`
 		UserMax     int    `json:"usermax"`
-		Months      int    `json:"months"`
-		Price       int    `json:"price"`
+		// Estructura para poder recibir la informacion de precios de planes, si el usuario agrega mas de uno
+		MonthsAndPrice []models.PricePlans `json:"monthsandprice"`
 	}
 	// r.Body : contiene lo que envía el usuario (JSON)
 	// Decode(&input) : toma json y convierte a struct para saber qué campos esperar y cómo guardarlos
@@ -35,7 +36,7 @@ func (h *HandlerPlans) HandlerCreatePlans(w http.ResponseWriter, r *http.Request
 		return
 	}
 	// se pasa la funcion de creacion de plan con la informacion que esta en input
-	if err := h.S.ServiceCreatetPlans(input.Name, input.Description, input.UserMax, input.Months, input.Price); err != nil {
+	if err := h.S.ServiceCreatetPlans(input.Name, input.Description, input.UserMax, input.MonthsAndPrice); err != nil {
 		if errors.Is(err, ErrUserAlreadyaPlans) {
 			w.WriteHeader(http.StatusConflict)
 		} else {
