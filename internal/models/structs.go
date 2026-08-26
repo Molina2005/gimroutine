@@ -91,6 +91,11 @@ type DataToken struct {
 
 // PLANES
 
+type PricePlans struct {
+	Months int `json:"months"`
+	Price  int `json:"price"`
+}
+
 // maanejo de datos para llamar todos los campos de un plan
 type PlansAll struct {
 	Id          int
