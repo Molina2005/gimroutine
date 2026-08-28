@@ -12,6 +12,12 @@ export function RenderPlansRow(plans){
     const cellUserMax = document.createElement("td");
     cellUserMax.textContent = plans.UserMax;
     row.appendChild(cellUserMax);
+    const cellMonths = document.createElement("td");
+    cellMonths.textContent = plans.Months;
+    row.appendChild(cellMonths);
+    const cellPrice = document.createElement("td");
+    cellPrice.textContent = plans.Price;
+    row.appendChild(cellPrice);
     const cellDateCreation = document.createElement("td");
     cellDateCreation.textContent = plans.CretionDate;
     row.appendChild(cellDateCreation);
