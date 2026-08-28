@@ -91,16 +91,20 @@ type DataToken struct {
 
 // PLANES
 
+// Manejo de precios de planes (PRECIOS SEGUN MESES)
 type PricePlans struct {
 	Months int `json:"months"`
 	Price  int `json:"price"`
 }
 
-// maanejo de datos para llamar todos los campos de un plan
-type PlansAll struct {
+// Manejo de informacion completa de planes (PRECIOS Y PLANES(DATOS BASICOS))
+// ademas sirve para manejo de datos para llamar todos los campos de un plan (DATOS BASICOS)
+type JoinPlanAndPrice struct {
 	Id          int
 	Name        string
 	Description string
 	UserMax     int
+	Months      int
+	Price       int
 	CretionDate time.Time
 }
