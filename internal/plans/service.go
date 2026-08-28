@@ -44,14 +44,19 @@ func (s *ServicePlans) ServiceCreatetPlans(name, description string, userMax int
 	for _, data := range MonthsAndPrice {
 		month := data.Months
 		price := data.Price
-		if err := s.repo.QueryInsertPrecio(Id, month, price); err != nil {
+		if err := s.repo.QueryInsertPrice(Id, month, price); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// Servicio para llamar todos los planes
-func (s *ServicePlans) ServiceAllPlans() ([]models.PlansAll, error) {
+// Servicio para llamar todos los planes con su respectiva informacion
+func (s *ServicePlans) ServiceAllPlans() ([]models.JoinPlanAndPrice, error) {
 	return s.repo.QueryAllPlans()
+}
+
+// Servicio para llamar plan al index
+func (s *ServicePlans) ServicePlansIndex() ([]models.JoinPlanAndPrice, error) {
+	return s.repo.QueryPlansIndex()
 }
