@@ -1,3 +1,4 @@
+// Funcion para poder crar la maquetacion nesecaria para poder ingresar lso nuevos precios 
 export function CreatePricesPlan(){
     const price = document.createElement("div")
 
