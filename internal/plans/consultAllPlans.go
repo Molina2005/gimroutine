@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (h *HandlerPlans) HandlerConsultAllPlans(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerPlans) HandlerAllPlans(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {
 		json.NewEncoder(w).Encode(map[string]string{
