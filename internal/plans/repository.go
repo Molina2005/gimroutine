@@ -81,7 +81,7 @@ func (r *RepositoryPlans) QueryAllPlans() ([]models.JoinPlanAndPrice, error) {
 func (r *RepositoryPlans) QueryPlansIndex() ([]models.JoinPlanAndPrice, error) {
 	ctx := context.Background()
 	query := `SELECT pns.nombre, pns.descripcion, pns.max_usuarios, pr.meses, pr.precio FROM planes AS pns
-		JOIN precios AS pr ON pr.id_plan = pns.id_plan WHERE pr.meses = 1`
+		JOIN precios AS pr ON pr.id_plan = pns.id_plan`
 	data, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
