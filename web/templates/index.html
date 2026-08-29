@@ -132,8 +132,10 @@
                         crecer y administrar tu negocio.
                     </p>
 
-                    // MAQUETACION PARA PODER INGRESAR INFORMACION DEL FRONT CON LOS PLANES CREADOS SOLO LOS QUE TIENEN MES
+                    <!-- Recibe toda la informacion del frontend y backend con los planes -->
+                    <div id="plans-container">
 
+                    </div>
                 </div>
 
             </div>
@@ -421,12 +423,11 @@
 
     </section>
 
-
     <script src="/static/js/cammon/nav.js"></script>
-
     <script>
         cargarMenu('/nav', 'container-nav');
     </script>
+    <script type="module" src="/static/js/index/renderPlans.js"></script>
 
 </body>
 </html>
