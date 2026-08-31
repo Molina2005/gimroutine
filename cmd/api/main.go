@@ -6,7 +6,6 @@ import (
 	"modulo/internal/clients"
 	"modulo/internal/database"
 	"modulo/internal/login"
-	"modulo/internal/plans"
 	"modulo/internal/users"
 	"net/http"
 	"os"
@@ -34,10 +33,6 @@ func main() {
 	repoClients := clients.NewRepository(connect)
 	serviceClients := clients.NewService(repoClients, repoLogin)
 	handlerClients := clients.NewHandler(serviceClients)
-	// Llamado capas para poder manipular planes
-	repoPlans := plans.NewRepository(connect)
-	servicePlans := plans.NewService(repoPlans)
-	handlerPlans := plans.NewHandler(servicePlans)
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// Creacion de superAdmin
@@ -58,10 +53,6 @@ func main() {
 	r.Put("/client/{id}", handlerClients.HandlerUpdateClients)
 	r.Delete("/client/{id}", handlerClients.HandlerDeleteClient)
 	r.Get("/ClientSearch/{search}", handlerClients.HandlerClientsSearch)
-	// URLS respuestas http (planes)
-	r.Post("/addPlans", handlerPlans.HandlerCreatePlans)
-	r.Get("/AllPlans", handlerPlans.HandlerAllPlans)
-	r.Get("/PlansIndex", handlerPlans.HandlerPlansIndex)
 	// URLS respuestas http (Login)
 	r.Post("/login", handlerlogin.HandlerLogin)
 	// Permite establecer la ruta html del index
@@ -97,8 +88,8 @@ func main() {
 		http.ServeFile(w, r, "./web/templates/pages/adminHome.html")
 	})
 	// Pagina inicial para el usaurios
-	r.Get("/userHome", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/userHome.html")
+	r.Get("/technicalHome", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/technicalHome.html")
 	})
 	// Pagina inicial para el clientes
 	r.Get("/clientHome", func(w http.ResponseWriter, r *http.Request) {
@@ -123,18 +114,6 @@ func main() {
 	// Pagina para actualizar informacion cliente
 	r.Get("/FormUpdateClients", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/clients/updateClient.html")
-	})
-	// pagina con lista de planes creados
-	r.Get("/planList", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/plans/planList.html")
-	})
-	// pagina para crear planes
-	r.Get("/planCreate", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/plans/forms/creationPlans.html")
-	})
-	// pagina actualizar informacion de planes
-	r.Get("/planUpdate", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/plans/forms/updatePlans.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
