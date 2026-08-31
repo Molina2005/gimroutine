@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async function(){
             if (result.type == "users"){
                 const routes = {
                     administrator : "/adminHome",
-                    userInter : "/userHome",
+                    technical : "/technicalHome",
                 }
                 // Redireccion a pagina del superAdmin 
                 if (result.role == "superAdmin"){
