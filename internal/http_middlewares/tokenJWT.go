@@ -8,11 +8,11 @@ import (
 )
 
 // Funcion obtener token JWT
-func GenerateJWT(idUser int, role string) (string, error) {
+func GenerateJWT(idUser, idrole int) (string, error) {
 	// Se agregan models.DataToken parametros y informacion de JWT
 	data := models.DataToken{
-		Id:   idUser,
-		Role: role,
+		Id:     idUser,
+		IdRole: idrole,
 		RegisteredClaims: jwt.RegisteredClaims{
 			// Momento en que va a expirar el token
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
