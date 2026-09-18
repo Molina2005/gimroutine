@@ -27,12 +27,11 @@ func (h *HandlerClients) HandlerUpdateClients(w http.ResponseWriter, r *http.Req
 		return
 	}
 	var input struct {
-		Name     string `json:"name"`
-		Document string `json:"document"`
-		Gmail    string `json:"gmail"`
-		Phone    string `json:"phone"`
-		Password string `json:"password"`
-		State    string `json:"state"`
+		Name            string `json:"name"`
+		Phone           string `json:"phone"`
+		Id_client_state int    `json:"id_users_state"`
+		Nit             string `json:"nit"`
+		Gmail           string `json:"gmail"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		json.NewEncoder(w).Encode(map[string]string{
@@ -43,11 +42,10 @@ func (h *HandlerClients) HandlerUpdateClients(w http.ResponseWriter, r *http.Req
 	if err := h.service.ServiceUpdateClient(
 		id,
 		input.Name,
-		input.Document,
-		input.Gmail,
 		input.Phone,
-		input.Password,
-		input.State); err != nil {
+		input.Nit,
+		input.Gmail,
+		input.Id_client_state); err != nil {
 		if errors.Is(err, ErrClientDoesNotExists) {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
