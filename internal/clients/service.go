@@ -4,7 +4,6 @@ import (
 	"errors"
 	"modulo/internal/login"
 	"modulo/internal/models"
-	"modulo/internal/utils"
 )
 
 type ServiceClients struct {
@@ -20,20 +19,23 @@ func NewService(r *RepositoryClients, rl *login.RepoLogin) *ServiceClients {
 var ErrClientAlreadyExists = errors.New("Cliente ya existe en el sistema")
 var ErrClientDoesNotExists = errors.New("Cliente no existe en el sistema")
 
-func (s *ServiceClients) ServiceCreateClient(nameClient, document, gmail, phone, password, state string) error {
+// Servicios internos para creacion de clientes
+func (s *ServiceClients) ServiceCreateClient(name, phone, gmail, nit string, id_state int) error {
 	existGmailClient, err := s.RepoLogin.QueryClientExistsByGmail(gmail)
 	if err != nil {
 		return err
 	}
+	// Validacion de existencia de correo
 	existGmailUser, err := s.RepoLogin.QueryuserExistsXEmail(gmail)
 	if err != nil {
 		return err
 	}
+	// Si existe muestra error de existencia
 	if existGmailClient || existGmailUser {
 		return ErrClientAlreadyExists
 	}
 	// Validacion de existencia de documento
-	ExistsDoc, err := s.Repo.QueryClientExistsByDocument(document)
+	ExistsDoc, err := s.Repo.QueryClientExistsByDocument(gmail)
 	if err != nil {
 		return err
 	}
@@ -41,12 +43,7 @@ func (s *ServiceClients) ServiceCreateClient(nameClient, document, gmail, phone,
 	if ExistsDoc {
 		return ErrClientAlreadyExists
 	}
-	// Hasheo de contraseña
-	hash, err := utils.HashPassword(password)
-	if err != nil {
-		return err
-	}
-	return s.Repo.QueryCreateClient(nameClient, document, gmail, phone, hash, state)
+	return s.Repo.QueryCreateClient(name, phone, gmail, nit, id_state)
 }
 
 // Servicio consultar cliente
@@ -67,7 +64,7 @@ func (s *ServiceClients) ServiceConsultAllClient() ([]models.Clients, error) {
 }
 
 // Servicio actualizar informacion clientes
-func (s *ServiceClients) ServiceUpdateClient(id_client int, name, document, gmail, phone, password, state string) error {
+func (s *ServiceClients) ServiceUpdateClient(id_client int, name, phone, nit, gmail string, id_estado_usuario int) error {
 	Exist, err := s.Repo.QueryClientExistsById(id_client)
 	if err != nil {
 		return err
@@ -75,14 +72,7 @@ func (s *ServiceClients) ServiceUpdateClient(id_client int, name, document, gmai
 	if !Exist {
 		return ErrClientDoesNotExists
 	}
-	if password == "" {
-		return s.Repo.QueryUpdateClientNoPassword(id_client, name, document, gmail, phone, state)
-	}
-	HashPassword, err := utils.HashPassword(password)
-	if err != nil {
-		return err
-	}
-	return s.Repo.QueryUpdateClient(id_client, name, document, gmail, phone, HashPassword, state)
+	return s.Repo.QueryUpdateClient(id_client, name, gmail, phone, nit, id_estado_usuario)
 }
 
 // Requerimientos eliminacion cliente
