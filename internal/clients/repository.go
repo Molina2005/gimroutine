@@ -27,24 +27,24 @@ func (r *RepositoryClients) QueryClientExistsById(IdClient int) (bool, error) {
 	return ExistsId, nil
 }
 
-// Crear fncion valdar exixtencia por documento
-func (r *RepositoryClients) QueryClientExistsByDocument(Document string) (bool, error) {
+// Crear fncion valdar exixtencia por correo
+func (r *RepositoryClients) QueryClientExistsByDocument(gmail string) (bool, error) {
 	ctx := context.Background()
-	var ExistsDocument bool
-	query := `SELECT EXISTS(SELECT 1 FROM clientes WHERE documento = $1)`
-	err := r.db.QueryRow(ctx, query, Document).Scan(&ExistsDocument)
+	var ExistsGmail bool
+	query := `SELECT EXISTS(SELECT 1 FROM clientes WHERE correo = $1)`
+	err := r.db.QueryRow(ctx, query, gmail).Scan(&ExistsGmail)
 	if err != nil {
 		return false, err
 	}
-	return ExistsDocument, nil
+	return ExistsGmail, nil
 }
 
 // consulta para creacion de clientes
-func (r *RepositoryClients) QueryCreateClient(name, document, gmail, phone, password, state string) error {
+func (r *RepositoryClients) QueryCreateClient(name, phone, gmail, nit string, id_state int) error {
 	ctx := context.Background()
-	query := `INSERT INTO clientes (nombre,documento,correo,telefono,contrasena,estado) 
-		VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err := r.db.Exec(ctx, query, name, document, gmail, phone, password, state)
+	query := `INSERT INTO clientes (nombre,telefono,nit,correo, id_estado_usuario) 
+		VALUES ($1, $2, $3, $4, $5)`
+	_, err := r.db.Exec(ctx, query, name, phone, nit, gmail, id_state)
 	if err != nil {
 		return err
 	}
@@ -56,15 +56,17 @@ func (r *RepositoryClients) QueryViewClientInfomation(id_client int) (*models.Cl
 	ctx := context.Background()
 	// Guarda la informacion que se envia con Scan
 	var DataClient models.Client
-	query := "SELECT nombre, documento, correo, telefono, contrasena, estado FROM clientes WHERE id_cliente=$1"
+	query := `SELECT c.nombre, c.telefono, eu.nombre AS estado, c.nit,
+		correo FROM clientes c
+		JOIN estados_usuarios eu ON eu.id_estado_usuario = c.id_estado_usuario 
+		WHERE id_cliente=$1`
 	// Envia informacion con scan a la variable DataClient
 	if err := r.db.QueryRow(ctx, query, id_client).Scan(
 		&DataClient.Name,
-		&DataClient.Document,
-		&DataClient.Gmail,
 		&DataClient.Phone,
-		&DataClient.Password,
 		&DataClient.State,
+		&DataClient.Nit,
+		&DataClient.Gmail,
 	); err != nil {
 		return nil, err
 	}
@@ -75,8 +77,10 @@ func (r *RepositoryClients) QueryViewClientInfomation(id_client int) (*models.Cl
 // Consultar informacion de clientes
 func (r *RepositoryClients) QueryClientInformation() ([]models.Clients, error) {
 	ctx := context.Background()
-	query := `SELECT id_cliente, nombre, documento, correo, telefono, fecha_ingreso, 
-		contrasena, estado FROM clientes ORDER BY id_cliente ASC`
+	query := `SELECT c.id_cliente, c.nombre, c.telefono, c.fecha_ingreso, eu.nombre AS estado, c.nit,
+	correo FROM clientes c
+	JOIN estados_usuarios eu ON eu.id_estado_usuario = c.id_estado_usuario
+	ORDER BY id_cliente ASC`
 	// Trae todos los registros
 	data, err := r.db.Query(ctx, query)
 	if err != nil {
@@ -88,9 +92,8 @@ func (r *RepositoryClients) QueryClientInformation() ([]models.Clients, error) {
 	for data.Next() {
 		var client models.Clients
 		// Se agregan a memoria a client para luego pasarlo a dataclient
-		if err := data.Scan(&client.Id, &client.Name, &client.Document,
-			&client.Gmail, &client.Phone, &client.EntryDate,
-			&client.Password, &client.State); err != nil {
+		if err := data.Scan(&client.Id, &client.Name, &client.Phone, &client.EntryDate, &client.State,
+			&client.Nit, &client.Gmail); err != nil {
 			return nil, err
 		}
 		dataClients = append(dataClients, client)
@@ -98,23 +101,12 @@ func (r *RepositoryClients) QueryClientInformation() ([]models.Clients, error) {
 	return dataClients, nil
 }
 
-// Actualizacion informacion cliente con contraseña incluida
-func (r *RepositoryClients) QueryUpdateClient(id_client int, name, document, gmail, phone, password, state string) error {
+// Actualizacion informacion cliente
+func (r *RepositoryClients) QueryUpdateClient(id_client int, name, gmail, phone, nit string, id_state int) error {
 	ctx := context.Background()
-	query := `UPDATE clientes SET nombre = $1, documento = $2, correo = $3, telefono = $4, contrasena = $5, estado = $6 
-	WHERE id_cliente = $7`
-	if _, err := r.db.Exec(ctx, query, name, document, gmail, phone, password, state, id_client); err != nil {
-		return err
-	}
-	return nil
-}
-
-// Actualizacion informacion cliente sin contraseña incluida
-func (r *RepositoryClients) QueryUpdateClientNoPassword(id_client int, name, document, gmail, phone, state string) error {
-	ctx := context.Background()
-	query := `UPDATE clientes SET nombre = $1, documento = $2, correo = $3, telefono = $4, estado = $5
+	query := `UPDATE clientes SET nombre = $1, correo = $2, telefono = $3, id_estado_usuario = $4, nit = $5
 	WHERE id_cliente = $6`
-	if _, err := r.db.Exec(ctx, query, name, document, gmail, phone, state, id_client); err != nil {
+	if _, err := r.db.Exec(ctx, query, name, gmail, phone, id_state, nit, id_client); err != nil {
 		return err
 	}
 	return nil
@@ -134,11 +126,12 @@ func (r *RepositoryClients) QueryDeleteClient(id_client int) error {
 // Buscar cliente en buscador
 func (r *RepositoryClients) QuerySearchClients(search string) ([]models.SearchClients, error) {
 	ctx := context.Background()
-	query := `SELECT nombre, documento, correo, telefono, contrasena, fecha_ingreso, estado 
-	FROM clientes 
-	WHERE nombre ILIKE '%' || $1 || '%' 
-	OR documento ILIKE '%' || $1 || '%' 
-	OR correo ILIKE '%' || $1 || '%'`
+	query := `SELECT c.nombre, c.telefono, c.fecha_ingreso, eu.nombre AS estado, c.nit,
+	correo FROM clientes c
+	JOIN estados_usuarios eu ON eu.id_estado_usuario = c.id_estado_usuario
+	WHERE c.nombre ILIKE '%' || $1 || '%' 
+	OR c.nit ILIKE '%' || $1 || '%' 
+	OR c.correo ILIKE '%' || $1 || '%'`
 	data, err := r.db.Query(ctx, query, search)
 	if err != nil {
 		return nil, err
@@ -147,7 +140,7 @@ func (r *RepositoryClients) QuerySearchClients(search string) ([]models.SearchCl
 	defer data.Close()
 	for data.Next() {
 		var User models.SearchClients
-		err := data.Scan(&User.Name, &User.Document, &User.Gmail, &User.Phone, &User.Password, &User.EntryDate, &User.State)
+		err := data.Scan(&User.Name, &User.Phone, &User.EntryDate, &User.State, &User.Nit, &User.Gmail)
 		if err != nil {
 			return nil, err
 		}
