@@ -46,13 +46,13 @@ func (r *RepoLogin) QueryClientExistsByGmail(Gmail string) (bool, error) {
 func (r *RepoLogin) QueryLogin(email string) (*models.Login, error) {
 	ctx := context.Background()
 	var DataLogin models.Login
-	query := `SELECT id_usuarios, correo, contrasena, rol FROM usuarios
+	query := `SELECT id_usuarios, correo, contrasena, id_rol FROM usuarios
 		WHERE correo = $1`
 	if err := r.db.QueryRow(ctx, query, email).Scan(
 		&DataLogin.Id,
 		&DataLogin.Email,
 		&DataLogin.Password,
-		&DataLogin.Role,
+		&DataLogin.IdRole,
 	); err != nil {
 		return nil, err
 	}
