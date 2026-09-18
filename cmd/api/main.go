@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"modulo/internal/client_modules/d1/regional"
 	"modulo/internal/clients"
 	"modulo/internal/database"
 	"modulo/internal/login"
+	"modulo/internal/roles"
 	"modulo/internal/users"
+	usersstate "modulo/internal/users_state"
 	"net/http"
 	"os"
 
@@ -25,6 +28,10 @@ func main() {
 	repoLogin := login.NewRepository(connect)
 	serviceLogin := login.NewService(repoLogin)
 	handlerlogin := login.NewHandler(serviceLogin)
+	// Llamado capas para poder manipular roles
+	repoRoles := roles.NewRepository(connect)
+	serviceRoles := roles.NewService(repoRoles)
+	handlerRoles := roles.NewHandler(serviceRoles)
 	// LLamado de las capas para poder maninpular usuarios
 	repo := users.NewRepository(connect)
 	service := users.NewService(repo, repoLogin)
@@ -33,11 +40,20 @@ func main() {
 	repoClients := clients.NewRepository(connect)
 	serviceClients := clients.NewService(repoClients, repoLogin)
 	handlerClients := clients.NewHandler(serviceClients)
+	// Llamado capas para poder manipular estados de usuarios
+	repoUserStates := usersstate.NewRepository(connect)
+	serviceUserStates := usersstate.NewService(repoUserStates)
+	handlerUserStates := usersstate.NewHandler(serviceUserStates)
+	// Llamado capas para poder manipular regionales
+	repoRegional := regional.NewRepository(connect)
+	serviceRegional := regional.NewService(repoRegional)
+	handlerRegional := regional.NewHandler(serviceRegional)
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// Creacion de superAdmin
 	service.ServiceCreateSuperAdmin()
-
+	// URLS respuestas http (roles)
+	r.Get("/Allroles", handlerRoles.HandlerConsultAllRoles)
 	// URLS respuestas http (usuario)
 	// {id} : va enrutado con el id de chi.URLParam(r, "id")
 	r.Post("/users", handler.HandlerCreateUsers)
@@ -53,8 +69,16 @@ func main() {
 	r.Put("/client/{id}", handlerClients.HandlerUpdateClients)
 	r.Delete("/client/{id}", handlerClients.HandlerDeleteClient)
 	r.Get("/ClientSearch/{search}", handlerClients.HandlerClientsSearch)
+	r.Get("/clientPage/{id}", handlerClients.HandlerClientsPages)
+	// URSL respuestas htpp (estados_usaurios)
+	r.Get("/AllUserStates", handlerUserStates.HandlerAllUserState)
 	// URLS respuestas http (Login)
 	r.Post("/login", handlerlogin.HandlerLogin)
+	// URLS respuestas http (regionales)
+	r.Post("/regional", handlerRegional.HandlerCreateRegional)
+	r.Get("/regional/{id}", handlerRegional.HandlerConsultUserInformation)
+	r.Get("/allRegional", handlerRegional.HandlerConsultAllRegional)
+	r.Put("/regional/{id}", handlerRegional.HandlerUpdateRegional)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
@@ -62,10 +86,6 @@ func main() {
 	// Permite establecer la ruta html de crear usuario
 	r.Get("/createUsers", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/users/add_users.html")
-	})
-	// Permite establecer la ruta html de crear empresa
-	r.Get("/CreateCompany", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/users/company.html")
 	})
 	// Permite establecer la ruta html del login
 	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -79,17 +99,9 @@ func main() {
 	r.Get("/FormUpdateUsers", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/users/updateUsers.html")
 	})
-	// Pagina inicial para el super admin
-	r.Get("/superAdminHome", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/superAdmin.html")
-	})
 	// Pagina inicial para el admin
 	r.Get("/adminHome", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/adminHome.html")
-	})
-	// Pagina inicial para el usaurios
-	r.Get("/technicalHome", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/technicalHome.html")
 	})
 	// Pagina inicial para el clientes
 	r.Get("/clientHome", func(w http.ResponseWriter, r *http.Request) {
@@ -114,6 +126,18 @@ func main() {
 	// Pagina para actualizar informacion cliente
 	r.Get("/FormUpdateClients", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/admin/forms/clients/updateClient.html")
+	})
+	// Pagina listado de regionales existentes
+	r.Get("/listRegional", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/regionalList.html")
+	})
+	// Pagina para crear regionales
+	r.Get("/formCreateRegional", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalCreate.html")
+	})
+	// Pagina para actualizar informacion regionales
+	r.Get("/formUpdateRegional", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalUpdate.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
