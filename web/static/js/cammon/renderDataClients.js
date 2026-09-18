@@ -6,12 +6,9 @@ export function RenderClientsRow(client){
     const cellName = document.createElement("td");
     cellName.textContent = client.Name;
     row.appendChild(cellName);
-    const cellDocument = document.createElement("td");
-    cellDocument.textContent = client.Document;
-    row.appendChild(cellDocument);
-    const cellEmail = document.createElement("td");
-    cellEmail.textContent = client.Gmail;
-    row.appendChild(cellEmail);
+    const cellGmail = document.createElement("td");
+    cellGmail.textContent = client.Gmail;
+    row.appendChild(cellGmail); 
     const cellPhone = document.createElement("td");
     cellPhone.textContent = client.Phone;
     row.appendChild(cellPhone);
@@ -21,6 +18,9 @@ export function RenderClientsRow(client){
     const cellState = document.createElement("td");
     cellState.textContent = client.State;
     row.appendChild(cellState);
+    const cellNit = document.createElement("td");
+    cellNit.textContent = client.Nit;
+    row.appendChild(cellNit);
     row.appendChild(RenderCrudButton(client.Id, ConsultButtonClients, UpdateButtonClients, DeleteButtonClients))
     return row
 }
