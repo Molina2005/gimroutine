@@ -7,6 +7,7 @@ import (
 	"modulo/internal/models"
 	"modulo/internal/utils"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -27,7 +28,7 @@ var ErrUserDoesNotExists = errors.New("usuario no existe en el sistema")
 var ErrSuperAdminAlreadyExists = errors.New("superAdmin ya existe en el sistema")
 
 // Creacion de usuario y requirimientos a seguir
-func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) error {
+func (s *ServiceUsers) ServiceCreatetUser(name, email, password, lastName string, id_rol, phone, id_users_state int) error {
 	existGmailClient, err := s.RepoLogin.QueryClientExistsByGmail(email)
 	if err != nil {
 		return err
@@ -44,19 +45,19 @@ func (s *ServiceUsers) ServiceCreatetUser(name, email, password, role string) er
 	if err != nil {
 		return errors.New("error al hashear contraseña")
 	}
-	// Nombre y email del usuario en minuscula para evitar usuarios duplicados en la creacion
+	// Nombre y email del usuario en mayuscula para evitar usuarios duplicados en la creacion
 	LowerName := strings.ToLower(name)
 	LowerEmail := strings.ToLower(email)
 
 	// Validaion de se pemiten campos vacios
-	if name == "" || email == "" || HashPassword == "" {
+	if name == "" || email == "" || HashPassword == "" || lastName == "" || id_rol == 0 || phone == 0 || id_users_state == 0 {
 		return errors.New("todos los campos son obligatorios")
 	}
-	return s.repo.QueryInsertUser(LowerName, LowerEmail, HashPassword, role)
+	return s.repo.QueryInsertUser(LowerName, LowerEmail, HashPassword, lastName, phone, id_rol, id_users_state)
 }
 
 // Servicio consultar usuario
-func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
+func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.Users, error) {
 	Exist, err := s.repo.QueryuserExistsXId(id_user)
 	if err != nil {
 		return nil, err
@@ -68,8 +69,8 @@ func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.User, error) {
 }
 
 // Requerimientos actualizacion informacion usuario
-func (s *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email, password, role string) error {
-	Exist, err := s.repo.QueryuserExistsXId(id_usuarios)
+func (s *ServiceUsers) ServiceUpdateUserInformation(id_user int, name, email, password, apellido, phone string, id_rol, id_state int) error {
+	Exist, err := s.repo.QueryuserExistsXId(id_user)
 	if err != nil {
 		fmt.Print("err en query service ")
 		return err
@@ -79,13 +80,13 @@ func (s *ServiceUsers) ServiceUpdateUserInformation(id_usuarios int, name, email
 	}
 	// Si no se actializa contraseña solo actualiza los demas datos
 	if password == "" {
-		return s.repo.QueryUpdateUserNoPassword(id_usuarios, name, email, role)
+		return s.repo.QueryUpdateUserNoPassword(id_user, name, email, apellido, phone, id_rol, id_state)
 	}
 	HashPassword, err := utils.HashPassword(password)
 	if err != nil {
 		fmt.Println("error al hashear contraseña")
 	}
-	return s.repo.QueryUpdateUser(id_usuarios, name, email, HashPassword, role)
+	return s.repo.QueryUpdateUser(id_user, name, email, HashPassword, apellido, phone, id_rol, id_state)
 }
 
 // Requerimientos eliminacion usuario
@@ -119,12 +120,24 @@ func (s *ServiceUsers) ServiceCreateSuperAdmin() error {
 	if Exists {
 		return ErrSuperAdminAlreadyExists
 	}
+	// Se convierte dato que viene de .env a entero
+	convId, errconv := strconv.Atoi(os.Getenv("IDROL_SUPER"))
+	if errconv != nil {
+		return errconv
+	}
+	convIdState, errconv := strconv.Atoi(os.Getenv("STATE"))
+	if errconv != nil {
+		return errconv
+	}
 	// Modelos para poder guardar informacion de variables de entorno y dejar rol fijo
 	SuperAdmin := models.User{
-		Name:     os.Getenv("NAME_SUPER"),
-		Email:    os.Getenv("EMAIL_SUPER"),
-		Password: os.Getenv("PASSWORD_SUPER"),
-		Role:     "superAdmin",
+		Name:           os.Getenv("NAME_SUPER"),
+		Email:          os.Getenv("EMAIL_SUPER"),
+		Password:       os.Getenv("PASSWORD_SUPER"),
+		IdRole:         convId,
+		LastName:       os.Getenv("LASTNAME_SUPER"),
+		Phone:          os.Getenv("PHONE_SUPER"),
+		Id_users_state: convIdState,
 	}
 
 	// Contraseña incriptada
@@ -135,5 +148,6 @@ func (s *ServiceUsers) ServiceCreateSuperAdmin() error {
 	// Nombre y email del usuario en minuscula para evitar usuarios duplicados en la creacion
 	LowerName := strings.ToLower(SuperAdmin.Name)
 	LowerEmail := strings.ToLower(SuperAdmin.Email)
-	return s.repo.QueryCreateSuperAdmin(LowerName, LowerEmail, HashPassword, SuperAdmin.Role)
+	return s.repo.QueryCreateSuperAdmin(LowerName, LowerEmail, HashPassword,
+		SuperAdmin.LastName, SuperAdmin.Phone, SuperAdmin.IdRole, SuperAdmin.Id_users_state)
 }
