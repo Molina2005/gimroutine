@@ -33,7 +33,10 @@ func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *h
 		Name     string `json:"name"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
-		Role     string `json:"role"`
+		IdRole   int    `json:"idrol"`
+		LastName string `json:"lastname"`
+		Phone    string `json:"phone"`
+		Id_state int    `json:"id_state"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&inputUpdate); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -48,7 +51,10 @@ func (h *HandlerUsers) HandlerUpdateUsersInformation(w http.ResponseWriter, r *h
 		inputUpdate.Name,
 		inputUpdate.Email,
 		inputUpdate.Password,
-		inputUpdate.Role,
+		inputUpdate.LastName,
+		inputUpdate.Phone,
+		inputUpdate.IdRole,
+		inputUpdate.Id_state,
 	); err != nil {
 		if errors.Is(err, ErrUserDoesNotExists) {
 			w.WriteHeader(http.StatusNotFound)
