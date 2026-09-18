@@ -15,12 +15,11 @@ func (h *HandlerClients) HandlerCreationClients(w http.ResponseWriter, r *http.R
 		return
 	}
 	var input struct {
-		Name     string `json:"name"`
-		Document string `json:"document"`
-		Gmail    string `json:"gmail"`
-		Phone    string `json:"phone"`
-		Password string `json:"password"`
-		State    string `json:"state"`
+		Name           string `json:"name"`
+		Phone          string `json:"phone"`
+		Gmail          string `json:"gmail"`
+		Nit            string `json:"nit"`
+		Id_users_state int    `json:"id_users_state"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -29,7 +28,7 @@ func (h *HandlerClients) HandlerCreationClients(w http.ResponseWriter, r *http.R
 		})
 		return
 	}
-	if err := h.service.ServiceCreateClient(input.Name, input.Document, input.Gmail, input.Phone, input.Password, input.State); err != nil {
+	if err := h.service.ServiceCreateClient(input.Name, input.Phone, input.Gmail, input.Nit, input.Id_users_state); err != nil {
 		if errors.Is(err, ErrClientAlreadyExists) {
 			w.WriteHeader(http.StatusConflict)
 		} else {
