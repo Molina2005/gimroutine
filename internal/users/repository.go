@@ -34,7 +34,7 @@ func (r RepositoryUsers) QueryuserExistsXId(id_user int) (bool, error) {
 func (r *RepositoryUsers) QueryExistsSuperAdmin() (bool, error) {
 	ctx := context.Background()
 	var ExistRole bool
-	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE rol = 'superAdmin')`
+	query := `SELECT EXISTS(SELECT 1 FROM usuarios WHERE id_rol = 1)`
 	if err := r.db.QueryRow(ctx, query).Scan(&ExistRole); err != nil {
 		return false, err
 	}
@@ -42,11 +42,11 @@ func (r *RepositoryUsers) QueryExistsSuperAdmin() (bool, error) {
 }
 
 // Insercion de usuarios
-func (r *RepositoryUsers) QueryInsertUser(name, email, password, role string) error {
+func (r *RepositoryUsers) QueryInsertUser(name, email, password, lastName string, id_rol, phone, id_users_state int) error {
 	ctx := context.Background()
-	query := `INSERT INTO usuarios (nombre, correo, contrasena, rol) 
-				VALUES ($1, $2, $3, $4)`
-	_, err := r.db.Exec(ctx, query, name, email, password, role)
+	query := `INSERT INTO usuarios (nombre, correo, contrasena, id_rol, apellido, telefono, id_estado_usuario) 
+				VALUES ($1, $2, $3, $4, $5, $6, $7)`
+	_, err := r.db.Exec(ctx, query, name, email, password, id_rol, lastName, phone, id_users_state)
 	if err != nil {
 		return err
 	}
@@ -54,17 +54,25 @@ func (r *RepositoryUsers) QueryInsertUser(name, email, password, role string) er
 }
 
 // Consultar Informacion usuario
-func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.User, error) {
+func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.Users, error) {
 	ctx := context.Background()
 	// Guarda la informacion que se envia con Scan
-	var DataUser models.User
-	query := "SELECT nombre, correo, contrasena, rol FROM usuarios WHERE id_usuarios=$1"
+	var DataUser models.Users
+	query := `SELECT u.nombre, u.correo, u.contrasena, r.cargo, 
+		u.apellido, u.telefono, eu.nombre AS estado 
+		FROM usuarios u 
+		join rol r ON u.id_rol = r.id_rol
+		join estados_usuarios eu ON eu.id_estado_usuario = u.id_estado_usuario WHERE id_usuarios=$1`
 	// Envia informacion con scan a la variable DataUser
 	if err := r.db.QueryRow(ctx, query, id_user).Scan(
+
 		&DataUser.Name,
-		&DataUser.Email,
+		&DataUser.Gmail,
 		&DataUser.Password,
 		&DataUser.Role,
+		&DataUser.LastName,
+		&DataUser.Phone,
+		&DataUser.Users_state,
 	); err != nil {
 		return nil, err
 	}
@@ -73,11 +81,11 @@ func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.User, er
 }
 
 // Actualizacion informacion usuario con contraseña incluida
-func (r *RepositoryUsers) QueryUpdateUser(id_user int, name, email, password, role string) error {
+func (r *RepositoryUsers) QueryUpdateUser(id_user int, name, email, password, apellido, phone string, id_rol, id_state int) error {
 	ctx := context.Background()
-	query := `UPDATE usuarios SET nombre = $1, correo = $2, contrasena = $3, rol = $4
-	WHERE id_usuarios = $5`
-	_, err := r.db.Exec(ctx, query, name, email, password, role, id_user)
+	query := `UPDATE usuarios SET nombre = $1, correo = $2, contrasena = $3, id_rol = $4 , apellido = $5, 
+	telefono = $6, id_estado_usuario = $7 WHERE id_usuarios = $8`
+	_, err := r.db.Exec(ctx, query, name, email, password, id_rol, apellido, phone, id_state, id_user)
 	if err != nil {
 		return err
 	}
@@ -85,11 +93,11 @@ func (r *RepositoryUsers) QueryUpdateUser(id_user int, name, email, password, ro
 }
 
 // Actualizacion informacion usuario sin contraseña
-func (r *RepositoryUsers) QueryUpdateUserNoPassword(id_user int, name, email, role string) error {
+func (r *RepositoryUsers) QueryUpdateUserNoPassword(id_user int, name, email, apellido, phone string, id_rol, id_state int) error {
 	ctx := context.Background()
-	query := `UPDATE usuarios SET nombre = $1, correo = $2, rol = $3
-	WHERE id_usuarios = $4`
-	_, err := r.db.Exec(ctx, query, name, email, role, id_user)
+	query := `UPDATE usuarios SET nombre = $1, correo = $2, id_rol = $3 , apellido = $4, 
+	telefono = $5, id_estado_usuario = $6 WHERE id_usuarios = $7`
+	_, err := r.db.Exec(ctx, query, name, email, id_rol, apellido, phone, id_state, id_user)
 	if err != nil {
 		return err
 	}
@@ -110,7 +118,11 @@ func (r *RepositoryUsers) QueryDeleteUser(id_user int) error {
 // Consulta informacion de todos los usuarios
 func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 	ctx := context.Background()
-	query := `SELECT id_usuarios, nombre, correo, contrasena, fecha_ingreso, rol FROM usuarios ORDER BY id_usuarios ASC`
+	query := `SELECT u.id_usuarios, u.nombre, u.correo, u.contrasena, u.fecha_ingreso, r.cargo, u.apellido, u.telefono, eu.nombre AS estado 
+		FROM usuarios u 
+		join rol r ON u.id_rol = r.id_rol
+		join estados_usuarios eu ON eu.id_estado_usuario = u.id_estado_usuario 
+		ORDER BY u.id_usuarios ASC`
 	data, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
@@ -119,7 +131,8 @@ func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 	var DataUsers []models.Users
 	for data.Next() {
 		var users models.Users
-		if err := data.Scan(&users.Id, &users.Name, &users.Gmail, &users.Password, &users.EntryDate, &users.Role); err != nil {
+		if err := data.Scan(&users.Id, &users.Name, &users.Gmail, &users.Password, &users.EntryDate,
+			&users.Role, &users.LastName, &users.Phone, &users.Users_state); err != nil {
 			return nil, err
 		}
 		DataUsers = append(DataUsers, users)
@@ -130,10 +143,12 @@ func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 // Buscar usuario en buscador
 func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers, error) {
 	ctx := context.Background()
-	query := `SELECT nombre, correo, contrasena, fecha_ingreso, rol 
-	FROM usuarios 
-	WHERE nombre ILIKE '%' || $1 || '%' 
-	OR correo ILIKE '%' || $1 || '%'`
+	query := `SELECT u.id_usuarios, u.nombre, u.correo, u.contrasena, u.fecha_ingreso, r.cargo, u.apellido, u.telefono, eu.nombre AS estado 
+		FROM usuarios u 
+		join rol r ON u.id_rol = r.id_rol
+		join estados_usuarios eu ON eu.id_estado_usuario = u.id_estado_usuario
+		WHERE u.nombre ILIKE '%' || $1 || '%' 
+		OR u.correo ILIKE '%' || $1 || '%'`
 	data, err := r.db.Query(ctx, query, search)
 	if err != nil {
 		return nil, err
@@ -142,7 +157,7 @@ func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers,
 	defer data.Close()
 	for data.Next() {
 		var User models.SearchUsers
-		err := data.Scan(&User.Name, &User.Gmail, &User.Password, &User.EntryDate, &User.Role)
+		err := data.Scan(&User.Id, &User.Name, &User.Gmail, &User.Password, &User.EntryDate, &User.Role, &User.LastName, &User.Phone, &User.Users_state)
 		if err != nil {
 			return nil, err
 		}
@@ -152,11 +167,11 @@ func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers,
 }
 
 // Creacion super admin
-func (r *RepositoryUsers) QueryCreateSuperAdmin(name, email, password, role string) error {
+func (r *RepositoryUsers) QueryCreateSuperAdmin(name, email, password, lastName, phone string, id_rol, id_users_state int) error {
 	ctx := context.Background()
-	query := `INSERT INTO usuarios (nombre, correo, contrasena, rol) 
-				VALUES ($1, $2, $3, $4)`
-	_, err := r.db.Exec(ctx, query, name, email, password, role)
+	query := `INSERT INTO usuarios (nombre, correo, contrasena, id_rol, apellido, telefono, id_estado_usuario) 
+				VALUES ($1, $2, $3, $4, $5, $6, $7)`
+	_, err := r.db.Exec(ctx, query, name, email, password, id_rol, lastName, phone, id_users_state)
 	if err != nil {
 		return err
 	}

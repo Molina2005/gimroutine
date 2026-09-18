@@ -29,7 +29,7 @@ func (s *ServiceLogin) ServiceLogin(email, password string) (*models.Login, erro
 			Email:    email,
 			Password: password,
 			Type:     "users",
-			Role:     user.Role,
+			IdRole:   user.IdRole,
 		}, nil
 	}
 	client, errHashClient := s.r.QueryLoginClient(email)
