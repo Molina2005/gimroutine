@@ -43,16 +43,16 @@ func (h *HandlerLogin) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Se llama funcion para poder obtener el token JWT de cada usuario al ingresar
-	token, err := httpmiddlewares.GenerateJWT(user.Id, user.Role)
+	token, err := httpmiddlewares.GenerateJWT(user.Id, user.IdRole)
 	if err != nil {
 		http.Error(w, "error al generar token", http.StatusUnauthorized)
 	}
 	// Envio de informacion al frontend
-	json.NewEncoder(w).Encode(map[string]string{
+	json.NewEncoder(w).Encode(map[string]any{
 		"message": "Login exitoso",
 		"token":   token,
 		// Pasa informacion de si es cliente o usuario
-		"type": user.Type,
-		"role": user.Role,
+		"type":    user.Type,
+		"id_role": user.IdRole,
 	})
 }
