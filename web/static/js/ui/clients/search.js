@@ -5,6 +5,7 @@ import { SearchCreate } from "../../cammon/search.js";
 document.addEventListener("DOMContentLoaded", async function(){
     SearchCreate("searchInputClient", ConnectionSearchClient);
 })
+
 // Funcion que recibe la informacion que envia fetch y crea las columnas
 export async function ReturnSearchClient(data){
     const tableSearch = document.getElementById("clients-table")
