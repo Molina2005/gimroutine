@@ -8,11 +8,16 @@
 <body>
     <form id="form-update-users">
         <input type="text" id="name">
+        <input type="text" id="lastname" required>
         <input type="text" id="email">
-        <input title="********" type="password" id="password">
+        <input title="********" type="password" id="password" placeholder="contraseña">
         <select id="role">
-            <option value="administrator">Administrador</option>
-            <option value="userInter">usuario</option>
+            <option value="">Seleccionar rol</option>
+        </select>
+        
+        <input type="number"  id="phone" required>
+        <select id="state">
+            <option value="">Seleccionar estado</option>
         </select>
         <button type="submit">Actualizar</button>
     </form>
