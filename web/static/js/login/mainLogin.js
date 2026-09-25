@@ -16,16 +16,10 @@ document.addEventListener("DOMContentLoaded", async function(){
             // Objeto el cual guarda las rutas de cada uno de los roles
             if (result.type == "users"){
                 const routes = {
-                    administrator : "/adminHome",
-                    technical : "/technicalHome",
-                }
-                // Redireccion a pagina del superAdmin 
-                if (result.role == "superAdmin"){
-                    window.location.replace("/superAdminHome")
-                }else{
-                    // Redireccion a cada pagina de inicio segun el rol
-                    window.location.replace(routes[result.role])
-                }
+                    1: "/adminHome",
+                }                
+                // Redireccion a cada pagina de inicio segun el rol
+                window.location.replace(routes[result.id_role])
             }else{
                 window.location.replace("/clientHome")
             }
