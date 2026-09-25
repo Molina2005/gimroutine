@@ -79,6 +79,8 @@ func main() {
 	r.Get("/regional/{id}", handlerRegional.HandlerConsultUserInformation)
 	r.Get("/allRegional", handlerRegional.HandlerConsultAllRegional)
 	r.Put("/regional/{id}", handlerRegional.HandlerUpdateRegional)
+	r.Delete("/regional/{id}", handlerRegional.HandlerDeleteRegional)
+	r.Get("/regionalSearch/{search}", handlerRegional.HandlerRegionalSearch)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
@@ -129,15 +131,23 @@ func main() {
 	})
 	// Pagina listado de regionales existentes
 	r.Get("/listRegional", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/regionalList.html")
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/regional/regionalList.html")
 	})
 	// Pagina para crear regionales
 	r.Get("/formCreateRegional", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalCreate.html")
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regional/regionalCreate.html")
 	})
 	// Pagina para actualizar informacion regionales
 	r.Get("/formUpdateRegional", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalUpdate.html")
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regional/regionalUpdate.html")
+	})
+	// pagina con menu de modulos para que usuario elija datos que desea ver segun la region
+	r.Get("/moduleMenu", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/pages/moduleMenu.html")
+	})
+	// pagina para moder vizualizar los contactos de cada regional
+	r.Get("/regionalContacts", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/regionalContacts.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
