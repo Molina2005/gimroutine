@@ -126,7 +126,7 @@ func (r *RepositoryClients) QueryDeleteClient(id_client int) error {
 // Buscar cliente en buscador
 func (r *RepositoryClients) QuerySearchClients(search string) ([]models.SearchClients, error) {
 	ctx := context.Background()
-	query := `SELECT c.nombre, c.telefono, c.fecha_ingreso, eu.nombre AS estado, c.nit,
+	query := `SELECT c.id_cliente, c.nombre, c.telefono, c.fecha_ingreso, eu.nombre AS estado, c.nit,
 	correo FROM clientes c
 	JOIN estados_usuarios eu ON eu.id_estado_usuario = c.id_estado_usuario
 	WHERE c.nombre ILIKE '%' || $1 || '%' 
@@ -139,12 +139,14 @@ func (r *RepositoryClients) QuerySearchClients(search string) ([]models.SearchCl
 	var DataClients []models.SearchClients
 	defer data.Close()
 	for data.Next() {
-		var User models.SearchClients
-		err := data.Scan(&User.Name, &User.Phone, &User.EntryDate, &User.State, &User.Nit, &User.Gmail)
+		var Client models.SearchClients
+		err := data.Scan(&Client.Id,
+			&Client.Name, &Client.Phone, &Client.EntryDate,
+			&Client.State, &Client.Nit, &Client.Gmail)
 		if err != nil {
 			return nil, err
 		}
-		DataClients = append(DataClients, User)
+		DataClients = append(DataClients, Client)
 	}
 	return DataClients, nil
 }
