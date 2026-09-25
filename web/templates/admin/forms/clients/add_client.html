@@ -9,14 +9,11 @@
     <h2>Agregar Cliente</h2>
     <form id="addClientForm">
         <input title="nombre" type="text" placeholder="Nombre" id="name" required>
-        <input title="documento" type="text" id="document" placeholder="Documento" required>
-        <input title="correo" type="text" id="gmail" placeholder="Correo" required>
-        <input title="phone" type="text" id="phone" placeholder="Phone" required>
-        <input title="contraseña" type="password" id="password" placeholder="Contraseña" required>
-        <label>Estado</label>
-        <select id="state" required>
-            <option value="activo">Activo</option>
-            <option value="inactivo">Inactivo</option>
+        <input title="phone" type="text" id="phone" placeholder="phone" required>
+        <input title="gmail" type="text" id="gmail" placeholder="gmail" required>
+        <input title="nit" type="number" id="nit" placeholder="nit" required>
+        <select id="state">
+            <option value="">Seleccione un estado</option>
         </select>
         <button title="Guardar nuevo cliente" type="submit">Guardar</button>
     </form>
