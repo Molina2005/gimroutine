@@ -12,8 +12,12 @@
         <input title="8+ caracteres, con mayúscula, minúscula, número y símbolo" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}" type="password" id="password" placeholder="Contraseña" required>
         <label>Rol</label>
         <select id="role">
-            <option value="administrator">Administrador</option>
-            <option value="technical">Usuario</option>
+            <option value="">seleccione un rol</option>
+        </select>
+        <input type="text" placeholder="Telefono" id="phone" required>
+        <input type="text" placeholder="Apellido" id="lastname" required>
+        <select id="state">
+            <option value="">seleccione un estado</option>
         </select>
         <button title="Envio informacion" type="submit" class="login-btn">Enviar</button>
     </form>
