@@ -2,7 +2,6 @@ package users
 
 import (
 	"context"
-	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -54,12 +53,12 @@ func (r *RepositoryUsers) QueryInsertUser(name, email, password, lastName string
 }
 
 // Consultar Informacion usuario
-func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.Users, error) {
+func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*User, error) {
 	ctx := context.Background()
 	// Guarda la informacion que se envia con Scan
-	var DataUser models.Users
-	query := `SELECT u.nombre, u.correo, u.contrasena, r.cargo, 
-		u.apellido, u.telefono, eu.nombre AS estado 
+	var DataUser User
+	query := `SELECT u.nombre, u.correo, u.contrasena, u.id_rol, r.cargo, 
+		u.apellido, u.telefono, eu.id_estado_usuario, eu.nombre AS estado 
 		FROM usuarios u 
 		join rol r ON u.id_rol = r.id_rol
 		join estados_usuarios eu ON eu.id_estado_usuario = u.id_estado_usuario WHERE id_usuarios=$1`
@@ -67,11 +66,13 @@ func (r *RepositoryUsers) QueryViewUserInfomation(id_user int) (*models.Users, e
 	if err := r.db.QueryRow(ctx, query, id_user).Scan(
 
 		&DataUser.Name,
-		&DataUser.Gmail,
+		&DataUser.Email,
 		&DataUser.Password,
+		&DataUser.IdRole,
 		&DataUser.Role,
 		&DataUser.LastName,
 		&DataUser.Phone,
+		&DataUser.Id_users_state,
 		&DataUser.Users_state,
 	); err != nil {
 		return nil, err
@@ -116,7 +117,7 @@ func (r *RepositoryUsers) QueryDeleteUser(id_user int) error {
 }
 
 // Consulta informacion de todos los usuarios
-func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
+func (r *RepositoryUsers) QueryUsersInformation() ([]Users, error) {
 	ctx := context.Background()
 	query := `SELECT u.id_usuarios, u.nombre, u.correo, u.contrasena, u.fecha_ingreso, r.cargo, u.apellido, u.telefono, eu.nombre AS estado 
 		FROM usuarios u 
@@ -128,9 +129,9 @@ func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 		return nil, err
 	}
 	defer data.Close()
-	var DataUsers []models.Users
+	var DataUsers []Users
 	for data.Next() {
-		var users models.Users
+		var users Users
 		if err := data.Scan(&users.Id, &users.Name, &users.Gmail, &users.Password, &users.EntryDate,
 			&users.Role, &users.LastName, &users.Phone, &users.Users_state); err != nil {
 			return nil, err
@@ -141,7 +142,7 @@ func (r *RepositoryUsers) QueryUsersInformation() ([]models.Users, error) {
 }
 
 // Buscar usuario en buscador
-func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers, error) {
+func (r *RepositoryUsers) QuerySearchUsers(search string) ([]SearchUsers, error) {
 	ctx := context.Background()
 	query := `SELECT u.id_usuarios, u.nombre, u.correo, u.contrasena, u.fecha_ingreso, r.cargo, u.apellido, u.telefono, eu.nombre AS estado 
 		FROM usuarios u 
@@ -153,10 +154,10 @@ func (r *RepositoryUsers) QuerySearchUsers(search string) ([]models.SearchUsers,
 	if err != nil {
 		return nil, err
 	}
-	var DataUsers []models.SearchUsers
+	var DataUsers []SearchUsers
 	defer data.Close()
 	for data.Next() {
-		var User models.SearchUsers
+		var User SearchUsers
 		err := data.Scan(&User.Id, &User.Name, &User.Gmail, &User.Password, &User.EntryDate, &User.Role, &User.LastName, &User.Phone, &User.Users_state)
 		if err != nil {
 			return nil, err
