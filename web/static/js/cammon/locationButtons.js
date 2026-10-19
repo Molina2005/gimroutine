@@ -1,4 +1,4 @@
-// Funcion para poder guardar los botones de cruds y asi puedan ser reutilizables
+// Funcion para poder guardar los botones de cruds
 export function RenderCrudButton(id, consult, update, remove){
     // Container el cua va a guardar toda la informacion
     const buttonContainer = document.createElement("td")
@@ -14,6 +14,23 @@ export function RenderCrudButton(id, consult, update, remove){
     deleteButton.onclick = () => remove(id)
     // Se agrega botones a container y retorna cada uno de ellos 
     buttonContainer.appendChild(consultButton)
+    buttonContainer.appendChild(updateButton)
+    buttonContainer.appendChild(deleteButton)
+    return buttonContainer
+}
+
+// Funcion para poder guardar los botones de cruds sin el de consultar 
+export function RenderCrudButtonEspecials(id, update, remove){
+    // Container el cua va a guardar toda la informacion
+    const buttonContainer = document.createElement("td")
+    // Botones para cada una de las cruds 
+    const updateButton = document.createElement("button")
+    updateButton.textContent = "Actualizar"
+    updateButton.onclick = () => update(id)
+    const deleteButton = document.createElement("button")
+    deleteButton.textContent = "Eliminar"
+    deleteButton.onclick = () => remove(id)
+    // Se agrega botones a container y retorna cada uno de ellos 
     buttonContainer.appendChild(updateButton)
     buttonContainer.appendChild(deleteButton)
     return buttonContainer
