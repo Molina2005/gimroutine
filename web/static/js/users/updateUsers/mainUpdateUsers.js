@@ -1,5 +1,4 @@
-import { logicInfoUser } from "./logicUpdateUsers.js"
-import { logicUpdateUser } from "./logicUpdateUsers.js"
+import { logicInfoUser, logicUpdateUser } from "./logicUpdateUsers.js"
 import { LogicAllRoles } from "../../roles/allRoles/logicRoles.js";
 import { logicAllUserStates } from "../../user_states/logicAllUserStates.js";
 import { RolOptions, StateUserOptions } from "../../cammon/selectOption.js";
@@ -27,10 +26,10 @@ document.addEventListener("DOMContentLoaded", async function(){
     const formUpdate = document.getElementById("form-update-users");
     document.getElementById("name").value = data.user.Name
     document.getElementById("lastname").value = data.user.LastName
-    document.getElementById("email").value = data.user.Gmail
-    document.getElementById("role").value = data.user.Role 
+    document.getElementById("email").value = data.user.Email
+    document.getElementById("role").value = data.user.IdRole
     document.getElementById("phone").value = data.user.Phone
-    document.getElementById("state").value = data.Users_state
+    document.getElementById("state").value = data.user.Id_users_state
     // Evento para cuando el usuario de click a boton actualizar se actualizen los datos con lo que ingreso en los inputs 
     formUpdate.addEventListener("submit", async function(e){
         e.preventDefault();
