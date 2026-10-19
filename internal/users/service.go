@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"modulo/internal/login"
-	"modulo/internal/models"
 	"modulo/internal/utils"
 	"os"
 	"strconv"
@@ -57,7 +56,7 @@ func (s *ServiceUsers) ServiceCreatetUser(name, email, password, lastName string
 }
 
 // Servicio consultar usuario
-func (s *ServiceUsers) ServiceQueryUser(id_user int) (*models.Users, error) {
+func (s *ServiceUsers) ServiceQueryUser(id_user int) (*User, error) {
 	Exist, err := s.repo.QueryuserExistsXId(id_user)
 	if err != nil {
 		return nil, err
@@ -102,12 +101,12 @@ func (s *ServiceUsers) ServiceDeleteUser(id_usuarios int) error {
 }
 
 // Servicio para consultar todos los usuarios
-func (s *ServiceUsers) ServiceConsultAllUsers() ([]models.Users, error) {
+func (s *ServiceUsers) ServiceConsultAllUsers() ([]Users, error) {
 	return s.repo.QueryUsersInformation()
 }
 
 // Servicio para buscar usuario por nombre o correo
-func (s *ServiceUsers) ServiceUserSearch(dataUsersSearch string) ([]models.SearchUsers, error) {
+func (s *ServiceUsers) ServiceUserSearch(dataUsersSearch string) ([]SearchUsers, error) {
 	return s.repo.QuerySearchUsers(dataUsersSearch)
 }
 
@@ -130,7 +129,7 @@ func (s *ServiceUsers) ServiceCreateSuperAdmin() error {
 		return errconv
 	}
 	// Modelos para poder guardar informacion de variables de entorno y dejar rol fijo
-	SuperAdmin := models.User{
+	SuperAdmin := User{
 		Name:           os.Getenv("NAME_SUPER"),
 		Email:          os.Getenv("EMAIL_SUPER"),
 		Password:       os.Getenv("PASSWORD_SUPER"),
