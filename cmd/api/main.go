@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	jobposition "modulo/internal/client_modules/d1/jobPosition"
 	"modulo/internal/client_modules/d1/regional"
+	regionalcontacts "modulo/internal/client_modules/d1/regionalContacts"
 	"modulo/internal/clients"
 	"modulo/internal/database"
 	"modulo/internal/login"
@@ -48,6 +50,14 @@ func main() {
 	repoRegional := regional.NewRepository(connect)
 	serviceRegional := regional.NewService(repoRegional)
 	handlerRegional := regional.NewHandler(serviceRegional)
+	// Llamado capas para poder manipular cargos de trabajo
+	repoJobPosition := jobposition.NewRepository(connect)
+	serviceJobPosition := jobposition.NewService(repoJobPosition)
+	handlerJobPosition := jobposition.NewHandler(serviceJobPosition)
+	// Llamado capas para poder manipular contactos regionales
+	repoRegionalContacts := regionalcontacts.NewRepository(connect)
+	serviceRegionalContacts := regionalcontacts.NewService(repoRegionalContacts)
+	handlerRegionalContacts := regionalcontacts.NewHandler(serviceRegionalContacts)
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// Creacion de superAdmin
@@ -81,6 +91,15 @@ func main() {
 	r.Put("/regional/{id}", handlerRegional.HandlerUpdateRegional)
 	r.Delete("/regional/{id}", handlerRegional.HandlerDeleteRegional)
 	r.Get("/regionalSearch/{search}", handlerRegional.HandlerRegionalSearch)
+	// URLS respuestas http (cargo de trabajo)
+	r.Get("/AllJobPosition", handlerJobPosition.HandlerAllJobPosition)
+	// URLS respuestas http (contactos regionales)
+	r.Post("/regionalContacts", handlerRegionalContacts.HandlerRegionalContactsCreate)
+	r.Get("/regionalContact/{id}", handlerRegionalContacts.HandlerRegionalContacts)
+	r.Get("/AllregionalContacts/{idRegional}", handlerRegionalContacts.HandlerConsultAllContactsRegional)
+	r.Put("/regionalContacts/{id}", handlerRegionalContacts.HandlerRegionalContactsUpdate)
+	r.Delete("/regionalContacts/{id}", handlerRegionalContacts.HandlerRegionalContactsDelete)
+	r.Get("/regionalContacts/{search}", handlerRegionalContacts.HandlerRegionalContactsSearch)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
@@ -103,19 +122,15 @@ func main() {
 	})
 	// Pagina inicial para el admin
 	r.Get("/adminHome", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/adminHome.html")
+		http.ServeFile(w, r, "./web/templates/pages/homePages/adminHome.html")
 	})
 	// Pagina inicial para el clientes
 	r.Get("/clientHome", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/clientHome.html")
+		http.ServeFile(w, r, "./web/templates/pages/homePages/clientHome.html")
 	})
 	// pagina navegador general
 	r.Get("/nav", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/components/navGeneral.html")
-	})
-	// pagina formulario politica y privacidad
-	r.Get("/PrivacyPolicy", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/politica_privacidad.html")
 	})
 	// Pagina informacion clientes
 	r.Get("/clientsInfo", func(w http.ResponseWriter, r *http.Request) {
@@ -147,7 +162,14 @@ func main() {
 	})
 	// pagina para moder vizualizar los contactos de cada regional
 	r.Get("/regionalContacts", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/regionalContacts.html")
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/regionalContacts/regionalContacts.html")
+	})
+	// Pagina para creacion de nuevos contactos regional
+	r.Get("/formCreateRegionalContacts", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalContacts/creationForm.html")
+	})
+	r.Get("/formUpdateRegionalContacts", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalContacts/updateForm.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
