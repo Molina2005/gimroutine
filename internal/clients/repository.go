@@ -2,7 +2,6 @@ package clients
 
 import (
 	"context"
-	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -27,7 +26,7 @@ func (r *RepositoryClients) QueryClientExistsById(IdClient int) (bool, error) {
 	return ExistsId, nil
 }
 
-// Crear fncion valdar exixtencia por correo
+// Crear funcion validar exixtencia por correo
 func (r *RepositoryClients) QueryClientExistsByDocument(gmail string) (bool, error) {
 	ctx := context.Background()
 	var ExistsGmail bool
@@ -52,11 +51,11 @@ func (r *RepositoryClients) QueryCreateClient(name, phone, gmail, nit string, id
 }
 
 // Consultar Informacion cliente
-func (r *RepositoryClients) QueryViewClientInfomation(id_client int) (*models.Client, error) {
+func (r *RepositoryClients) QueryViewClientInfomation(id_client int) (*Client, error) {
 	ctx := context.Background()
 	// Guarda la informacion que se envia con Scan
-	var DataClient models.Client
-	query := `SELECT c.nombre, c.telefono, eu.nombre AS estado, c.nit,
+	var DataClient Client
+	query := `SELECT c.nombre, c.telefono, eu.id_estado_usuario, eu.nombre AS estado, c.nit,
 		correo FROM clientes c
 		JOIN estados_usuarios eu ON eu.id_estado_usuario = c.id_estado_usuario 
 		WHERE id_cliente=$1`
@@ -64,6 +63,7 @@ func (r *RepositoryClients) QueryViewClientInfomation(id_client int) (*models.Cl
 	if err := r.db.QueryRow(ctx, query, id_client).Scan(
 		&DataClient.Name,
 		&DataClient.Phone,
+		&DataClient.IdState,
 		&DataClient.State,
 		&DataClient.Nit,
 		&DataClient.Gmail,
@@ -75,7 +75,7 @@ func (r *RepositoryClients) QueryViewClientInfomation(id_client int) (*models.Cl
 }
 
 // Consultar informacion de clientes
-func (r *RepositoryClients) QueryClientInformation() ([]models.Clients, error) {
+func (r *RepositoryClients) QueryClientInformation() ([]Clients, error) {
 	ctx := context.Background()
 	query := `SELECT c.id_cliente, c.nombre, c.telefono, c.fecha_ingreso, eu.nombre AS estado, c.nit,
 	correo FROM clientes c
@@ -87,10 +87,10 @@ func (r *RepositoryClients) QueryClientInformation() ([]models.Clients, error) {
 		return nil, err
 	}
 	defer data.Close()
-	var dataClients []models.Clients
+	var dataClients []Clients
 	// Recorre cada registro uno por uno
 	for data.Next() {
-		var client models.Clients
+		var client Clients
 		// Se agregan a memoria a client para luego pasarlo a dataclient
 		if err := data.Scan(&client.Id, &client.Name, &client.Phone, &client.EntryDate, &client.State,
 			&client.Nit, &client.Gmail); err != nil {
@@ -124,7 +124,7 @@ func (r *RepositoryClients) QueryDeleteClient(id_client int) error {
 }
 
 // Buscar cliente en buscador
-func (r *RepositoryClients) QuerySearchClients(search string) ([]models.SearchClients, error) {
+func (r *RepositoryClients) QuerySearchClients(search string) ([]SearchClients, error) {
 	ctx := context.Background()
 	query := `SELECT c.id_cliente, c.nombre, c.telefono, c.fecha_ingreso, eu.nombre AS estado, c.nit,
 	correo FROM clientes c
@@ -136,10 +136,10 @@ func (r *RepositoryClients) QuerySearchClients(search string) ([]models.SearchCl
 	if err != nil {
 		return nil, err
 	}
-	var DataClients []models.SearchClients
+	var DataClients []SearchClients
 	defer data.Close()
 	for data.Next() {
-		var Client models.SearchClients
+		var Client SearchClients
 		err := data.Scan(&Client.Id,
 			&Client.Name, &Client.Phone, &Client.EntryDate,
 			&Client.State, &Client.Nit, &Client.Gmail)
