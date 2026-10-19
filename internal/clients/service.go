@@ -3,7 +3,6 @@ package clients
 import (
 	"errors"
 	"modulo/internal/login"
-	"modulo/internal/models"
 )
 
 type ServiceClients struct {
@@ -47,7 +46,7 @@ func (s *ServiceClients) ServiceCreateClient(name, phone, gmail, nit string, id_
 }
 
 // Servicio consultar cliente
-func (s *ServiceClients) ServiceQueryClient(id_client int) (*models.Client, error) {
+func (s *ServiceClients) ServiceQueryClient(id_client int) (*Client, error) {
 	Exist, err := s.Repo.QueryClientExistsById(id_client)
 	if err != nil {
 		return nil, err
@@ -59,7 +58,7 @@ func (s *ServiceClients) ServiceQueryClient(id_client int) (*models.Client, erro
 }
 
 // Servicio consultar todos los clientes
-func (s *ServiceClients) ServiceConsultAllClient() ([]models.Clients, error) {
+func (s *ServiceClients) ServiceConsultAllClient() ([]Clients, error) {
 	return s.Repo.QueryClientInformation()
 }
 
@@ -88,6 +87,6 @@ func (s *ServiceClients) ServiceDeleteClient(id_client int) error {
 }
 
 // Servicio para buscar cliente por nombre documento o correo
-func (s *ServiceClients) ServiceClientSearch(dataClientSearch string) ([]models.SearchClients, error) {
+func (s *ServiceClients) ServiceClientSearch(dataClientSearch string) ([]SearchClients, error) {
 	return s.Repo.QuerySearchClients(dataClientSearch)
 }
