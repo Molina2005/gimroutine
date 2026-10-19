@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     const formUpdate = document.getElementById("form-update-clients")
     document.getElementById("name").value = data.client.Name
     document.getElementById("phone").value = data.client.Phone
-    document.getElementById("state").value = data.client.State
+    document.getElementById("state").value = data.client.IdState
     document.getElementById("nit").value = data.client.Nit
     document.getElementById("gmail").value = data.client.Gmail    
     // Evento para cuando el usuario de click a boton actualizar se actualizen los datos con lo que ingreso en los inputs 
