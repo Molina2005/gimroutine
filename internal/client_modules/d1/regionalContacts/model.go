@@ -23,6 +23,16 @@ type RegionalesContacts struct {
 	UserState    string
 }
 
+type searchRegionalContacts struct {
+	Id           int
+	Name         string
+	LastName     string
+	Gmail        string
+	Phone        string
+	Job_position string
+	UserState    string
+}
+
 // ============================== //
 // STRUCT PARA FUNCION DE VALIDACION CAMPOS
 // ============================== //
