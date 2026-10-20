@@ -70,6 +70,6 @@ func (s *ServiceRegionalContacts) ServiceRegionalContactsDelete(idRegionalContac
 }
 
 // Servicio buscador de contactos regional
-func (s *ServiceRegionalContacts) ServiceRegionalSeach() {
-
+func (s *ServiceRegionalContacts) ServiceRegionalContactsSeach(search string, idRegional int) ([]searchRegionalContacts, error) {
+	return s.Repo.QueryRegionalSeach(search, idRegional)
 }
