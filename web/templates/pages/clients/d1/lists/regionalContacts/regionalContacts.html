@@ -7,7 +7,7 @@
 </head>
 <body>
     <a href="/formCreateRegionalContacts">Agregar</a>
-    <!-- <input type="search" placeholder="Buscar..."> -->
+    <input type="search" id="searchInputContact" placeholder="Buscar...">
     <table>
         <tr>
             <td>Nombre</td>
@@ -19,7 +19,8 @@
         </tr>
         <tbody id="regional-contacts-table"></tbody>
     </table>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="/static/js/ui/clients/d1/regionalContacts/ui.js"></script>
+    <script type="module" src="/static/js/ui/clients/d1/regionalContacts/search.js"></script>
 </body>
 </html>
