@@ -23,7 +23,7 @@ export function StateClientOptions(data, Select){
     return option
 }
 
-export function StateJobPosition(data, Select){
+export function StateJobPosition(dacomta, Select){
     const option = document.createElement("option");
     option.value = data.Id;
     option.textContent = data.Name;

@@ -99,7 +99,7 @@ func main() {
 	r.Get("/AllregionalContacts/{idRegional}", handlerRegionalContacts.HandlerConsultAllContactsRegional)
 	r.Put("/regionalContacts/{id}", handlerRegionalContacts.HandlerRegionalContactsUpdate)
 	r.Delete("/regionalContacts/{id}", handlerRegionalContacts.HandlerRegionalContactsDelete)
-	r.Get("/regionalContacts/{search}", handlerRegionalContacts.HandlerRegionalContactsSearch)
+	r.Get("/regionalContacts/{search}/{idRegional}", handlerRegionalContacts.HandlerRegionalContactsSearch)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
