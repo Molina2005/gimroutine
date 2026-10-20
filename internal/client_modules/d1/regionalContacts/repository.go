@@ -162,7 +162,7 @@ func (r *RepositoryRegionalContacts) QueryRegionalContactsUpdate(
 func (r *RepositoryRegionalContacts) QueryRegionalContactsDelete(idRegionalContact int) error {
 	ctx := context.Background()
 	query := `DELETE FROM contactos_regional WHERE id_contactos_regional = $1`
-	_, err := r.db.Exec(ctx, query)
+	_, err := r.db.Exec(ctx, query, idRegionalContact)
 	if err != nil {
 		return err
 	}
@@ -170,6 +170,27 @@ func (r *RepositoryRegionalContacts) QueryRegionalContactsDelete(idRegionalConta
 }
 
 // Funcion buscador de contactos regional
-func (r *RepositoryRegionalContacts) QueryRegionalSeach() {
-
+func (r *RepositoryRegionalContacts) QueryRegionalSeach(search string, idRegional int) ([]searchRegionalContacts, error) {
+	ctx := context.Background()
+	query := `SELECT cr.id_contactos_regional, cr.nombre, cr.apellido, cr.correo, cr.telefono, eu.nombre AS estado, c.nombre AS cargo  
+		FROM contactos_regional cr 
+		JOIN regionales r ON r.id_regional = cr.id_regional
+		JOIN estados_usuarios eu ON eu.id_estado_usuario = cr.id_estado_usuario
+		JOIN cargos c ON c.id_cargo = cr.id_cargo
+		WHERE (cr.nombre ILIKE '%' || $1 || '%' 
+		OR cr.correo ILIKE '%' || $1 || '%') AND r.id_regional = $2`
+	data, err := r.db.Query(ctx, query, search, idRegional)
+	if err != nil {
+		return nil, err
+	}
+	var dataContact []searchRegionalContacts
+	for data.Next() {
+		var contact searchRegionalContacts
+		if err := data.Scan(&contact.Id, &contact.Name, &contact.LastName, &contact.Gmail,
+			&contact.Phone, &contact.UserState, &contact.Job_position); err != nil {
+			return nil, err
+		}
+		dataContact = append(dataContact, contact)
+	}
+	return dataContact, nil
 }
