@@ -47,5 +47,4 @@ func (h *HandlerRegionalContacts) HandlerRegionalContactsCreate(w http.ResponseW
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "contacto_creado_correctamente",
 	})
-
 }
