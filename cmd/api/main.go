@@ -6,6 +6,7 @@ import (
 	jobposition "modulo/internal/client_modules/d1/jobPosition"
 	"modulo/internal/client_modules/d1/regional"
 	regionalcontacts "modulo/internal/client_modules/d1/regionalContacts"
+	servicepoints "modulo/internal/client_modules/d1/servicePoints"
 	"modulo/internal/clients"
 	"modulo/internal/database"
 	"modulo/internal/login"
@@ -58,6 +59,10 @@ func main() {
 	repoRegionalContacts := regionalcontacts.NewRepository(connect)
 	serviceRegionalContacts := regionalcontacts.NewService(repoRegionalContacts)
 	handlerRegionalContacts := regionalcontacts.NewHandler(serviceRegionalContacts)
+	// Llamado de capas para poder manipular puntos de servicios
+	repoServicePoints := servicepoints.NewRepository(connect)
+	serviceServicePoints := servicepoints.NewService(repoServicePoints)
+	handlerServicePoints := servicepoints.NewHandler(serviceServicePoints)
 	// Creacion de nuevo enrutador
 	r := chi.NewRouter()
 	// Creacion de superAdmin
@@ -100,6 +105,8 @@ func main() {
 	r.Put("/regionalContacts/{id}", handlerRegionalContacts.HandlerRegionalContactsUpdate)
 	r.Delete("/regionalContacts/{id}", handlerRegionalContacts.HandlerRegionalContactsDelete)
 	r.Get("/regionalContacts/{search}/{idRegional}", handlerRegionalContacts.HandlerRegionalContactsSearch)
+	// URLS respuestas htttp (puntos de servicios)
+	r.Post("/servicePoints", handlerServicePoints.HandlerServicePointsCreate)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
@@ -168,8 +175,17 @@ func main() {
 	r.Get("/formCreateRegionalContacts", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalContacts/creationForm.html")
 	})
+	// Pagina para actualizacion de informacion de contactos regional
 	r.Get("/formUpdateRegionalContacts", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/regionalContacts/updateForm.html")
+	})
+	// Pagina para poder vizualizar los puntos servicios de cada regional
+	r.Get("/servicePoints", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/lists/servicePoints/servicePoints.html")
+	})
+	// Pagina para creacion de nuevos puntos de servicios
+	r.Get("/formCreateServicePoints", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/servicePoints/creationForm.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
