@@ -8,6 +8,5 @@ export async function ConnectionCreateRegional(data){
     if (!res.ok){
         throw {status: res.status};
     }
-    console.log("fetch", res)
     return res.json();
 }
