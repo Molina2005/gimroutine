@@ -107,6 +107,7 @@ func main() {
 	r.Get("/regionalContacts/{search}/{idRegional}", handlerRegionalContacts.HandlerRegionalContactsSearch)
 	// URLS respuestas htttp (puntos de servicios)
 	r.Post("/servicePoints", handlerServicePoints.HandlerServicePointsCreate)
+	r.Get("/servicePoints/{idRegional}", handlerServicePoints.HandlerAllServicePoints)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
