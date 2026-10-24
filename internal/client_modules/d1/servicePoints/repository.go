@@ -51,3 +51,25 @@ func (r *RepositoryServicePoints) QueryServicePointCreate(name, addres, city str
 	}
 	return nil
 }
+
+// Funcion obtener todos los puntos de servicios
+func (r *RepositoryServicePoints) QueryAllServicePoints(idRegional int) ([]ServicePoints, error) {
+	ctx := context.Background()
+	query := `SELECT ps.id_punto_servicio, ps.nombre AS nombre_punto, ps.direccion, ps.ciudad, eu.nombre AS estado FROM puntos_servicios ps 
+		JOIN estados_usuarios eu ON eu.id_estado_usuario = ps.id_estado_usuario WHERE id_regional = $1`
+	data, err := r.db.Query(ctx, query, idRegional)
+	if err != nil {
+		return nil, err
+	}
+	defer data.Close()
+	var DataServicePoints []ServicePoints
+	for data.Next() {
+		var ModelsServicePoints ServicePoints
+		if err := data.Scan(&ModelsServicePoints.Id, &ModelsServicePoints.Name, &ModelsServicePoints.Addres,
+			&ModelsServicePoints.City, &ModelsServicePoints.Estado); err != nil {
+			return nil, err
+		}
+		DataServicePoints = append(DataServicePoints, ModelsServicePoints)
+	}
+	return DataServicePoints, nil
+}
