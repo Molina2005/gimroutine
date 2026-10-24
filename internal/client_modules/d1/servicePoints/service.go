@@ -27,3 +27,8 @@ func (s *ServiceServicePoints) ServiceServicePointsCreation(name, addres, city s
 	}
 	return s.repo.QueryServicePointCreate(name, addres, city, idRegional, idState)
 }
+
+// Servicio obtener informacion de todos los puntos de servicios
+func (s *ServiceServicePoints) ServiceAllServicePoints(idRegional int) ([]ServicePoints, error) {
+	return s.repo.QueryAllServicePoints(idRegional)
+}
