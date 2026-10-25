@@ -1,2 +1,7 @@
+import { ConnectionAllServicePoints } from "./api.js"
 
-// Obtener id de regional 
+export async function LogicAllServicePoints(){
+    const idRegional = Number(sessionStorage.getItem("idRegional"));
+    const dataServicePoints = await ConnectionAllServicePoints(idRegional)
+    return dataServicePoints
+}
