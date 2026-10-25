@@ -66,10 +66,26 @@ func (r *RepositoryServicePoints) QueryAllServicePoints(idRegional int) ([]Servi
 	for data.Next() {
 		var ModelsServicePoints ServicePoints
 		if err := data.Scan(&ModelsServicePoints.Id, &ModelsServicePoints.Name, &ModelsServicePoints.Addres,
-			&ModelsServicePoints.City, &ModelsServicePoints.Estado); err != nil {
+			&ModelsServicePoints.City, &ModelsServicePoints.State); err != nil {
 			return nil, err
 		}
 		DataServicePoints = append(DataServicePoints, ModelsServicePoints)
 	}
 	return DataServicePoints, nil
 }
+
+// Funcion consultar y/o obtener punto servicio especifico
+func (r *RepositoryServicePoints) QueryServicePointInformation(idServicePoint int) (*ServicePoint, error) {
+	ctx := context.Background()
+	var dataServicePoints ServicePoint
+	query := `SELECT ps.nombre AS nombre_punto, ps.direccion, ps.ciudad, ps.id_estado_usuario FROM puntos_servicios ps
+	JOIN estados_usuarios eu ON eu.id_estado_usuario = ps.id_estado_usuario	WHERE ps.id_punto_servicio = $1`
+	if err := r.db.QueryRow(ctx, query, idServicePoint).Scan(
+		&dataServicePoints.Name, &dataServicePoints.Addres,
+		&dataServicePoints.City, &dataServicePoints.IdState); err != nil {
+		return nil, err
+	}
+	return &dataServicePoints, nil
+}
+
+// Funcion actualizacion de informacion de punto servicio
