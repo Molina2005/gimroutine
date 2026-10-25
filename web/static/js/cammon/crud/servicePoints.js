@@ -1,9 +1,6 @@
 // FUNCIONES REFERENTES A TODO LO RELACIONADO CON BOTONES DE CRUDS DE CLIENTES
-export async function ConsultButtonServicePoints(id){
-    window.location.href = ``;
-}
 export function UpdateButtonServicePoints(id){
-    window.location.href = ``;
+    window.location.href = `/formUpdateServicePoints?id=${id}`;
 }
 export async function DeleteButtonServicePoints(id){
 // Interfaz de sweetAlert2 para mostrar en pantalla alerta dinamica
