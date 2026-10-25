@@ -32,3 +32,15 @@ func (s *ServiceServicePoints) ServiceServicePointsCreation(name, addres, city s
 func (s *ServiceServicePoints) ServiceAllServicePoints(idRegional int) ([]ServicePoints, error) {
 	return s.repo.QueryAllServicePoints(idRegional)
 }
+
+// Servicio para poder consultar a punto servicio especifico
+func (s *ServiceServicePoints) ServicePointInformation(idServicePoint int) (*ServicePoint, error) {
+	ExistsId, errId := s.repo.ExistsServicePointsOfId(idServicePoint)
+	if errId != nil {
+		return nil, errId
+	}
+	if !ExistsId {
+		return nil, ErrServicePointsAlreadyExists
+	}
+	return s.repo.QueryServicePointInformation(idServicePoint)
+}
