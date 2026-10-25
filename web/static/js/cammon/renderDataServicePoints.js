@@ -1,22 +1,22 @@
-import { ConsultButtonServicePoints, DeleteButtonServicePoints, UpdateButtonServicePoints } from "./crud/servicePoints.js";
-import { RenderCrudButton } from "./locationButtons.js";
+import { DeleteButtonServicePoints, UpdateButtonServicePoints } from "./crud/servicePoints.js";
+import { RenderCrudButtonEspecials } from "./locationButtons.js";
 
 // Funcion para creacion de filas - columnas, botones crud 
-export function RenderServicePointsRow(servicePoints){
+export function RenderServicePointsRow(servicePoint){
     const row = document.createElement("tr");
     const cellName = document.createElement("td");
-    cellName.textContent = servicePoints.Name;
+    cellName.textContent = servicePoint.Name;
     row.appendChild(cellName);
     const cellAddres = document.createElement("td");
-    cellAddres.textContent = servicePoints.Addres;
+    cellAddres.textContent = servicePoint.Addres;
     row.appendChild(cellAddres); 
     const cellCity = document.createElement("td");
-    cellCity.textContent = servicePoints.City;
+    cellCity.textContent = servicePoint.City;
     row.appendChild(cellCity); 
     const cellState = document.createElement("td");
-    cellState.textContent = servicePoints.State;
-    row.appendChild(cellState); 
-    row.appendChild(RenderCrudButton(servicePoints.Id, ConsultButtonServicePoints, UpdateButtonServicePoints, 
+    cellState.textContent = servicePoint.State;
+    row.appendChild(cellState);
+    row.appendChild(RenderCrudButtonEspecials(servicePoint.Id, UpdateButtonServicePoints, 
         DeleteButtonServicePoints))
     return row
 }
