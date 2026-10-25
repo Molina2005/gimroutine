@@ -108,6 +108,7 @@ func main() {
 	// URLS respuestas htttp (puntos de servicios)
 	r.Post("/servicePoints", handlerServicePoints.HandlerServicePointsCreate)
 	r.Get("/servicePoints/{idRegional}", handlerServicePoints.HandlerAllServicePoints)
+	r.Get("/servicePoint/{id}", handlerServicePoints.HandlerServicePointInformation)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
@@ -187,6 +188,10 @@ func main() {
 	// Pagina para creacion de nuevos puntos de servicios
 	r.Get("/formCreateServicePoints", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/servicePoints/creationForm.html")
+	})
+	// Pagina para actualizacion de nuevos puntos de servicios
+	r.Get("/formUpdateServicePoints", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/servicePoints/updateForm.html")
 	})
 	// Ruta para poder trabajar con los archivos statics como css, js, etc...
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
