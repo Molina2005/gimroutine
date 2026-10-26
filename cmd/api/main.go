@@ -109,6 +109,7 @@ func main() {
 	r.Post("/servicePoints", handlerServicePoints.HandlerServicePointsCreate)
 	r.Get("/servicePoints/{idRegional}", handlerServicePoints.HandlerAllServicePoints)
 	r.Get("/servicePoint/{id}", handlerServicePoints.HandlerServicePointInformation)
+	r.Put("/servicePoint/{id}", handlerServicePoints.HandlerServicePointsUpdate)
 	// Permite establecer la ruta html del index
 	r.Get("/index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/index.html")
