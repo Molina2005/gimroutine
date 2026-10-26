@@ -89,3 +89,13 @@ func (r *RepositoryServicePoints) QueryServicePointInformation(idServicePoint in
 }
 
 // Funcion actualizacion de informacion de punto servicio
+func (r *RepositoryServicePoints) QueryServicePointUpdate(name, addres, city string, idState, idServicePoint int) error {
+	ctx := context.Background()
+	query := `UPDATE puntos_servicios SET nombre = $1, direccion = $2, ciudad = $3, id_estado_usuario = $4
+	WHERE id_punto_servicio = $5`
+	_, err := r.db.Exec(ctx, query, name, addres, city, idState, idServicePoint)
+	if err != nil {
+		return err
+	}
+	return nil
+}
