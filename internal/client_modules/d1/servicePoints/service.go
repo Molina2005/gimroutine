@@ -44,3 +44,15 @@ func (s *ServiceServicePoints) ServicePointInformation(idServicePoint int) (*Ser
 	}
 	return s.repo.QueryServicePointInformation(idServicePoint)
 }
+
+func (s *ServiceServicePoints) ServicePointUpdate(name, addres, city string, idState, idServicePoint int) error {
+
+	ExistsId, errId := s.repo.ExistsServicePointsOfId(idServicePoint)
+	if errId != nil {
+		return errId
+	}
+	if ExistsId {
+		return ErrServicePointsAlreadyExists
+	}
+	return s.repo.QueryServicePointUpdate(name, addres, city, idState, idServicePoint)
+}
