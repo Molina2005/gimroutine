@@ -7,7 +7,7 @@
 </head>
 <body>
     <a href="/formCreateServicePoints">Agregar</a>
-    <input type="search" placeholder="Buscar...">
+    <input type="search" id="searchInputServicePoints" placeholder="Buscar...">
     <table>
         <tr>
             <th>Nombre</th>
@@ -17,6 +17,8 @@
         </tr>
         <tbody id="service-points-table"></tbody>
     </table>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="/static/js/ui/clients/d1/servicePoints/ui.js"></script>
+    <script type="module" src="/static/js/ui/clients/d1/servicePoints/search.js"></script>
 </body>
 </html>
