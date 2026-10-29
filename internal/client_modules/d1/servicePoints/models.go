@@ -14,3 +14,11 @@ type ServicePoints struct {
 	City   string
 	State  string
 }
+
+type SearchServicePoint struct {
+	Id     int
+	Name   string
+	Addres string
+	City   string
+	State  string
+}
