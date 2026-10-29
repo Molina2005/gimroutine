@@ -1,3 +1,5 @@
+import { ConnectionServicePointDelete } from "../../ui/clients/d1/servicePoints/api.js";
+
 // FUNCIONES REFERENTES A TODO LO RELACIONADO CON BOTONES DE CRUDS DE CLIENTES
 export function UpdateButtonServicePoints(id){
     window.location.href = `/formUpdateServicePoints?id=${id}`;
@@ -16,7 +18,7 @@ export async function DeleteButtonServicePoints(id){
     if (!result.isConfirmed) return;
     // Si da confirmar elimina el usuario 
     try{
-        await ConnectionClientDelete(id);
+        await ConnectionServicePointDelete(id);
         await Swal.fire({
             icon:"success",
             title:"Eliminado",
@@ -26,7 +28,7 @@ export async function DeleteButtonServicePoints(id){
         Swal.fire({
             icon:"error",
             title:"error",
-            text:"No se puede eliminar el Punto servicio"
+            text:"No se puede eliminar el punto servicio"
         })
     }
 }
