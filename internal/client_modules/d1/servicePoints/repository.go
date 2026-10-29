@@ -99,3 +99,40 @@ func (r *RepositoryServicePoints) QueryServicePointUpdate(name, addres, city str
 	}
 	return nil
 }
+
+// Funcion para buscador de informacion
+func (r *RepositoryServicePoints) QueryServicePointSearch(search string, idRegional int) ([]SearchServicePoint, error) {
+	ctx := context.Background()
+	query := `SELECT ps.id_punto_servicio,ps.nombre AS nombre_punto,ps.direccion,ps.ciudad,eu.nombre AS estado
+		FROM puntos_servicios ps 
+		JOIN estados_usuarios eu ON eu.id_estado_usuario = ps.id_estado_usuario
+		WHERE (
+			ps.nombre ILIKE '%' || $1 || '%'
+			OR ps.ciudad ILIKE '%' || $1 || '%'
+		)AND ps.id_regional = $2;`
+	data, err := r.db.Query(ctx, query, search, idRegional)
+	if err != nil {
+		return nil, err
+	}
+	defer data.Close()
+	var dataServicePoint []SearchServicePoint
+	for data.Next() {
+		var servicePoint SearchServicePoint
+		if err := data.Scan(&servicePoint.Id, &servicePoint.Name, &servicePoint.Addres,
+			&servicePoint.City, &servicePoint.State); err != nil {
+			return nil, err
+		}
+		dataServicePoint = append(dataServicePoint, servicePoint)
+	}
+	return dataServicePoint, nil
+}
+
+// Funcion eliminacion puntos de servicio
+func (r *RepositoryServicePoints) QueryServicePointDelete(idServicePoint int) error {
+	ctx := context.Background()
+	query := `DELETE FROM puntos_servicios WHERE id_punto_servicio = $1`
+	if _, err := r.db.Exec(ctx, query, idServicePoint); err != nil {
+		return err
+	}
+	return nil
+}
