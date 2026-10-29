@@ -45,8 +45,8 @@ func (s *ServiceServicePoints) ServicePointInformation(idServicePoint int) (*Ser
 	return s.repo.QueryServicePointInformation(idServicePoint)
 }
 
+// Servicio para actualizar informacion de puntos de servicio
 func (s *ServiceServicePoints) ServicePointUpdate(name, addres, city string, idState, idServicePoint int) error {
-
 	ExistsId, errId := s.repo.ExistsServicePointsOfId(idServicePoint)
 	if errId != nil {
 		return errId
@@ -55,4 +55,14 @@ func (s *ServiceServicePoints) ServicePointUpdate(name, addres, city string, idS
 		return ErrServicePointsAlreadyExists
 	}
 	return s.repo.QueryServicePointUpdate(name, addres, city, idState, idServicePoint)
+}
+
+// Servicio para buscador de informacion
+func (s *ServiceServicePoints) ServicePointSearch(search string, idRegional int) ([]SearchServicePoint, error) {
+	return s.repo.QueryServicePointSearch(search, idRegional)
+}
+
+// Servicio para eliminacion de puntos de servicios
+func (s *ServiceServicePoints) ServicePointDelete(idServicePoint int) error {
+	return s.repo.QueryServicePointDelete(idServicePoint)
 }
