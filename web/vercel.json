@@ -4,6 +4,10 @@
     {
       "source": "/",
       "destination": "/templates/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "https://backend-mabtrosoft-production.up.railway.app/$1"
     }
   ]
 }
