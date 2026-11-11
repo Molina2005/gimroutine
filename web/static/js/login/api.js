@@ -1,6 +1,7 @@
+import { API_BACKEND_RAILWAY } from "../config/config.js";
 // Login para clientes y usuarios con cada uno de los roles 
 export async function login(data){
-    const res = await fetch("/login",{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/login`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(data)        

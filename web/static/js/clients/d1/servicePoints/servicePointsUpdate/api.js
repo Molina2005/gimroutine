@@ -1,7 +1,7 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js";
 export async function ConnectionServicePointInformation(id){
-    const res = await fetch(`/servicePoint/${id}`, {
+    const res = await fetch(`${API_BACKEND_RAILWAY}/servicePoint/${id}`, {
         method:"GET",
-        headers:{"Content-Type":"application/json"},
     });
     if (!res.ok){
         return {status:res.status};
@@ -10,7 +10,7 @@ export async function ConnectionServicePointInformation(id){
 }
 
 export async function ConnectionServicePointUpdate(id, data){
-    const res = await fetch(`/servicePoint/${id}`, {
+    const res = await fetch(`${API_BACKEND_RAILWAY}/servicePoint/${id}`, {
         method:"PUT",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify(data)

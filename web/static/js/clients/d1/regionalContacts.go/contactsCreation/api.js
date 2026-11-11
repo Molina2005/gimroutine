@@ -1,5 +1,6 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js"
 export async function ConnectionRegionalContactsCreate(data){
-    const res = await fetch("regionalContacts", {
+    const res = await fetch(`${API_BACKEND_RAILWAY}regionalContacts`, {
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify(data)

@@ -1,6 +1,7 @@
+import { API_BACKEND_RAILWAY } from "../../config/config.js";
 // fetch para traer info usuario por id
 export async function InfoUser(id){
-    const res = await fetch(`/users/${id}`,{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/users/${id}`,{
         method: "GET",
         headers: {"Content-Type":"application/json"},
     })
@@ -12,7 +13,7 @@ export async function InfoUser(id){
 
 // fetch para actualizar info usuario
 export async function updateUser(id,data){
-    const res = await fetch(`/users/${id}`,{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/users/${id}`,{
         method: "PUT",
         headers: {"Content-Type":"application/json"},
         body:JSON.stringify(data)

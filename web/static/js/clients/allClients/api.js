@@ -1,5 +1,6 @@
-export async function ConnectionAllClient(data){
-    const res = await fetch("/AllClients",{
+import { API_BACKEND_RAILWAY } from "../../config/config.js";
+export async function ConnectionAllClient(){
+    const res = await fetch(`${API_BACKEND_RAILWAY}/AllClients`,{
         method:"GET",
         headers: {"Content-Type":"application/json",},
     });

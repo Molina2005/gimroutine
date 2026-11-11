@@ -1,7 +1,8 @@
+import { API_BACKEND_RAILWAY } from "../../config/config.js";
 // Funcion para recibir informacion del backend eliminacion de usuarios
 import { DataReturn } from "./search.js";
 export async function ConnectionUsersDelete(id){
-    const data = await fetch(`/users/${id}`, {
+    const data = await fetch(`${API_BACKEND_RAILWAY}/users/${id}`, {
         method: "DELETE"
     })
     if (!data.ok){
@@ -13,9 +14,8 @@ export async function ConnectionUsersDelete(id){
 // Funcion para recibir informacion del backend del buscador de usuarios
 export async function ConnectionSearchUser(search){
     try{
-        const res = await fetch(`/UsersSearch/${encodeURIComponent(search)}`,{
+        const res = await fetch(`${API_BACKEND_RAILWAY}/UsersSearch/${encodeURIComponent(search)}`,{
             method: "GET",
-            headers: {"Content-Type":"application/json"},
         })
         const data = await res.json();
         DataReturn(data)

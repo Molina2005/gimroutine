@@ -1,8 +1,8 @@
+import { API_BACKEND_RAILWAY } from "../../config/config.js";
 // fetch para traer info client por id
 export async function InfoClient(id){
-    const res = await fetch(`/client/${id}`,{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/client/${id}`,{
         method: "GET",
-        headers: {"Content-Type":"application/json"},
     })
     if (!res.ok){
         throw {status: res.status}
@@ -13,7 +13,7 @@ export async function InfoClient(id){
 
 // Fetch para actulizar informacion cliente
 export async function UpdateClient(id, data){
-    const res = await fetch(`/client/${id}`,{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/client/${id}`,{
         method:"PUT",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify(data)

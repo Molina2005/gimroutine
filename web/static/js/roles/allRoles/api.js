@@ -1,8 +1,8 @@
+import { API_BACKEND_RAILWAY } from "../../config/config.js";
 // Funcion para obtener roles creados 
-export async function connectionAllRoles(data){
-    const res = await fetch("Allroles",{
+export async function connectionAllRoles(){
+    const res = await fetch(`${API_BACKEND_RAILWAY}Allroles`,{
         method:"GET",
-        headers:{"Content-Type":"application/json"},
     })
     if (!res.ok){
         throw {status: res.status};

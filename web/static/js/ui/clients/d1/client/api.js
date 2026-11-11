@@ -1,8 +1,9 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js";
 import { ReturnSearchClient } from "./search.js";
 
 // Funcion para recibir informacion del backend eliminacion de clientes
 export async function ConnectionClientDelete(id){
-    const data = await fetch(`/client/${id}`, {
+    const data = await fetch(`${API_BACKEND_RAILWAY}/client/${id}`, {
         method: "DELETE"
     })
     if (!data.ok){
@@ -14,9 +15,8 @@ export async function ConnectionClientDelete(id){
 // Funcion para recibir informacion del backend del buscador de clientes
 export async function ConnectionSearchClient(search){
     try{
-        const res = await fetch(`/ClientSearch/${encodeURIComponent(search)}`,{
+        const res = await fetch(`${API_BACKEND_RAILWAY}/ClientSearch/${encodeURIComponent(search)}`,{
             method: "GET",
-            headers: {"Content-Type":"application/json"},
         })
         const data = await res.json();
         ReturnSearchClient(data)

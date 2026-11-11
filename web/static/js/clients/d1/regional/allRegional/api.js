@@ -1,8 +1,8 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js"
 // Funcion para conectar backend y frontend 
 export async function ConnectionAllRegional(){
-    const res = await fetch("allRegional", {
+    const res = await fetch(`${API_BACKEND_RAILWAY}allRegional`, {
         method:"GET",
-        headers:{"Content-Type":"application/json"}
     })
     if (!res.ok){
         return {status: res.status}

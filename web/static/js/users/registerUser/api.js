@@ -1,8 +1,9 @@
+import { API_BACKEND_RAILWAY } from "../../config/config.js";
 // Funcion para manejar la conexion con el backend por medio de fetch
 // Recibe la data
 export async function connectionUser(data){
     // Ruta para poder comunicarse con el backend(API) de creacion de usuarios
-    const res = await fetch("/users",{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/users`,{
         // Metodo con el que se realizara la peticion
         method:"POST",
         // headers: indica el tipo de datos que se envian en el body

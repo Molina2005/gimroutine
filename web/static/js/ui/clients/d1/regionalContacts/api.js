@@ -1,8 +1,9 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js";
 import { ReturnSearchRegionalContact } from "./search.js";
 
 // Funcion obtener informacion para eliminar contacto de sistema 
 export async function ConnectionRegionalContactDelete(id){
-    const res = await fetch(`/regionalContacts/${id}`, {
+    const res = await fetch(`${API_BACKEND_RAILWAY}/regionalContacts/${id}`, {
         method:"DELETE",
     });
     if (!res.ok){
@@ -14,9 +15,8 @@ export async function ConnectionRegionalContactDelete(id){
 // Conexion entre backend y frontend 
 export async function ConnectionRegionalContactSearch(search, idRegional){
     try{
-        const res = await fetch(`/regionalContacts/${encodeURIComponent(search)}/${idRegional}`,{
+        const res = await fetch(`${API_BACKEND_RAILWAY}/regionalContacts/${encodeURIComponent(search)}/${idRegional}`,{
             method: "GET",
-            headers: {"Content-Type":"application/json"},
         })
         const data = await res.json();
         ReturnSearchRegionalContact(data)

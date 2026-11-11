@@ -1,8 +1,8 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js";
 // Funcion para poder obtener informacion del contacto regional segun id 
 export async function ConnectionInfoRegionalContacts(id){
-    const res = await fetch(`/regionalContact/${id}`, {
+    const res = await fetch(`${API_BACKEND_RAILWAY}/regionalContact/${id}`, {
         method:"GET",
-        headers:{"Content-Type":"application/json"} 
     });
     if (!res.ok){
         return {status:res.status}
@@ -11,7 +11,7 @@ export async function ConnectionInfoRegionalContacts(id){
 }   
 
 export async function ConnectionUpdateRegionalContacts(id, data){
-    const res = await fetch(`/regionalContacts/${id}`,{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/regionalContacts/${id}`,{
         method:"PUT",
         headers: {"Content-Type":"application/json"},
         body:JSON.stringify(data)

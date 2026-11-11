@@ -1,11 +1,11 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js";
 import { ReturnSearchServicePoints } from "./search.js";
 
 // Conexiones entre backend y frontend para manejar buscador 
 export async function ConnectionServicePointsSearch(search, idRegional){
     try{
-        const res = await fetch(`/servicePoints/${encodeURIComponent(search)}/${idRegional}`,{
+        const res = await fetch(`${API_BACKEND_RAILWAY}/servicePoints/${encodeURIComponent(search)}/${idRegional}`,{
             method: "GET",
-            headers: {"Content-Type":"application/json"},
         });
         const data = await res.json();
         ReturnSearchServicePoints(data);
@@ -15,7 +15,7 @@ export async function ConnectionServicePointsSearch(search, idRegional){
 }   
 // Conexiones entre backend y frontend para manejar eliminador 
 export async function ConnectionServicePointDelete(id){
-    const res = await fetch(`/servicePoint/${id}`, {
+    const res = await fetch(`${API_BACKEND_RAILWAY}/servicePoint/${id}`, {
         method:"DELETE"
     })
     if (!res.ok){

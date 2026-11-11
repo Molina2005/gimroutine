@@ -1,5 +1,6 @@
+import { API_BACKEND_RAILWAY } from "../config/config.js";
 export async function ConnectionAllUserStates(){
-    const res = await fetch("/AllUserStates",{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/AllUserStates`,{
         method: "GET",
         headers:{"Content-Type":"application/json"},
     })

@@ -1,0 +1,6 @@
+web/
+.gitignore
+.env
+.package-lock.json
+package.json
+uploadsImg/

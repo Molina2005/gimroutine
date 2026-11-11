@@ -6,6 +6,7 @@ import (
 	"modulo/internal/config"
 	"modulo/internal/database"
 	"modulo/internal/handlers"
+	httpmiddlewares "modulo/internal/http_middlewares"
 	"modulo/internal/routes"
 	"net/http"
 	"os"
@@ -23,6 +24,8 @@ func main() {
 	fmt.Println("CONEXION EXITOSA A LA BASE DE DATOS")
 	// ENRUTADOR PARA MANEJAR INFORMACION
 	r := chi.NewRouter()
+	// LLAMADO DE CORS PARA PERMISOS DE DOMINIOS BACKEND Y FRONTEND
+	r.Use(httpmiddlewares.EnableCors)
 	// CAPAS SEGUN MODULOS
 	config.LayersOfModules(connect)
 	// ENRUTADORES PARA MANEJO DE HANDLER

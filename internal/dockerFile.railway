@@ -1,0 +1,24 @@
+# Dockerizacion para solo contenerizar backend
+ARG VERSION=1.25.10
+ARG VERSIONBINARIO=3.22
+FROM golang:${VERSION}-alpine3.23 AS build
+
+WORKDIR /gimroutine
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY  internal/ ./internal/
+COPY cmd/api ./cmd/api/
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o serverbackend ./cmd/api 
+
+FROM alpine:${VERSIONBINARIO}
+
+WORKDIR /gimroutine
+
+COPY --from=build /gimroutine/serverbackend .
+
+CMD [ "./serverbackend" ]
+
+
+

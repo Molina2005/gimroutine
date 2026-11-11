@@ -1,8 +1,9 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js";
 import { ReturnSearchRegional } from "./search.js";
 
 // Conexion entre backend y frontend para eliminacion de regionales
 export async function ConnectionRegionalDelete(id){
-    const res = await fetch(`/regional/${id}`, {
+    const res = await fetch(`${API_BACKEND_RAILWAY}/regional/${id}`, {
         method:"DELETE",
     })
     if (!res.ok){
@@ -16,7 +17,6 @@ export async function ConnectionRegionalSearch(search){
     try{
         const res = await fetch(`/regionalSearch/${encodeURIComponent(search)}`,{
             method: "GET",
-            headers: {"Content-Type":"application/json"},
         })
         const data = await res.json();
         ReturnSearchRegional(data)

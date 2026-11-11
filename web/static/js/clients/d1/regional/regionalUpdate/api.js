@@ -1,8 +1,8 @@
+import { API_BACKEND_RAILWAY } from "../../../../config/config.js"
 
 export async function ConnectionInfoRegional(id){
-        const res = await fetch(`/regional/${id}`, {
+        const res = await fetch(`${API_BACKEND_RAILWAY}/regional/${id}`, {
         method:"GET",
-        headers:{"Content-Type":"application/json"}
     })
     if (!res.ok){
         return {status: res.status} 
@@ -12,7 +12,7 @@ export async function ConnectionInfoRegional(id){
 
 // fetch para actualizar info usuario
 export async function ConnectionUpdateRegional(id,data){
-    const res = await fetch(`/regional/${id}`,{
+    const res = await fetch(`${API_BACKEND_RAILWAY}/regional/${id}`,{
         method: "PUT",
         headers: {"Content-Type":"application/json"},
         body:JSON.stringify(data)
