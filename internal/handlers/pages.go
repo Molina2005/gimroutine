@@ -37,7 +37,7 @@ func HandlerPages() chi.Router {
 		http.ServeFile(w, r, "./web/templates/pages/homePages/clientHome.html")
 	})
 	// pagina navegador general
-	pagesRouter.Get("/nav", func(w http.ResponseWriter, r *http.Request) {
+	pagesRouter.Get("nav", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/components/navGeneral.html")
 	})
 	// Pagina informacion clientes
