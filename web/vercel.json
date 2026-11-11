@@ -1,7 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "proxy": {
-    "entrypoint": "/",
-    "matcher": ["/templates/index.html"]
-  }
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/templates/index.html"
+    }
+  ]
 }
