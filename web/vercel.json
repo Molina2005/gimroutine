@@ -6,7 +6,7 @@
       "destination": "/templates/index.html"
     },
     {
-      "source":"nav",
+      "source":"/nav",
       "destination":"/templates/components/navGeneral.html"
     },
     {
