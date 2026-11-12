@@ -1,7 +1,7 @@
 package httpmiddlewares
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 )
 
@@ -22,7 +22,7 @@ func EnableCors(cors http.Handler) http.Handler {
 		}
 		(w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS") // Enumera los metodos HTTP permitidos para las solicitudes de origen cruzados
 		(w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")     // Especifica que encabezados se pueden usar en la solicitud de origen cruzado
-		log.Printf("CORS: método=%s ruta=%s origen=%s", r.Method, r.URL.Path, r.Header.Get("Origin"))
+		fmt.Print("ENTROOOOOOOOOOOO")
 		cors.ServeHTTP(w, r)
 	})
 
