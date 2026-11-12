@@ -5,7 +5,7 @@ import (
 )
 
 // Funcion para utilizacion de CORS - Manejo de permisos de dominios Backend - Frontend
-func EnableCors(cors http.Handler) http.Handler {
+func EnableCors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := []string{
 			"https://mabtrosoftweb.vercel.app",
@@ -25,7 +25,7 @@ func EnableCors(cors http.Handler) http.Handler {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
-		cors.ServeHTTP(w, r)
+		next.ServeHTTP(w, r)
 	})
 
 }
