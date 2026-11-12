@@ -19,7 +19,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "https://backend-mabtrosoft-production.up.railway.app/$1"
+      "destination": "https://mabtrosoft-backend-production.up.railway.app/$1"
     }
   ]
 }
