@@ -10,6 +10,10 @@
       "destination":"/templates/login/login.html"
     },
     {
+      "source":"/adminHome",
+      "destination":"/templates/pages/homePages/adminHome.html"
+    },
+    {
       "source":"/nav",
       "destination":"/templates/components/navGeneral.html"
     },
