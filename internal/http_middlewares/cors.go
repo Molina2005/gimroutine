@@ -1,7 +1,6 @@
 package httpmiddlewares
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -9,7 +8,7 @@ import (
 func EnableCors(cors http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := []string{
-			"https://mabtrosoftweb.vercel.app",
+			"https://mabtrosoftweb-programming10.vercel.app",
 		}
 
 		origin := r.Header.Get("Origin")
@@ -22,7 +21,6 @@ func EnableCors(cors http.Handler) http.Handler {
 		}
 		(w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS") // Enumera los metodos HTTP permitidos para las solicitudes de origen cruzados
 		(w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")     // Especifica que encabezados se pueden usar en la solicitud de origen cruzado
-		fmt.Print("ENTROOOOOOOOOOOO")
 		cors.ServeHTTP(w, r)
 	})
 
