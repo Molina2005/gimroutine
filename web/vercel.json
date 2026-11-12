@@ -6,6 +6,10 @@
       "destination": "/templates/index.html"
     },
     {
+      "source":"nav",
+      "destination":"/templates/components/navGeneral.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "https://backend-mabtrosoft-production.up.railway.app/$1"
     }
