@@ -6,6 +6,10 @@
       "destination": "/templates/index.html"
     },
     {
+      "source":"/login",
+      "destination":"/templates/login/login.html"
+    },
+    {
       "source":"/nav",
       "destination":"/templates/components/navGeneral.html"
     },
