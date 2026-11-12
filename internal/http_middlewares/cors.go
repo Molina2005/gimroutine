@@ -6,7 +6,7 @@ import "net/http"
 func EnableCors(cors http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := []string{
-			"https://mabtrosoftweb-dmfxqmok9-programming10.vercel.app",
+			"https://mabtrosoftweb-9df8wkl1e-programming10.vercel.app",
 		}
 
 		origin := r.Header.Get("Origin")
