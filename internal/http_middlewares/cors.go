@@ -1,7 +1,6 @@
 package httpmiddlewares
 
 import (
-	"log"
 	"net/http"
 )
 
@@ -9,10 +8,9 @@ import (
 func EnableCors(cors http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := []string{
-			"https://mabtrosoft-backend-production.up.railway.app",
+			"https://mabtrosoftweb.vercel.app",
 		}
 
-		log.Println("MIDDLEWARE CORS EJECUTADO:", r.Method, r.URL.Path)
 		origin := r.Header.Get("Origin")
 		for _, allowed := range allowedOrigins {
 			if origin == allowed {
