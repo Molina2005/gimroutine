@@ -1,6 +1,9 @@
 package httpmiddlewares
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
 
 // Funcion para utilizacion de CORS - Manejo de permisos de dominios Backend - Frontend
 func EnableCors(cors http.Handler) http.Handler {
@@ -19,11 +22,7 @@ func EnableCors(cors http.Handler) http.Handler {
 		}
 		(w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS") // Enumera los metodos HTTP permitidos para las solicitudes de origen cruzados
 		(w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")     // Especifica que encabezados se pueden usar en la solicitud de origen cruzado
-		// Responder directamente a las solicitudes preflight
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
+		log.Printf("CORS: método=%s ruta=%s origen=%s", r.Method, r.URL.Path, r.Header.Get("Origin"))
 		cors.ServeHTTP(w, r)
 	})
 
