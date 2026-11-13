@@ -2,7 +2,7 @@ import { ConnectionClientDelete } from "../../ui/clients/d1/client/api.js";
 
 // FUNCIONES REFERENTES A TODO LO RELACIONADO CON BOTONES DE CRUDS DE CLIENTES
 export async function ConsultButtonClients(id){
-    window.location.href = `/clientPage/${id}`;
+    window.location.href = `/clientPageD1/${id}`;
 }
 export function UpdateButtonClients(id){
     window.location.href = `/FormUpdateClients?id=${id}`;
