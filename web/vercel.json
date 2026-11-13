@@ -6,6 +6,10 @@
       "destination": "/templates/index.html"
     },
     {
+      "source":"/createUsers",
+      "destination":"/templates/admin/forms/users/add_users.html"
+    },
+    {
       "source":"/login",
       "destination":"/templates/login/login.html"
     },
@@ -14,12 +18,84 @@
       "destination":"/templates/users/users.html"
     },
     {
+      "source":"/FormUpdateUsers",
+      "destination":"/templates/admin/forms/users/updateUsers.html"
+    },
+    {
       "source":"/adminHome",
       "destination":"/templates/pages/homePages/adminHome.html"
     },
     {
+      "source":"/clientHome",
+      "destination":"/templates/pages/homePages/clientHome.html"
+    },
+    {
       "source":"/nav",
       "destination":"/templates/components/navGeneral.html"
+    },
+    {
+      "source":"/clientsInfo",
+      "destination":"/templates/admin/clients.html"
+    },
+    {
+      "source":"/addClient",
+      "destination":"/templates/admin/forms/clients/add_client.html"
+    },
+    {
+      "source":"/FormUpdateClients",
+      "destination":"/templates/admin/forms/clients/updateClient.html"
+    },
+    {
+      "source":"/listRegional",
+      "destination":"/templates/pages/clients/d1/lists/regional/regionalList.html"
+    },
+    {
+      "source":"/formCreateRegional",
+      "destination":"/templates/pages/clients/d1/forms/regional/regionalCreate.html"
+    },
+    {
+      "source":"/formUpdateRegional",
+      "destination":"/templates/pages/clients/d1/forms/regional/regionalUpdate.html"
+    },
+    {
+      "source":"/moduleMenu",
+      "destination":"/templates/pages/clients/d1/pages/moduleMenu.html"
+    },
+    {
+      "source":"/regionalContacts",
+      "destination":"/templates/pages/clients/d1/lists/regionalContacts/regionalContacts.html"
+    },
+     {
+      "source":"/formCreateRegionalContacts",
+      "destination":"/templates/pages/clients/d1/forms/regionalContacts/creationForm.html"
+    },
+     {
+      "source":"/formUpdateRegionalContacts",
+      "destination":"/templates/pages/clients/d1/forms/regionalContacts/updateForm.html"
+    },
+     {
+      "source":"/servicePoints",
+      "destination":"/templates/pages/clients/d1/lists/servicePoints/servicePoints.html"
+    },
+     {
+      "source":"/formCreateServicePoints",
+      "destination":"/templates/pages/clients/d1/forms/servicePoints/creationForm.html"
+    },
+     {
+      "source":"/formUpdateServicePoints",
+      "destination":"/templates/pages/clients/d1/forms/servicePoints/updateForm.html"
+    },
+     {
+      "source":"/",
+      "destination":"/"
+    },
+     {
+      "source":"/",
+      "destination":"/"
+    },
+    {
+      "source":"/adminHome",
+      "destination":"/templates/pages/homePages/adminHome.html"
     },
     {
       "source": "/(.*)",
