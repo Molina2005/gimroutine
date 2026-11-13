@@ -65,33 +65,25 @@
       "source":"/regionalContacts",
       "destination":"/templates/pages/clients/d1/lists/regionalContacts/regionalContacts.html"
     },
-     {
+    {
       "source":"/formCreateRegionalContacts",
       "destination":"/templates/pages/clients/d1/forms/regionalContacts/creationForm.html"
     },
-     {
+    {
       "source":"/formUpdateRegionalContacts",
       "destination":"/templates/pages/clients/d1/forms/regionalContacts/updateForm.html"
     },
-     {
+    {
       "source":"/servicePoints",
       "destination":"/templates/pages/clients/d1/lists/servicePoints/servicePoints.html"
     },
-     {
+    {
       "source":"/formCreateServicePoints",
       "destination":"/templates/pages/clients/d1/forms/servicePoints/creationForm.html"
     },
-     {
+    {
       "source":"/formUpdateServicePoints",
       "destination":"/templates/pages/clients/d1/forms/servicePoints/updateForm.html"
-    },
-     {
-      "source":"/",
-      "destination":"/"
-    },
-     {
-      "source":"/",
-      "destination":"/"
     },
     {
       "source":"/adminHome",

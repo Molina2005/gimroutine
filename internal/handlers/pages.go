@@ -92,7 +92,5 @@ func HandlerPages() chi.Router {
 	pagesRouter.Get("/formUpdateServicePoints", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./web/templates/pages/clients/d1/forms/servicePoints/updateForm.html")
 	})
-	pagesRouter.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
-
 	return pagesRouter
 }
