@@ -51,5 +51,8 @@ func (h *HandlerClients) HandlerClientsPages(w http.ResponseWriter, r *http.Requ
 		fmt.Print("error en pagina")
 		return
 	}
-	http.ServeFile(w, r, pages)
+	// Redirigir al frontend alojado en Vercel
+	frontendURL := "https://mabtrosoftweb.vercel.app"
+
+	http.Redirect(w, r, frontendURL+pages, http.StatusFound)
 }
