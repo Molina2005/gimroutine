@@ -32,10 +32,13 @@ func main() {
 	routes.Routes(connect, r)
 	// LLAMADO DE FUNCION PARA CARGAR CADA UNA DE LAS PAGINAS ENRUTADORAS
 	r.Mount("/", handlers.HandlerPages())
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
+
 	// SERVIDOR ESCUCHANDO EN PUERTO XXXX
 	port := os.Getenv("BACKEND_PORT")
 	if port == "" {
 		port = "8080"
 	}
+
 	http.ListenAndServe(":"+port, r)
 }
