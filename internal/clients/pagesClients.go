@@ -52,6 +52,9 @@ func (h *HandlerClients) HandlerClientsPages(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	//
+	// AGENDAR PARA ESTUDIAR PASOS Y FUNCION
+	//
 	redirectURL := "https://mabtrosoftweb.vercel.app" + pages +
 		"?id=" + strconv.Itoa(Id)
 
