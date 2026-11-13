@@ -90,10 +90,6 @@
       "destination":"/templates/pages/homePages/adminHome.html"
     },
     {
-      "source":"/clientPage",
-      "destination":"/templates/pages/clients/d1/pages/subPageD1.html"
-    },
-    {
       "source": "/(.*)",
       "destination": "https://mabtrosoft-backend-production.up.railway.app/$1"
     }
