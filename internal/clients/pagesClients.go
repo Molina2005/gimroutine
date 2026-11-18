@@ -51,12 +51,9 @@ func (h *HandlerClients) HandlerClientsPages(w http.ResponseWriter, r *http.Requ
 		fmt.Print("error en pagina")
 		return
 	}
-
-	//
-	// AGENDAR PARA ESTUDIAR PASOS Y FUNCION
-	//
+	// Se guarda direccion completa con pagina a redireccionar segun cliente con su respectivo id
 	redirectURL := "https://mabtrosoftweb.vercel.app" + pages +
 		"?id=" + strconv.Itoa(Id)
-
+	// Se redirreciona al usuario segun la direccion dada
 	http.Redirect(w, r, redirectURL, http.StatusFound)
 }

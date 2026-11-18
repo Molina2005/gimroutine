@@ -1,4 +1,5 @@
 {
     "mobile-preview.url": "http://localhost:4040/index",
-    "workbench.editor.showTabIndex": true
+    "workbench.editor.showTabIndex": true,
+    "livePreview.defaultPreviewPath": "/web/templates/components/navGeneral.html"
 }
