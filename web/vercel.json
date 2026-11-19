@@ -90,6 +90,10 @@
       "destination":"/templates/pages/homePages/adminHome.html"
     },
     {
+      "source":"/vitalIncidents",
+      "destination":"/templates/pages/clients/d1/lists/vitalIncidents/vitalIncidents.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "https://mabtrosoft-backend-production.up.railway.app/$1"
     }
