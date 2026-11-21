@@ -1,4 +1,10 @@
-// URLSM PARA PODER MANEJAR PREUEBAS LOCALMENTE Y AMBIENTE DE PRODUCCION
-export const API_BACKEND_RAILWAY = window.location.hostname == "localhost"
+// URLSM PARA PODER MANEJAR PREUEBAS LOCALMENTE, AMBIENTE DE PRUEBAS Y AMBIENTE DE PRODUCCION
+const DOMINIO_ACTUAL = window.location.hostname;
+export const API_BACKEND_RAILWAY = DOMINIO_ACTUAL == "localhost"
+    // LOCAL
     ?  "http://localhost:8080"
+    // PRUEBAS
+    : DOMINIO_ACTUAL == "mabtrosoftweb-git-testing-programming10.vercel.app"
+    ? "mabtrosoft-testing-production.up.railway.app"
+    // PRODUCCION
     : "https://mabtrosoft-backend-production.up.railway.app"

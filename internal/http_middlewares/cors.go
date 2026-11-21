@@ -9,6 +9,7 @@ func EnableCors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := []string{
 			"http://localhost:3000",
+			"mabtrosoftweb-git-testing-programming10.vercel.app",
 			"https://mabtrosoftweb.vercel.app",
 		}
 
