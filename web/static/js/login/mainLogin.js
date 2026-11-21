@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async function(){
         }catch (err){
             // Si error es Estado no autorizado(401) entra a alert si no es un error del servidor
             if (err.status == "401") {
-                alert("Porfavor digite las credenciales correctamente")
+                alert("Por Favor digite las credenciales correctamente")
             }else{
                 alert("Error en el servidor")
             }
