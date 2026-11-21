@@ -8,8 +8,11 @@ import (
 func EnableCors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := []string{
+			// ENTORNO LOCAL
 			"http://localhost:3000",
-			"mabtrosoftweb-git-testing-programming10.vercel.app",
+			// ENTORNO PRUEBAS
+			"https://mabtrosoftweb-git-testing-programming10.vercel.app",
+			// ENTORNO PRODUCCION
 			"https://mabtrosoftweb.vercel.app",
 		}
 
