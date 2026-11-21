@@ -6,5 +6,5 @@ export const API_BACKEND_RAILWAY = DOMINIO_ACTUAL == "localhost"
     // PRUEBAS
     : DOMINIO_ACTUAL == "mabtrosoftweb-git-testing-programming10.vercel.app"
     ? "mabtrosoft-testing-production.up.railway.app"
-    // PRODUCCION
+    // PRODUCCIONN
     : "https://mabtrosoft-backend-production.up.railway.app"
