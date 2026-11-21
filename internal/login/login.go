@@ -32,7 +32,6 @@ func (h *HandlerLogin) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	// Se llama al servicio para validar las credenciales.
 	// Si ocurre un error, se responde con estado 401 y un mensaje en formato JSON.
-
 	user, err := h.S.ServiceLogin(input.Email, input.Password)
 	if err != nil {
 		// WriteHeader: Guarda el codigo de estado de la respuesta

@@ -12,8 +12,11 @@ import (
 )
 
 func ConnectDB() (*pgxpool.Pool, error) {
-	// cargue de archivo .env
-	_ = godotenv.Load()
+	// cargue de archivo .env y pase de direccion
+	err := godotenv.Load("../../.env")
+	if err != nil {
+		log.Fatalf("Error al obtener variables de entorno %v", err)
+	}
 
 	connectionChain := fmt.Sprintf(
 		// Formato que pide supabase para la conexion

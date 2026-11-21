@@ -1,6 +1,7 @@
 package login
 
 import (
+	"errors"
 	"modulo/internal/models"
 	"modulo/internal/utils"
 )
@@ -28,8 +29,8 @@ func (s *ServiceLogin) ServiceLogin(email, password string) (*models.Login, erro
 			Id:       user.Id,
 			Email:    email,
 			Password: password,
-			Type:     "users",
 			IdRole:   user.IdRole,
+			Type:     "users",
 		}, nil
 	}
 	client, errHashClient := s.r.QueryLoginClient(email)
@@ -44,6 +45,17 @@ func (s *ServiceLogin) ServiceLogin(email, password string) (*models.Login, erro
 			Password: client.Password,
 			Type:     "clients",
 		}, nil
+	}
+	ExistsUser, errUser := s.r.QueryuserExistsXEmail(email)
+	if errUser != nil {
+		return nil, errUser
+	}
+	ExistsClients, errClient := s.r.QueryClientExistsByGmail(email)
+	if errClient != nil {
+		return nil, errClient
+	}
+	if !ExistsUser || !ExistsClients {
+		return nil, errors.New("no existe uusario")
 	}
 	return &models.Login{}, nil
 }

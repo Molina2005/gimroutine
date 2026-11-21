@@ -2,6 +2,7 @@ package login
 
 import (
 	"context"
+	"fmt"
 	"modulo/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,7 +16,7 @@ func NewRepository(db *pgxpool.Pool) *RepoLogin {
 	return &RepoLogin{db: db}
 }
 
-// Verificacion existencia de usuario por correo
+// Verificacion existencia de USUARIO por correo
 // Uso: solo cuando se quieren registrar y ya existe el correo en sistema
 func (r RepoLogin) QueryuserExistsXEmail(email string) (bool, error) {
 	// contexto que exije *pgxpool.Pool para consultas sql
@@ -30,7 +31,7 @@ func (r RepoLogin) QueryuserExistsXEmail(email string) (bool, error) {
 	return existsEmail, nil
 }
 
-// Crear funcion validar existencia por correo
+// Crear funcion validar existencia por correo CLIENTE
 func (r *RepoLogin) QueryClientExistsByGmail(Gmail string) (bool, error) {
 	ctx := context.Background()
 	var ExistsGmail bool
@@ -54,6 +55,7 @@ func (r *RepoLogin) QueryLogin(email string) (*models.Login, error) {
 		&DataLogin.Password,
 		&DataLogin.IdRole,
 	); err != nil {
+		fmt.Printf("data error %v", err)
 		return nil, err
 	}
 	return &DataLogin, nil
