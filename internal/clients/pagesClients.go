@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"modulo/internal/pages"
+	"modulo/internal/utils"
 	"net/http"
 	"strconv"
 	"strings"
@@ -51,9 +52,13 @@ func (h *HandlerClients) HandlerClientsPages(w http.ResponseWriter, r *http.Requ
 		fmt.Print("error en pagina")
 		return
 	}
+	// Se obtiene dominio actual para poder saber en que ambiente se esta trabajando
+	urlFrontEnd := utils.GetFrontEndtUrl(r)
 	// Se guarda direccion completa con pagina a redireccionar segun cliente con su respectivo id
-	redirectURL := "https://mabtrosoftweb.vercel.app" + pages +
+	redirectURL := urlFrontEnd + pages +
 		"?id=" + strconv.Itoa(Id)
-	// Se redirreciona al usuario segun la direccion dada
-	http.Redirect(w, r, redirectURL, http.StatusFound)
+	// Se redirreciona al usuario segun la direccion dada y se pasa en formato json
+	json.NewEncoder(w).Encode(map[string]string{
+		"redirectURL": redirectURL,
+	})
 }
