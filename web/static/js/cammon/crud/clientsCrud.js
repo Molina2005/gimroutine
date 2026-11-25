@@ -3,7 +3,13 @@ import { ConnectionClientDelete } from "../../ui/clients/d1/client/api.js";
 
 // FUNCIONES REFERENTES A TODO LO RELACIONADO CON BOTONES DE CRUDS DE CLIENTES
 export async function ConsultButtonClients(id){
-    window.location.href = `${API_BACKEND_RAILWAY}/clientPage/${id}`;
+    // SE OBTIENE INFORMACION PROVENIENTE DEL HANDLER PARA PODER REDIRECCIONAR AL MODULO SEGUN CLIENTE
+    const res = await fetch(`${API_BACKEND_RAILWAY}/clientPage/${id}`);
+    if (!res.ok) {
+        throw new Error("Error al consultar el cliente");
+    }
+    const data = await res.json();
+    window.location.href = data.redirectURL
 }
 export function UpdateButtonClients(id){    
     window.location.href = `/FormUpdateClients?id=${id}`;
