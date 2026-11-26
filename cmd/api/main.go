@@ -8,6 +8,7 @@ import (
 	"modulo/internal/handlers"
 	httpmiddlewares "modulo/internal/http_middlewares"
 	"modulo/internal/routes"
+	"modulo/internal/webkooks"
 	"net/http"
 	"os"
 
@@ -30,6 +31,7 @@ func main() {
 	config.LayersOfModules(connect)
 	// ENRUTADORES PARA MANEJO DE HANDLER
 	routes.Routes(connect, r)
+	r.HandleFunc("/NotifyChangesVitals", webkooks.NotifyChangesVitals)
 	// LLAMADO DE FUNCION PARA CARGAR CADA UNA DE LAS PAGINAS ENRUTADORAS
 	r.Mount("/", handlers.HandlerPages())
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))
