@@ -15,7 +15,7 @@ type Vital struct {
 	Incident       int       `json:"incident"`
 	Equipment      string    `json:"equipment"`
 	Description    string    `json:"description"`
-	Oc             string    `json:"oc"`
+	Oc             int       `json:"oc"`
 	EarrIng        string    `json:"earring"`
 	EntryDate      time.Time `json:"entrydate"`
 	ExecutionDate  time.Time `json:"executiondate"`
