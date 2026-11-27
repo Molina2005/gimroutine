@@ -3,6 +3,7 @@ package webkooks
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -23,11 +24,10 @@ type Vital struct {
 
 // Modelo para recibir el evento
 type data struct {
-	Type      string `json:"type"`
-	Table     string `json:"table"`
-	Schema    string `json:"schema"`
-	Record    Vital  `json:"record"`
-	OldRecord any    `json:"oldrecord"`
+	Type   string `json:"type"`
+	Table  string `json:"table"`
+	Schema string `json:"schema"`
+	Record Vital  `json:"record"`
 }
 
 func NotifyChangesVitals(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +35,6 @@ func NotifyChangesVitals(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&webHook); err != nil {
 		fmt.Println("error de json", err)
 	}
-	fmt.Println("datawebhook data", webHook)
+	log.Println("datawebhook data", webHook)
 	w.WriteHeader(200)
 }

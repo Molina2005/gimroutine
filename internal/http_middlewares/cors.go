@@ -2,18 +2,22 @@ package httpmiddlewares
 
 import (
 	"net/http"
+	"os"
 )
 
 // Funcion para utilizacion de CORS - Manejo de permisos de dominios Backend - Frontend
 func EnableCors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		domainLocal := os.Getenv("DOMAIN_LOCAL")
+		domainTesting := os.Getenv("DOMAIN_TESTING")
+		domainProduction := os.Getenv("DOMAIN_PRODUCTION")
 		allowedOrigins := []string{
 			// ENTORNO LOCAL
-			"http://localhost:3000",
+			domainLocal,
 			// ENTORNO PRUEBAS
-			"https://mabtrosoftweb-git-testing-programming10.vercel.app",
+			domainTesting,
 			// ENTORNO PRODUCCION
-			"https://mabtrosoftweb.vercel.app",
+			domainProduction,
 		}
 
 		origin := r.Header.Get("Origin")
