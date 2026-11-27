@@ -35,6 +35,6 @@ func NotifyChangesVitals(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&webHook); err != nil {
 		fmt.Println("error de json", err)
 	}
-	fmt.Println("datawebhook", webHook)
+	fmt.Println("datawebhook data", webHook)
 	w.WriteHeader(200)
 }
