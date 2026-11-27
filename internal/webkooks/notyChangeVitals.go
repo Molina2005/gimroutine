@@ -9,17 +9,17 @@ import (
 
 // Modelo para obtener los datos de la tabla del evento
 type Vital struct {
-	IdVital        int       `json:"idvital"`
-	IdServicePoint int       `json:"idservicepoint"`
-	IdUser         int       `json:"iduser"`
-	Incident       int       `json:"incident"`
-	Equipment      string    `json:"equipment"`
-	Description    string    `json:"description"`
-	Oc             int       `json:"oc"`
-	EarrIng        string    `json:"earring"`
-	EntryDate      time.Time `json:"entrydate"`
-	ExecutionDate  time.Time `json:"executiondate"`
-	Status         int       `json:"status"`
+	Id_incidencia_vital  int       `json:"id_incidencia_vital"`
+	Id_punto_servicio    int       `json:"id_punto_servicio"`
+	Id_usuarios          int       `json:"id_usuarios"`
+	Incidencia           int       `json:"incidencia"`
+	Equipo               string    `json:"equipo"`
+	Descripcion          string    `json:"descripcion"`
+	Oc                   int       `json:"oc"`
+	Pendientes           string    `json:"pendientes"`
+	Fecha_registro       time.Time `json:"fecha_registro"`
+	Fecha_ejecucion      time.Time `json:"fecha_ejecucion"`
+	Id_status_incidencia int       `json:"id_status_incidencia"`
 }
 
 // Modelo para recibir el evento
