@@ -8,7 +8,7 @@ import (
 	"modulo/internal/handlers"
 	httpmiddlewares "modulo/internal/http_middlewares"
 	"modulo/internal/routes"
-	"modulo/internal/webkooks"
+
 	"net/http"
 	"os"
 
@@ -29,9 +29,10 @@ func main() {
 	r.Use(httpmiddlewares.EnableCors)
 	// CAPAS SEGUN MODULOS
 	config.LayersOfModules(connect)
+	config.LayersOfModulesWebHook(connect)
 	// ENRUTADORES PARA MANEJO DE HANDLER
 	routes.Routes(connect, r)
-	r.HandleFunc("/NotifyChangesVitals", webkooks.NotifyChangesVitals)
+	routes.RoutesWebHook(connect, r)
 	// LLAMADO DE FUNCION PARA CARGAR CADA UNA DE LAS PAGINAS ENRUTADORAS
 	r.Mount("/", handlers.HandlerPages())
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static/"))))

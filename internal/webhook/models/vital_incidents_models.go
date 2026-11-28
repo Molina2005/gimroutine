@@ -1,14 +1,7 @@
-package webkooks
-
-import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
-)
+package models
 
 // Modelo para obtener los datos de la tabla del evento
-type Vital struct {
+type VitalIncidents struct {
 	Id_incidencia_vital  int    `json:"id_incidencia_vital"`
 	Id_punto_servicio    int    `json:"id_punto_servicio"`
 	Id_usuarios          int    `json:"id_usuarios"`
@@ -23,18 +16,9 @@ type Vital struct {
 }
 
 // Modelo para recibir el evento
-type data struct {
-	Type   string `json:"type"`
-	Table  string `json:"table"`
-	Schema string `json:"schema"`
-	Record Vital  `json:"record"`
-}
-
-func NotifyChangesVitals(w http.ResponseWriter, r *http.Request) {
-	var webHook data
-	if err := json.NewDecoder(r.Body).Decode(&webHook); err != nil {
-		fmt.Println("error de json", err)
-	}
-	log.Println("datawebhook data", webHook)
-	w.WriteHeader(200)
+type WebHookVitals struct {
+	Type   string         `json:"type"`
+	Table  string         `json:"table"`
+	Schema string         `json:"schema"`
+	Record VitalIncidents `json:"record"`
 }
